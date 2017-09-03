@@ -12,6 +12,7 @@ class Simulator {
 public:
     Simulator(Traffic &traffic, Algorithm &algorithm, Building &building);
     void step(Time time, Duration dt);
+    bool done() const;
 
 private:
     void inject_passenger(Passenger *passenger);

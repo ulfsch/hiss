@@ -6,13 +6,12 @@
 
 #include "Algorithm.h"
 
-class Building;
 
 class CallButtonAlgorithm : public Algorithm {
 public:
     CallButtonAlgorithm();
-
     virtual void operator()(Building &);
+
 };
 
 #endif //CHISS_CALLBUTTONALGORITHM_H

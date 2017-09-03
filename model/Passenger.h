@@ -15,9 +15,9 @@ typedef std::list<Passenger *> PassengerList;
 
 class Passenger {
     Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time);
-    Passenger(const Passenger &b) = delete;
 
 public:
+    Passenger(const Passenger &b) = delete;
     static Passenger *create(FloorNumber begin_floor, FloorNumber end_floor, Time time);
 
     Id id() const;

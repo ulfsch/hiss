@@ -1,10 +1,8 @@
 //
-// Floor.cpp.
+// Floor.cpp
 //
-
 #include <ostream>
 #include "Floor.h"
-#include "Elevator.h"
 
 Floor::Floor(FloorNumber floor_number) :
         number_(floor_number),
@@ -30,7 +28,6 @@ void Floor::clear_buttons() {
     down_button_ = false;
 }
 
-
 std::ostream &operator<<(std::ostream &os, Floor &floor) {
     os << std::string("floor ") << floor.number() << ": ";
     for (Passenger *passenger : floor.passengers()) {
@@ -38,3 +35,5 @@ std::ostream &operator<<(std::ostream &os, Floor &floor) {
     }
     return os;
 }
+
+// End of file

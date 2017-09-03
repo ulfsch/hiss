@@ -21,6 +21,10 @@ void Simulator::step(Time time, Duration dt) {
     move_elevators(dt);
 }
 
+bool Simulator::done() const {
+    return traffic_.done() && Passenger::all_at_destination();
+}
+
 void Simulator::inject_passenger(Passenger *passenger) {
     for (Floor &floor : building_.floors()) {
         if (floor.number() == passenger->begin_floor()) {

@@ -4,19 +4,20 @@
 #ifndef CHISS_CONSTANTTRAFFIC_H
 #define CHISS_CONSTANTTRAFFIC_H
 
-#include "../model/Passenger.h"
 #include "Traffic.h"
+#include "../model/Passenger.h"
 
 class ConstantTraffic : public Traffic {
 public:
-    ConstantTraffic(size_t number_of_floors, size_t total_no_of_passengers, double);
+    ConstantTraffic(size_t number_of_floors, size_t total_no_of_passengers, double rate);
     Passenger *operator()(Time time);
+    virtual bool done() const;
 
-    void off();
 private:
-    size_t number_of_floors_;
-    size_t max_no_of_passengers_;
-    double passengers_per_tick_;
+    const size_t number_of_floors_;
+    const size_t max_no_of_passengers_;
+    const double rate_;
+
     size_t no_of_passengers_;
     size_t count_;
 };

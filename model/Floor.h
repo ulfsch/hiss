@@ -10,7 +10,7 @@
 class Floor {
     void operator=(const Floor &b);
 public:
-    Floor(FloorNumber floor_number);
+    explicit Floor(FloorNumber floor_number);
 
     FloorNumber number() const { return number_; }
 

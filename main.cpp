@@ -9,12 +9,15 @@
 
 const FloorNumber NUMBER_OF_FLOORS = 10;
 const size_t NUMBER_OF_PASSENGERS = 100;
-const double PASSENGER_PER_SECOND = 1.0;
-const Duration DELTA_TIME = 1;
+const double PASSENGER_RATE = 1.0;       // Passengers/step
+const Duration SIMULATION_RATE = 1;      // Seconds/step
 
-
+/**
+ *
+ * @return
+ */
 Time run() {
-    ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_PER_SECOND);
+    ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
     CallButtonAlgorithm algorithm;
 
     Building building;
@@ -27,8 +30,9 @@ Time run() {
 
     // Run the simulator
     Time time = 0;
-    for (time = 0; time < 100 || !Passenger::all_at_destination(); time += DELTA_TIME) {
-        simulator.step(time, DELTA_TIME);
+    while (simulator.done() == false) {
+        simulator.step(time, SIMULATION_RATE);
+        time += SIMULATION_RATE;
         std::cout << building << std::endl;
     }
 

@@ -1,5 +1,5 @@
 //
-// CallButtonAlgorithm.cpp.
+// CallButtonAlgorithm.cpp
 //
 #include "CallButtonAlgorithm.h"
 #include "../model/Building.h"

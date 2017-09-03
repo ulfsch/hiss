@@ -1,7 +1,7 @@
 //
 // Passenger.cpp
 //
-#include <assert.h>
+#include <cassert>
 #include "Passenger.h"
 #include "algorithm"
 

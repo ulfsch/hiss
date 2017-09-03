@@ -1,7 +1,6 @@
 //
 // Building.h
 //
-
 #ifndef CHISS_BUILDING_H
 #define CHISS_BUILDING_H
 
