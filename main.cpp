@@ -6,6 +6,7 @@
 #include "simulator/ConstantTraffic.h"
 #include "simulator/CallButtonAlgorithm.h"
 #include "simulator/Simulator.h"
+#include "simulator/UpDownButtonAlgorithm.h"
 
 const FloorNumber NUMBER_OF_FLOORS = 10;
 const size_t NUMBER_OF_PASSENGERS = 100;
@@ -18,7 +19,9 @@ const Duration SIMULATION_RATE = 1;      // Seconds/step
  */
 Time run() {
     ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
-    CallButtonAlgorithm algorithm;
+
+    //CallButtonAlgorithm algorithm;
+    UpDownButtonAlgorithm algorithm;
 
     Building building;
     for (FloorNumber i = 0; i < NUMBER_OF_FLOORS; i++) {

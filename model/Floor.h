@@ -18,6 +18,10 @@ public:
 
     bool call_button() const { return call_button_; }
 
+    bool down_button() const { return down_button_; }
+
+    bool up_button() const { return up_button_; }
+
     void press_buttons(Passenger *passenger);
     void clear_buttons();
 

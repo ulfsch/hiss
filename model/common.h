@@ -6,8 +6,12 @@
 #define CHISS_COMMON_H
 
 typedef unsigned int Id;
-typedef unsigned int FloorNumber;
+typedef int FloorNumber;
 typedef unsigned long Duration;
 typedef unsigned int Time;
+
+enum class Direction {
+    NONE, UP, DOWN
+};
 
 #endif //CHISS_COMMON_H

@@ -17,6 +17,9 @@ public:
 
     bool standing_on_floor(FloorNumber i) const;
     bool is_idle() const;
+
+    Direction direction() const { return direction_; }
+
     FloorNumber current_floor() const;
     FloorNumber target_floor() const;
 
@@ -29,6 +32,7 @@ private:
     PassengerList passengers_;
     std::set<FloorNumber> buttons_;
 
+private:
     FloorNumber min_floor_;
     FloorNumber max_floor_;
     FloorNumber current_floor_;
@@ -42,9 +46,7 @@ private:
     enum class State {
         IDLE, WAITING, MOVING
     } state_;
-    enum class Direction {
-        NONE, UP, DOWN
-    } direction_;
+    Direction direction_;
 
 };
 

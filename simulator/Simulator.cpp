@@ -53,7 +53,7 @@ void Simulator::disembark(Elevator &elevator, Floor &floor, Time time) {
     for (auto *passenger : elevator.passengers()) {
         if (passenger->on_end_floor(floor.number())) {
             passenger->set_on_destination(time);
-            floor.passengers().push_back(passenger);
+//            floor.passengers().push_back(passenger);
 //            floor.press_buttons(passenger);
         } else {
             new_list.push_back(passenger);
