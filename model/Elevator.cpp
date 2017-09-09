@@ -3,6 +3,14 @@
 //
 #include "Elevator.h"
 
+/**
+ * Constructor.
+ * 
+ * @param min_floor lowest floor number. Bottom floor is 0
+ * @param max_floor highest floor number + 1
+ * @param velocity  elevator speed in m/s
+ * @param floor_height in meter
+ */
 Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity, int floor_height) :
         min_floor_(min_floor),
         max_floor_(max_floor),
@@ -16,12 +24,24 @@ Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity, i
         direction_(Direction::NONE) {
 }
 
-bool Elevator::standing_on_floor(FloorNumber i) const {
-    return is_idle() && current_floor_ == i;
+/**
+ * Order the elevator to go to a floor. 
+ * 
+ * The order is delayed until the elevator has stopped on a floor.
+ * Orders are not stacked. New values overwrites any old value.
+ * 
+ * @param floor_number 
+ */
+void Elevator::go_to(FloorNumber floor_number) {
+    next_floor_ = floor_number;
 }
 
 bool Elevator::is_idle() const {
     return state_ == State::IDLE;
+}
+
+bool Elevator::standing_on_floor(FloorNumber i) const {
+    return is_idle() && current_floor_ == i;
 }
 
 FloorNumber Elevator::current_floor() const {
@@ -30,10 +50,6 @@ FloorNumber Elevator::current_floor() const {
 
 FloorNumber Elevator::target_floor() const {
     return target_floor_;
-}
-
-void Elevator::go_to(FloorNumber floor_number) {
-    next_floor_ = floor_number;
 }
 
 void Elevator::clear_buttons() {
@@ -75,8 +91,7 @@ void Elevator::move(Duration duration) {
 }
 
 std::ostream &operator<<(std::ostream &os, Elevator &elevator) {
-    os << std::endl;
-    os << std::string("elevator: floor ") << elevator.current_floor() << ": ";
+    os << std::string("elevator: ") << elevator.current_floor() << ": ";
     for (Passenger *passenger : elevator.passengers()) {
         os << *passenger << " ";
     }

@@ -1,7 +1,6 @@
 //
 // common.h.
 //
-
 #ifndef CHISS_COMMON_H
 #define CHISS_COMMON_H
 

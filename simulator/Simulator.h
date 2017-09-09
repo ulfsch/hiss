@@ -14,6 +14,8 @@ public:
     void step(Time time, Duration dt);
     bool done() const;
 
+    Building &building() { return building_; }
+
 private:
     void inject_passenger(Passenger *passenger);
     void move_passengers(Time time);
@@ -27,5 +29,7 @@ private:
     Building &building_;
 
 };
+
+std::ostream &operator<<(std::ostream &os, Simulator &);
 
 #endif //CHISS_SIMULATOR_H

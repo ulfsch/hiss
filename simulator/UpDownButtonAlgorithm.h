@@ -38,5 +38,4 @@ public:
 
 std::ostream &operator<<(std::ostream &os, UpDownButtonAlgorithm::Stop &s);
 
-
 #endif //CHISS_UPDOWNBUTTONALGORITHM_H

@@ -86,4 +86,8 @@ void Simulator::move_elevators(Duration dt) {
     }
 }
 
+std::ostream &operator<<(std::ostream &os, Simulator &p) {
+    os << p.building();
+    return os;
+}
 

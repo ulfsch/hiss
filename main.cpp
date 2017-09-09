@@ -1,54 +1,193 @@
 //
 // main.cpp
 //
-#include <iostream>
 #include "model/Building.h"
 #include "simulator/ConstantTraffic.h"
 #include "simulator/CallButtonAlgorithm.h"
 #include "simulator/Simulator.h"
 #include "simulator/UpDownButtonAlgorithm.h"
+#include <iostream>
+#include <ncurses.h>
+#include <unistd.h>
+#include <cstring>
 
+static void print_building(Building &building);
+static Time run(bool graph, bool verbose);
+static void print_usage(const char *arg);
+
+
+/**
+ * Constants.
+ */
 const FloorNumber NUMBER_OF_FLOORS = 10;
 const size_t NUMBER_OF_PASSENGERS = 100;
-const double PASSENGER_RATE = 1.0;       // Passengers/step
+const double PASSENGER_RATE = 1;       // Passengers/step
 const Duration SIMULATION_RATE = 1;      // Seconds/step
 
 /**
+ * Main program.
  *
+ * @param argc
+ * @param argv
  * @return
  */
-Time run() {
-    ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
+int main(int argc, char *argv[]) {
+    bool opt_verbose = false;
+    bool opt_graphical = false;
+    int c;
 
+    while ((c = getopt(argc, argv, "gv?")) != -1) {
+        switch (c) {
+            case 'g':
+                opt_graphical = true;
+                break;
+            case 'v':
+                opt_verbose = true;
+                break;
+            case '?':
+                print_usage(argv[0]);
+        }
+    }
+
+    Time total_time = run(opt_graphical, opt_verbose);
+
+    std::cout << "Number of passengers:   " << Passenger::all_passengers().size() << std::endl;
+    std::cout << "Total simulation time:  " << total_time << std::endl;
+    std::cout << "Average waiting time:   " << Passenger::average_waiting_time() << std::endl;
+    std::cout << "Average traveling time: " << Passenger::average_traveling_time() << std::endl;
+
+    Passenger::delete_all();
+    return 0;
+}
+
+/**
+ * Run the simulator.
+ *
+ * @param graph ncurses output
+ * @param verbose
+ * @return simulation time in seconds
+ */
+static Time run(bool graph, bool verbose) {
+    ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
     //CallButtonAlgorithm algorithm;
     UpDownButtonAlgorithm algorithm;
-
     Building building;
+
     for (FloorNumber i = 0; i < NUMBER_OF_FLOORS; i++) {
         building.floors().push_back(Floor(i));
     }
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
-
+    building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
     Simulator simulator(traffic, algorithm, building);
 
-    // Run the simulator
+    // Run
     Time time = 0;
-    while (simulator.done() == false) {
-        simulator.step(time, SIMULATION_RATE);
-        time += SIMULATION_RATE;
-        std::cout << building << std::endl;
+    if (graph) {
+        initscr();
+        while (!simulator.done()) {
+            simulator.step(time, SIMULATION_RATE);
+            time += SIMULATION_RATE;
+            print_building(building);
+            sleep(1);
+        }
+        endwin();
+    } else {
+        while (!simulator.done()) {
+            simulator.step(time, SIMULATION_RATE);
+            time += SIMULATION_RATE;
+            if (verbose) {
+                std::cout << simulator << std::endl;
+            }
+        }
     }
 
     return time;
 }
 
-int main() {
-    Time total_time = run();
-    std::cout << "Total simulation time:  " << total_time << std::endl;
-    std::cout << "Average waiting time:   " << Passenger::average_waiting_time() << std::endl;
-    std::cout << "Average traveling time: " << Passenger::average_traveling_time() << std::endl;
-    Passenger::delete_all();
-    return 0;
+/**
+ * Print on ncurses window.
+ *
+ * @param building
+ */
+static void print_building(Building &building) {
+    int row = 0;
+    int column = 0;
+    wclear(stdscr);
+
+    wmove(stdscr, row, 0);
+    waddch(stdscr, ACS_ULCORNER);
+    whline(stdscr, ACS_HLINE, 28);
+    wmove(stdscr, row, 29);
+    waddch(stdscr, ACS_URCORNER);
+
+    for (auto i = building.floors().rbegin(); i != building.floors().rend(); ++i) {
+        wmove(stdscr, ++row, 0);
+        waddch(stdscr, ACS_VLINE);
+
+        wprintw(stdscr, "%2d: ", i->number());
+        for (Passenger *passenger : i->passengers()) {
+            wprintw(stdscr, " p%-2d ", passenger->id());
+        }
+
+        wmove(stdscr, row, 29);
+        waddch(stdscr, ACS_VLINE);
+    }
+    wmove(stdscr, ++row, 0);
+    waddch(stdscr, ACS_LLCORNER);
+    whline(stdscr, ACS_HLINE, 28);
+    wmove(stdscr, row, 29);
+    waddch(stdscr, ACS_LRCORNER);
+
+    column = 30;
+    for (Elevator &elevator : building.elevators()) {
+        row = building.floors().size() - elevator.current_floor();
+
+        wmove(stdscr, row - 1, column);
+        waddch(stdscr, ACS_ULCORNER);
+        whline(stdscr, ACS_HLINE, 28);
+        wmove(stdscr, row - 1, column + 29);
+        waddch(stdscr, ACS_URCORNER);
+
+        wmove(stdscr, row, column);
+        waddch(stdscr, ACS_VLINE);
+        for (Passenger *passenger : elevator.passengers()) {
+            wprintw(stdscr, " p%-2d ", passenger->id());
+        }
+        wmove(stdscr, row, column + 29);
+        waddch(stdscr, ACS_VLINE);
+
+        wmove(stdscr, row + 1, column);
+        waddch(stdscr, ACS_LLCORNER);
+        whline(stdscr, ACS_HLINE, 28);
+        wmove(stdscr, row + 1, column + 29);
+        waddch(stdscr, ACS_LRCORNER);
+
+        column += 30;
+    }
+
+    wmove(stdscr, 0, 0);
+    wrefresh(stdscr);
+}
+
+/**
+ * Print program help tex and exit.
+ *
+ * @param arg
+ */
+static void print_usage(const char *arg) {
+    const char *program = strrchr(arg, '/');
+    if (program) {
+        program += 1;
+    } else {
+        program = arg;
+    }
+    fprintf(stderr, "Usage: %s <options>\n", program);
+    fprintf(stderr, " Elevator simulator\n");
+    fprintf(stderr, " Options: \n");
+    fprintf(stderr, "  -g: graphical\n");
+    fprintf(stderr, "  -v: verbose\n");
+
+    exit(2);
 }
 
 // End of file
