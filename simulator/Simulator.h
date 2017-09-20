@@ -16,8 +16,10 @@ public:
 
     Building &building() { return building_; }
 
+    PassengerList &all_passengers();
+
 private:
-    void inject_passenger(Passenger *passenger);
+    void inject_passenger(std::shared_ptr<Passenger> passenger);
     void move_passengers(Time time);
     void disembark(Elevator &elevator, Floor &floor, Time time);
     void embark(Floor &floor, Elevator &elevator, Time time);
@@ -27,7 +29,7 @@ private:
     Traffic &traffic_;
     Algorithm &algorithm_;
     Building &building_;
-
+    PassengerList passengers_;
 };
 
 std::ostream &operator<<(std::ostream &os, Simulator &);

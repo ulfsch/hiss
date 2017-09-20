@@ -11,32 +11,33 @@ class Elevator {
 public:
     Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity = 5, int floor_height = 4);
 
-    void go_to(FloorNumber floor_number);
-    bool is_idle() const;
-    bool standing_on_floor(FloorNumber i) const;
+    // Access methods
+    FloorNumber target_floor() const;
+    FloorNumber current_floor() const;
 
     Direction direction() const { return direction_; }
-
-    FloorNumber current_floor() const;
-    FloorNumber target_floor() const;
-
-    void move(Duration dt);
-    void clear_buttons();
-    void press_buttons(Passenger *passenger);
-
     PassengerList &passengers() { return passengers_; }
-
     std::set<FloorNumber> &buttons() { return buttons_; }
+
+    // Elevator movement methods
+    bool is_idle() const;
+    bool standing_on_floor(FloorNumber i) const;
+    void go_to(FloorNumber floor_number);
+    void move(Duration dt);
+
+    // Button methods
+    void clear_floor_button(FloorNumber);
+    void press_floor_button(FloorNumber);
 
 private:
     const FloorNumber min_floor_;
     const FloorNumber max_floor_;
+    const int velocity_;
+    const int floor_height_;
+
     FloorNumber current_floor_;
     FloorNumber target_floor_;
     FloorNumber next_floor_;
-
-    const int velocity_;
-    const int floor_height_;
     int height_;
 
     enum class State {

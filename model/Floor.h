@@ -22,7 +22,7 @@ public:
 
     bool up_button() const { return up_button_; }
 
-    void press_buttons(Passenger *passenger);
+    void press_buttons(std::shared_ptr<Passenger> passenger);
     void clear_buttons();
 
 private:

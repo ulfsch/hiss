@@ -10,7 +10,7 @@
 class ConstantTraffic : public Traffic {
 public:
     ConstantTraffic(size_t number_of_floors, size_t total_no_of_passengers, double rate);
-    Passenger *operator()(Time time);
+    std::shared_ptr<Passenger> operator()(Time time);
     virtual bool done() const;
 
 private:

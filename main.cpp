@@ -49,15 +49,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    Time total_time = run(opt_graphical, opt_verbose);
-
-    std::cout << "Number of passengers:   " << Passenger::all_passengers().size() << std::endl;
-    std::cout << "Total simulation time:  " << total_time << std::endl;
-    std::cout << "Average waiting time:   " << Passenger::average_waiting_time() << std::endl;
-    std::cout << "Average traveling time: " << Passenger::average_traveling_time() << std::endl;
-
-    Passenger::delete_all();
-    return 0;
+    return run(opt_graphical, opt_verbose);
 }
 
 /**
@@ -78,6 +70,7 @@ static Time run(bool graph, bool verbose) {
     }
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
+
     Simulator simulator(traffic, algorithm, building);
 
     // Run
@@ -101,7 +94,25 @@ static Time run(bool graph, bool verbose) {
         }
     }
 
-    return time;
+    // Print the result
+    double waiting_time = 0;
+    double traveling_time = 0;
+    size_t count = 0;
+    for (const auto &passenger : simulator.all_passengers()) {
+        if (passenger->on_destination()) {
+            waiting_time += passenger->waiting_time();
+            traveling_time += passenger->traveling_time();
+            count += 1;
+        }
+    }
+
+    std::cout << "Number of passengers:     " << simulator.all_passengers().size() << std::endl;
+    std::cout << "Passengers at destination:" << count << std::endl;
+    std::cout << "Total simulation time:    " << time << std::endl;
+    std::cout << "Average waiting time:     " << waiting_time / count << std::endl;
+    std::cout << "Average traveling time:   " << traveling_time / count << std::endl;
+
+    return 0;
 }
 
 /**
@@ -125,7 +136,7 @@ static void print_building(Building &building) {
         waddch(stdscr, ACS_VLINE);
 
         wprintw(stdscr, "%2d: ", i->number());
-        for (Passenger *passenger : i->passengers()) {
+        for (auto passenger : i->passengers()) {
             wprintw(stdscr, " p%-2d ", passenger->id());
         }
 
@@ -150,7 +161,7 @@ static void print_building(Building &building) {
 
         wmove(stdscr, row, column);
         waddch(stdscr, ACS_VLINE);
-        for (Passenger *passenger : elevator.passengers()) {
+        for (auto passenger : elevator.passengers()) {
             wprintw(stdscr, " p%-2d ", passenger->id());
         }
         wmove(stdscr, row, column + 29);

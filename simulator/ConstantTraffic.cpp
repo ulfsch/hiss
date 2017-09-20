@@ -2,7 +2,6 @@
 // ConstantTraffic.cpp.
 //
 #include "ConstantTraffic.h"
-#include <cstdlib>
 
 /**
  * Passenger generator functor.
@@ -30,14 +29,14 @@ ConstantTraffic::ConstantTraffic(size_t number_of_floors,
  * @param time
  * @return pointer to a new passenger or nullptr
  */
-Passenger *ConstantTraffic::operator()(Time time) {
+std::shared_ptr<Passenger> ConstantTraffic::operator()(Time time) {
     while (count_ < rate_ &&
            no_of_passengers_ < max_no_of_passengers_) {
         auto from_floor = static_cast<FloorNumber>(std::rand() % number_of_floors_);
         auto to_floor = static_cast<FloorNumber>(std::rand() % number_of_floors_);
 
         if (from_floor != to_floor) {
-            Passenger *p = Passenger::create(from_floor, to_floor, time);
+            std::shared_ptr<Passenger> p = std::make_shared<Passenger>(Passenger(from_floor, to_floor, time));
             no_of_passengers_ += 1;
             count_ += 1;
             return p;

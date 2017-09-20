@@ -13,8 +13,9 @@ Simulator::Simulator(Traffic &traffic, Algorithm &algorithm, Building &building)
 }
 
 void Simulator::step(Time time, Duration dt) {
-    while (Passenger *passenger = traffic_(time)) {
+    while (auto passenger = traffic_(time)) {
         inject_passenger(passenger);
+        passengers_.push_back(passenger);
     }
     move_passengers(time);
     algorithm_(building_);
@@ -22,10 +23,25 @@ void Simulator::step(Time time, Duration dt) {
 }
 
 bool Simulator::done() const {
-    return traffic_.done() && Passenger::all_at_destination();
+    if (!traffic_.done()) {
+        return false;
+    }
+
+    // Check if all passengers at destination
+    for (auto p : passengers_) {
+        if (!p->on_destination()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
-void Simulator::inject_passenger(Passenger *passenger) {
+PassengerList &Simulator::all_passengers() {
+    return passengers_;
+}
+
+void Simulator::inject_passenger(std::shared_ptr<Passenger> passenger) {
     for (Floor &floor : building_.floors()) {
         if (floor.number() == passenger->begin_floor()) {
             floor.passengers().push_back(passenger);
@@ -39,7 +55,7 @@ void Simulator::move_passengers(Time time) {
         for (auto &elevator : building_.elevators()) {
             if (elevator.standing_on_floor(floor.number())) {
                 floor.clear_buttons();
-                elevator.clear_buttons();
+                elevator.clear_floor_button(floor.number());
 
                 disembark(elevator, floor, time);
                 embark(floor, elevator, time);
@@ -50,11 +66,11 @@ void Simulator::move_passengers(Time time) {
 
 void Simulator::disembark(Elevator &elevator, Floor &floor, Time time) {
     PassengerList new_list;
-    for (auto *passenger : elevator.passengers()) {
+    for (auto passenger : elevator.passengers()) {
         if (passenger->on_end_floor(floor.number())) {
             passenger->set_on_destination(time);
 //            floor.passengers().push_back(passenger);
-//            floor.press_buttons(passenger);
+//            floor.press_floor_button(passenger);
         } else {
             new_list.push_back(passenger);
         }
@@ -66,11 +82,11 @@ void Simulator::disembark(Elevator &elevator, Floor &floor, Time time) {
 
 void Simulator::embark(Floor &floor, Elevator &elevator, Time time) {
     PassengerList new_list;
-    for (auto *passenger : floor.passengers()) {
+    for (const auto &passenger : floor.passengers()) {
         if (passenger->on_begin_floor(floor.number())) {
             passenger->set_start_traveling(time);
             elevator.passengers().push_back(passenger);
-            elevator.press_buttons(passenger);
+            elevator.press_floor_button(passenger->end_floor());
         } else {
             new_list.push_back(passenger);
         }
