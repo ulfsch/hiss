@@ -1,13 +1,17 @@
 //
 // Passenger.cpp
 //
-#include <cassert>
 #include "Passenger.h"
-#include "algorithm"
+#include <cassert>
 
 Id Passenger::last_id_ = 0;
 
-
+/**
+ *
+ * @param begin_floor
+ * @param end_floor
+ * @param time
+ */
 Passenger::Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time) :
         id_(++last_id_),
         begin_floor_(begin_floor),
@@ -29,8 +33,8 @@ FloorNumber Passenger::end_floor() const {
     return end_floor_;
 }
 
-bool Passenger::on_end_floor(FloorNumber i) const {
-    return end_floor_ == i;
+bool Passenger::on_end_floor(FloorNumber floor_number) const {
+    return end_floor_ == floor_number;
 }
 
 bool Passenger::on_begin_floor(FloorNumber floor_number) const {

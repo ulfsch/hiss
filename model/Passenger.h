@@ -21,7 +21,7 @@ public:
     Id id() const;
     FloorNumber begin_floor() const;
     FloorNumber end_floor() const;
-    bool on_end_floor(FloorNumber i) const;
+    bool on_end_floor(FloorNumber floor_number) const;
     bool on_begin_floor(FloorNumber floor_number) const;
     bool on_destination() const;
 

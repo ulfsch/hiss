@@ -8,7 +8,6 @@
 #include <set>
 
 class Floor {
-    void operator=(const Floor &b);
 public:
     explicit Floor(FloorNumber floor_number);
 

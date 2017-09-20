@@ -22,12 +22,12 @@ TEST(PassengerBasic, waiting_time) {
     Time time = 50;
     Passenger *p = new Passenger(7, 14, time);
     p->set_start_traveling(time + 8);
-    EXPECT_EQ(8, p->waiting_time());
+    EXPECT_EQ(8UL, p->waiting_time());
 
     Passenger *p2 = new Passenger(8, 15, time + 100);
     p2->set_start_traveling(time + 116);
     EXPECT_FALSE(p2->on_destination());
-    EXPECT_EQ(16, p2->waiting_time());
+    EXPECT_EQ(16UL, p2->waiting_time());
 
     delete p;
     delete p2;
@@ -39,7 +39,7 @@ TEST(PassengerBasic, traveling_time) {
     p->set_start_traveling(time + 8);
     p->set_on_destination(time + 18);
     EXPECT_TRUE(p->on_destination());
-    EXPECT_EQ(10, p->traveling_time());
+    EXPECT_EQ(10U, p->traveling_time());
 
     delete p;
 }

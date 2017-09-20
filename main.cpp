@@ -181,7 +181,7 @@ static void print_building(Building &building) {
 }
 
 /**
- * Print program help tex and exit.
+ * Print program help text and exit.
  *
  * @param arg
  */
