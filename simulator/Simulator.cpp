@@ -45,7 +45,7 @@ void Simulator::inject_passenger(std::shared_ptr<Passenger> passenger) {
     for (Floor &floor : building_.floors()) {
         if (floor.number() == passenger->begin_floor()) {
             floor.passengers().push_back(passenger);
-            floor.press_buttons(passenger);
+            floor.press_buttons(passenger->end_floor());
         }
     }
 }
@@ -67,7 +67,7 @@ void Simulator::move_passengers(Time time) {
 void Simulator::disembark(Elevator &elevator, Floor &floor, Time time) {
     PassengerList new_list;
     for (auto passenger : elevator.passengers()) {
-        if (passenger->on_end_floor(floor.number())) {
+        if (elevator.can_disembark(passenger)) {
             passenger->set_on_destination(time);
 //            floor.passengers().push_back(passenger);
 //            floor.press_floor_button(passenger);
@@ -83,7 +83,7 @@ void Simulator::disembark(Elevator &elevator, Floor &floor, Time time) {
 void Simulator::embark(Floor &floor, Elevator &elevator, Time time) {
     PassengerList new_list;
     for (const auto &passenger : floor.passengers()) {
-        if (passenger->on_begin_floor(floor.number())) {
+        if (elevator.can_embark(passenger)) {
             passenger->set_start_traveling(time);
             elevator.passengers().push_back(passenger);
             elevator.press_floor_button(passenger->end_floor());

@@ -9,11 +9,6 @@ TEST(PassengerBasic, access_methods) {
     Passenger *p = new Passenger(7, 14, 10);
     EXPECT_EQ(7, p->begin_floor());
     EXPECT_EQ(14, p->end_floor());
-    
-    EXPECT_FALSE(p->on_begin_floor(8));
-    EXPECT_TRUE(p->on_begin_floor(7));
-    EXPECT_FALSE(p->on_end_floor(13));
-    EXPECT_TRUE(p->on_end_floor(14));
 
     delete p;
 }

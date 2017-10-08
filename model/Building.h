@@ -7,15 +7,20 @@
 #include "Elevator.h"
 #include "Floor.h"
 #include <list>
+#include <vector>
 
+/**
+ * Building is group of elevators and floors.
+ */
 class Building {
 public:
-    std::list<Elevator>& elevators() { return elevators_; }
-    std::list<Floor>& floors() { return floors_; }
+    std::vector<Elevator> &elevators() { return elevators_; }
+
+    std::vector<Floor> &floors() { return floors_; }
 
 private:
-    std::list<Elevator> elevators_;
-    std::list<Floor> floors_;
+    std::vector<Elevator> elevators_;
+    std::vector<Floor> floors_;
 
 };
 

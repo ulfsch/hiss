@@ -21,7 +21,7 @@ public:
 
     bool up_button() const { return up_button_; }
 
-    void press_buttons(std::shared_ptr<Passenger> passenger);
+    void press_buttons(FloorNumber destination_floor);
     void clear_buttons();
 
 private:

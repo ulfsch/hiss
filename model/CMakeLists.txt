@@ -1,9 +1,11 @@
 
 
 set(SOURCE_FILES
+        common.h
         Passenger.cpp
         Passenger.h
-        common.h
+        Direction.cpp
+        Direction.h
         Building.cpp
         Building.h
         Elevator.cpp

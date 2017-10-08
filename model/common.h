@@ -9,8 +9,4 @@ typedef int FloorNumber;
 typedef unsigned long Duration;
 typedef unsigned int Time;
 
-enum class Direction {
-    NONE, UP, DOWN
-};
-
 #endif //CHISS_COMMON_H

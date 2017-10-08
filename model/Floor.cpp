@@ -11,13 +11,13 @@ Floor::Floor(FloorNumber floor_number) :
         down_button_(false) {
 }
 
-void Floor::press_buttons(std::shared_ptr<Passenger> passenger) {
+void Floor::press_buttons(FloorNumber destination_floor) {
     call_button_ = true;
 
-    if (passenger->end_floor() > number_) {
+    if (destination_floor > number_) {
         up_button_ = true;
     }
-    if (passenger->end_floor() < number_) {
+    if (destination_floor < number_) {
         down_button_ = true;
     }
 }
@@ -30,7 +30,7 @@ void Floor::clear_buttons() {
 
 std::ostream &operator<<(std::ostream &os, Floor &floor) {
     os << std::string("floor ") << floor.number() << ": ";
-    for (auto passenger : floor.passengers()) {
+    for (const auto &passenger : floor.passengers()) {
         os << *passenger << " ";
     }
     return os;

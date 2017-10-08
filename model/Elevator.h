@@ -5,19 +5,25 @@
 #define CHISS_ELEVATOR_H
 
 #include "Passenger.h"
+#include "Direction.h"
 #include <set>
 
 class Elevator {
 public:
     Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity = 5, int floor_height = 4);
+    Elevator(FloorNumber *floor_array, size_t len, int velocity = 5, int floor_height = 4);
 
     // Access methods
     FloorNumber target_floor() const;
     FloorNumber current_floor() const;
+    FloorNumber next_floor() const;
 
     Direction direction() const { return direction_; }
     PassengerList &passengers() { return passengers_; }
     std::set<FloorNumber> &buttons() { return buttons_; }
+
+    bool can_embark(std::shared_ptr<Passenger> passenger);
+    bool can_disembark(std::shared_ptr<Passenger> passenger);
 
     // Elevator movement methods
     bool is_idle() const;
@@ -29,9 +35,14 @@ public:
     void clear_floor_button(FloorNumber);
     void press_floor_button(FloorNumber);
 
+    // Testing only
+    void set_position(FloorNumber number, Direction direction);
+
 private:
-    const FloorNumber min_floor_;
-    const FloorNumber max_floor_;
+    std::set<FloorNumber> floors_;
+
+    //    const FloorNumber min_floor_;
+    //    const FloorNumber max_floor_;
     const int velocity_;
     const int floor_height_;
 

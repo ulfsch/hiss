@@ -13,8 +13,6 @@
  * @param floor_height in meter
  */
 Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity, int floor_height) :
-        min_floor_(min_floor),
-        max_floor_(max_floor),
         velocity_(velocity),
         floor_height_(floor_height),
 
@@ -25,6 +23,31 @@ Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity, i
         height_(min_floor * floor_height),
         state_(State::IDLE),
         direction_(Direction::NONE) {
+    for (FloorNumber i = min_floor; i < max_floor; i++) {
+        floors_.insert(i);
+    }
+}
+
+/**
+ * Constructor.
+ *
+ * @param floor_array array of floor numbers
+ * @param len length of array
+ * @param velocity  elevator speed in m/s
+ * @param floor_height in meter
+ */
+Elevator::Elevator(FloorNumber floor_array[], size_t len, int velocity, int floor_height) :
+        floors_(floor_array, floor_array + len),
+        velocity_(velocity),
+        floor_height_(floor_height),
+
+        current_floor_(floor_array[0]),
+        target_floor_(floor_array[0]),
+        next_floor_(floor_array[0]),
+
+        height_(floor_array[0] * floor_height),
+        state_(State::IDLE),
+        direction_(Direction::NONE) {
 }
 
 FloorNumber Elevator::current_floor() const {
@@ -33,6 +56,10 @@ FloorNumber Elevator::current_floor() const {
 
 FloorNumber Elevator::target_floor() const {
     return target_floor_;
+}
+
+FloorNumber Elevator::next_floor() const {
+    return next_floor_;
 }
 
 bool Elevator::is_idle() const {
@@ -60,7 +87,7 @@ void Elevator::press_floor_button(FloorNumber number) {
  * @param floor_number
  */
 void Elevator::go_to(FloorNumber floor_number) {
-    assert(floor_number >= min_floor_ && floor_number < max_floor_);
+    assert(floors_.count(floor_number) > 0);
     next_floor_ = floor_number;
 }
 
@@ -101,6 +128,19 @@ void Elevator::move(Duration duration) {
         direction_ = Direction::NONE;
         state_ = State::IDLE;
     }
+}
+
+bool Elevator::can_embark(std::shared_ptr<Passenger> passenger) {
+    return (passenger->begin_floor() == current_floor());
+}
+
+bool Elevator::can_disembark(std::shared_ptr<Passenger> passenger) {
+    return (passenger->end_floor() == current_floor());
+}
+
+void Elevator::set_position(FloorNumber number, Direction direction) {
+    current_floor_ = number;
+    direction_ = direction;
 }
 
 std::ostream &operator<<(std::ostream &os, Elevator &elevator) {

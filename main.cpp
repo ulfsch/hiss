@@ -68,6 +68,7 @@ static Time run(bool graph, bool verbose) {
     for (FloorNumber i = 0; i < NUMBER_OF_FLOORS; i++) {
         building.floors().push_back(Floor(i));
     }
+
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
 

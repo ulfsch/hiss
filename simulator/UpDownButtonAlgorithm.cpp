@@ -2,13 +2,16 @@
 // UpDownButtonAlgorithm.cpp.
 //
 
-#include <vector>
-#include <algorithm>
-#include <iostream>
 #include "UpDownButtonAlgorithm.h"
 #include "../model/Building.h"
+#include <algorithm>
+#include <iostream>
 
-
+/**
+ * Algorithm for two call buttons (up/down) on each floor.
+ *
+ * @param building
+ */
 void UpDownButtonAlgorithm::operator()(Building &building) {
     for (Elevator &elevator : building.elevators()) {
         std::vector<Stop> stops;
@@ -20,7 +23,8 @@ void UpDownButtonAlgorithm::operator()(Building &building) {
         for (const Floor &floor : building.floors()) {
             if (floor.down_button()) {
                 stops.push_back(Stop(floor.number(), Direction::DOWN));
-            } else if (floor.up_button()) {
+            }
+            if (floor.up_button()) {
                 stops.push_back(Stop(floor.number(), Direction::UP));
             }
         }
@@ -30,42 +34,40 @@ void UpDownButtonAlgorithm::operator()(Building &building) {
             std::sort(stops.begin(), stops.end(), comp);
             elevator.go_to(stops.begin()->floor);
         }
-
-//        for (Stop s : stops) {
-//            std::cout << s;
-//        }
-//        std::cout << std::endl;
     }
 }
 
+/**
+ * The compare function.
+ *
+ * @param a
+ * @param b
+ * @return true if stop a is better than stop b given a elevator position and direction
+ */
 bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b) {
     int a_delta = a.floor - current_;
     int b_delta = b.floor - current_;
+    Direction a_dir = (a_delta < 0) ? Direction::DOWN : Direction::UP;
+    Direction b_dir = (b_delta < 0) ? Direction::DOWN : Direction::UP;
 
-    bool a_same_dir = a.direction == direction_ || a.direction == Direction::NONE || direction_ == Direction::NONE;
-    bool b_same_dir = b.direction == direction_ || b.direction == Direction::NONE || direction_ == Direction::NONE;
-
-    // Change of direction is always bad
-    if (a_delta > 0 && b_delta < 0 && direction_ == Direction::UP) {
+    // Prefer a stop in the elevator direction.
+    if (a_dir == direction_ && b_dir != direction_) {
         return true;
     }
-    if (a_delta < 0 && b_delta > 0 && direction_ == Direction::DOWN) {
-        return true;
-    }
-    if (a_delta < 0 && b_delta > 0 && direction_ == Direction::UP) {
-        return false;
-    }
-    if (a_delta > 0 && b_delta < 0 && direction_ == Direction::DOWN) {
+    if (a_dir != direction_ && b_dir == direction_) {
         return false;
     }
 
-    // Prefer passengers in the elevator direction
-    if (a_same_dir && !b_same_dir) {
+    // Prefer stop ... direction
+    if (a.direction == a_dir && b.direction != b_dir) {
         return true;
     }
-    if (!a_same_dir && b_same_dir) {
+    if (a.direction != a_dir && b.direction == b_dir) {
         return false;
     }
+//    if (a.direction != a_dir && b.direction != b_dir) {
+//        return std::abs(a_delta) > std::abs(b_delta);
+//    }
 
     // Shortest distance
     return std::abs(a_delta) < std::abs(b_delta);

@@ -33,14 +33,6 @@ FloorNumber Passenger::end_floor() const {
     return end_floor_;
 }
 
-bool Passenger::on_end_floor(FloorNumber floor_number) const {
-    return end_floor_ == floor_number;
-}
-
-bool Passenger::on_begin_floor(FloorNumber floor_number) const {
-    return begin_floor_ == floor_number;
-}
-
 bool Passenger::on_destination() const {
     return end_time_ != 0;
 }
