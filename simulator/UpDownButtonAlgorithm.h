@@ -14,7 +14,7 @@
 
 class UpDownButtonAlgorithm : public Algorithm {
 public:
-    virtual void operator()(Building &);
+    virtual void operator()(Building &) override;
 
     struct Stop {
         Stop(FloorNumber n, Direction d = Direction::NONE) : floor(n), direction(d) {}

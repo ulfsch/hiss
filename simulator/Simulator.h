@@ -26,7 +26,7 @@ private:
     void move_elevators(Duration dt);
 
 private:
-    Traffic &traffic_;
+    Traffic &traffic_generator_;
     Algorithm &algorithm_;
     Building &building_;
     PassengerList passengers_;

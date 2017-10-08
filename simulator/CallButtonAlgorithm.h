@@ -10,7 +10,7 @@
 class CallButtonAlgorithm : public Algorithm {
 public:
     CallButtonAlgorithm();
-    virtual void operator()(Building &);
+    virtual void operator()(Building &) override;
 
 };
 

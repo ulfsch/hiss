@@ -6,16 +6,16 @@
 #include <iostream>
 
 Simulator::Simulator(Traffic &traffic, Algorithm &algorithm, Building &building) :
-        traffic_(traffic),
+        traffic_generator_(traffic),
         algorithm_(algorithm),
         building_(building) {
 
 }
 
 void Simulator::step(Time time, Duration dt) {
-    while (auto passenger = traffic_(time)) {
-        inject_passenger(passenger);
-        passengers_.push_back(passenger);
+    for (auto p : traffic_generator_(time)) {
+        inject_passenger(p);
+        passengers_.push_back(p);
     }
     move_passengers(time);
     algorithm_(building_);
@@ -23,7 +23,7 @@ void Simulator::step(Time time, Duration dt) {
 }
 
 bool Simulator::done() const {
-    if (!traffic_.done()) {
+    if (!traffic_generator_.done()) {
         return false;
     }
 

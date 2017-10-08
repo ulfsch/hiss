@@ -4,13 +4,8 @@
 #include "ConstantTraffic.h"
 
 /**
- * Passenger generator functor.
+ * Constructor.
  *
- * Generate new passengers at a constant rate. The passengers
- * are evenly distributed on all floors.
- *
- * @param number_of_floors
- * @param total_no_of_passengers
  * @param rate  passengers/step
  */
 ConstantTraffic::ConstantTraffic(size_t number_of_floors,
@@ -26,27 +21,34 @@ ConstantTraffic::ConstantTraffic(size_t number_of_floors,
 /**
  * Passenger generator function.
  *
- * @param time
- * @return pointer to a new passenger or nullptr
+ * Generate new passengers at a constant rate. The passengers
+ * are evenly distributed on all floors.
+ *
+ * @param time the begin_time for the generated passengers
+ * @return list of new passengers generated in one step
  */
-std::shared_ptr<Passenger> ConstantTraffic::operator()(Time time) {
-    while (count_ < rate_ &&
-           no_of_passengers_ < max_no_of_passengers_) {
+PassengerList ConstantTraffic::operator()(Time time) {
+    PassengerList passengers;
+    count_ += rate_;
+
+    while (count_ > 1 && no_of_passengers_ < max_no_of_passengers_) {
         auto from_floor = static_cast<FloorNumber>(std::rand() % number_of_floors_);
         auto to_floor = static_cast<FloorNumber>(std::rand() % number_of_floors_);
 
         if (from_floor != to_floor) {
-            std::shared_ptr<Passenger> p = std::make_shared<Passenger>(Passenger(from_floor, to_floor, time));
+            passengers.push_back(std::make_shared<Passenger>(Passenger(from_floor, to_floor, time)));
             no_of_passengers_ += 1;
-            count_ += 1;
-            return p;
+            count_ -= 1;
         }
     }
 
-    count_ = 0;
-    return nullptr;
+    return passengers;
 }
 
+/**
+ *
+ * @return true when all passengers are generated
+ */
 bool ConstantTraffic::done() const {
     return no_of_passengers_ >= max_no_of_passengers_;
 }

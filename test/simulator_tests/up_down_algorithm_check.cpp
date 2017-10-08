@@ -35,8 +35,18 @@ TEST_F(UpDownAlgorithm, basic1) {
     EXPECT_EQ(7, elevator.next_floor());
 }
 
+TEST_F(UpDownAlgorithm, basic2) {
+    Elevator &elevator = building.elevators().front();
+
+    elevator.press_floor_button(7);
+    building.floors()[5].press_buttons(9);
+    algorithm(building);
+    EXPECT_EQ(5, elevator.next_floor());
+}
+
 TEST_F(UpDownAlgorithm, preferElevatorDirection) {
     Elevator &elevator = building.elevators().front();
+
     elevator.set_position(7, Direction::UP);
     building.floors()[9].press_buttons(3);
     building.floors()[6].press_buttons(3);

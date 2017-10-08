@@ -21,7 +21,7 @@ static void print_usage(const char *arg);
  */
 const FloorNumber NUMBER_OF_FLOORS = 10;
 const size_t NUMBER_OF_PASSENGERS = 100;
-const double PASSENGER_RATE = 1;       // Passengers/step
+const double PASSENGER_RATE = 1;         // Passengers/step
 const Duration SIMULATION_RATE = 1;      // Seconds/step
 
 /**
@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
  */
 static Time run(bool graph, bool verbose) {
     ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
-    //CallButtonAlgorithm algorithm;
-    UpDownButtonAlgorithm algorithm;
+    CallButtonAlgorithm algorithm;
+    //UpDownButtonAlgorithm algorithm;
     Building building;
 
     for (FloorNumber i = 0; i < NUMBER_OF_FLOORS; i++) {
