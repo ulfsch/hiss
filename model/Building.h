@@ -14,8 +14,9 @@
  */
 class Building {
 public:
-    std::vector<Elevator> &elevators() { return elevators_; }
+    Building(FloorNumber number_of_floors);
 
+    std::vector<Elevator> &elevators() { return elevators_; }
     std::vector<Floor> &floors() { return floors_; }
 
 private:

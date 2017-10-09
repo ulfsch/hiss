@@ -61,14 +61,11 @@ int main(int argc, char *argv[]) {
  */
 static Time run(bool graph, bool verbose) {
     ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
-    CallButtonAlgorithm algorithm;
-    //UpDownButtonAlgorithm algorithm;
-    Building building;
 
-    for (FloorNumber i = 0; i < NUMBER_OF_FLOORS; i++) {
-        building.floors().push_back(Floor(i));
-    }
+    //CallButtonAlgorithm algorithm;
+    UpDownButtonAlgorithm algorithm;
 
+    Building building(NUMBER_OF_FLOORS);
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
     building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
 

@@ -4,14 +4,17 @@
 #ifndef CHISS_ELEVATOR_H
 #define CHISS_ELEVATOR_H
 
-#include "Passenger.h"
+static const int VELOCITY = 5;
+static const int FLOOR_HEIGHT = 4;
+
 #include "Direction.h"
+#include "Passenger.h"
 #include <set>
 
 class Elevator {
 public:
-    Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity = 5, int floor_height = 4);
-    Elevator(FloorNumber *floor_array, size_t len, int velocity = 5, int floor_height = 4);
+    Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
+    Elevator(FloorNumber *floor_array, size_t len, int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
 
     // Access methods
     FloorNumber target_floor() const;
@@ -41,8 +44,6 @@ public:
 private:
     std::set<FloorNumber> floors_;
 
-    //    const FloorNumber min_floor_;
-    //    const FloorNumber max_floor_;
     const int velocity_;
     const int floor_height_;
 

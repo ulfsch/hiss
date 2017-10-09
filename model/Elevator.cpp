@@ -2,7 +2,7 @@
 // Elevator.cpp
 //
 #include "Elevator.h"
-#include <assert.h>
+#include <cassert>
 
 /**
  * Constructor.

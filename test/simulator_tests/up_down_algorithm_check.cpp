@@ -13,15 +13,11 @@ class UpDownAlgorithm : public ::testing::Test {
 
 protected:
     virtual void SetUp() {
-
-        for (FloorNumber i = 0; i < NUMBER_OF_FLOORS; i++) {
-            building.floors().push_back(Floor(i));
-        }
         building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
     }
 
 public:
-    Building building;
+    Building building{NUMBER_OF_FLOORS};
     UpDownButtonAlgorithm algorithm;
 
 };
