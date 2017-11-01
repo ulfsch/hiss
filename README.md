@@ -1,24 +1,25 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### Build
 
-### What is this repository for? ###
+    git clone git@bitbucket.org:ulfsch/chiss.git
+    cd chiss
+    mkdir build
+    cd build
+    cmake ..
+    make
 
-* This repository contain the "hiss" project written in c++
-* Version 0.1
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Dependencies
 
-### How do I get set up? ###
+ncurses
 
-* Setup
-cd chiss
-mkdir build
-cd build
-cmake ..
-make
+    sudo apt-get install libncurses5-dev
 
-* Configuration
-* Dependencies
 gtest
 
-* How to run tests
+    cd chiss
+    ln -s ~/src/gtest-1,7,0
+    
+### Tests
+
+    make test
