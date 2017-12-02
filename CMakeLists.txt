@@ -9,9 +9,10 @@ add_executable(hiss ${SOURCE_FILES})
 
 add_subdirectory(model)
 add_subdirectory(simulator)
+add_subdirectory(builder)
 add_subdirectory(gtest-1.7.0)
 
 enable_testing()
 add_subdirectory(test)
 
-target_link_libraries(hiss simulator model ncurses)
+target_link_libraries(hiss builder simulator model ncurses)

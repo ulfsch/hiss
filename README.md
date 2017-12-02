@@ -1,24 +1,21 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contain the "hiss" project written in c++
 
-### What is this repository for? ###
+### Dependencies
 
-* This repository contain the "hiss" project written in c++
-* Version 0.1
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Create symbolic link to googletest
 
-### How do I get set up? ###
+      cd chiss
+      ln -s ../../path/to/googletest gtest-1.7.0
 
-* Setup
-cd chiss
-mkdir build
-cd build
-cmake ..
-make
+### Build
 
-* Configuration
-* Dependencies
-gtest
+      mkdir build
+      cd build
+      cmake ..
+      make
+    
+### Test
 
-* How to run tests
+      make test

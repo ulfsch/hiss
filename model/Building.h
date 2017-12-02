@@ -14,7 +14,10 @@
  */
 class Building {
 public:
-    Building(FloorNumber number_of_floors);
+    explicit Building(FloorNumber number_of_floors);
+
+    void add_elevator(Elevator &elevator);
+    void add_floor(Floor &floor);
 
     std::vector<Elevator> &elevators() { return elevators_; }
     std::vector<Floor> &floors() { return floors_; }

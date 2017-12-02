@@ -9,6 +9,14 @@ Building::Building(FloorNumber number_of_floors) {
     }
 }
 
+void Building::add_elevator(Elevator &elevator) {
+    elevators_.push_back(elevator);
+}
+
+void Building::add_floor(Floor &floor) {
+    floors_.push_back(floor);
+}
+
 std::ostream &operator<<(std::ostream &os, Building &building) {
     for (auto &elevator : building.elevators()) {
         os << elevator << std::endl;

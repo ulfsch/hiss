@@ -125,7 +125,7 @@ void Elevator::move(Duration duration) {
             state_ = State::WAITING;
         }
     } else {
-        direction_ = Direction::NONE;
+        // direction_ = Direction::NONE;
         state_ = State::IDLE;
     }
 }

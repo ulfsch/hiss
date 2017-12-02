@@ -47,27 +47,34 @@ void UpDownButtonAlgorithm::operator()(Building &building) {
 bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b) {
     int a_delta = a.floor - current_;
     int b_delta = b.floor - current_;
-    Direction a_dir = (a_delta < 0) ? Direction::DOWN : Direction::UP;
-    Direction b_dir = (b_delta < 0) ? Direction::DOWN : Direction::UP;
+    Direction approach_dir_a = (a_delta < 0) ? Direction::DOWN : Direction::UP;
+    Direction approach_dir_b = (b_delta < 0) ? Direction::DOWN : Direction::UP;
 
     // Prefer a stop in the elevator direction.
-    if (a_dir == direction_ && b_dir != direction_) {
+    if (approach_dir_a == direction_ && approach_dir_b != direction_) {
         return true;
     }
-    if (a_dir != direction_ && b_dir == direction_) {
+    if (approach_dir_a != direction_ && approach_dir_b == direction_) {
         return false;
     }
 
-    // Prefer stop ... direction
-    if (a.direction == a_dir && b.direction != b_dir) {
+    // Prefer stop in travel direction
+    if (a.direction == approach_dir_a && b.direction != approach_dir_b) {
         return true;
     }
-    if (a.direction != a_dir && b.direction == b_dir) {
+    if (a.direction != approach_dir_a && b.direction == approach_dir_b) {
         return false;
     }
-//    if (a.direction != a_dir && b.direction != b_dir) {
-//        return std::abs(a_delta) > std::abs(b_delta);
+
+//    //
+//    if (a.direction == Direction::DOWN && b.direction == Direction::DOWN) {
+//        return a.floor > b.floor;
 //    }
+//    if (a.direction == Direction::UP && b.direction == Direction::UP) {
+//        return a.floor < b.floor;
+//    }
+//
+//    assert(false);
 
     // Shortest distance
     return std::abs(a_delta) < std::abs(b_delta);

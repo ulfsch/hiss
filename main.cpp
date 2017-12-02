@@ -6,13 +6,14 @@
 #include "simulator/CallButtonAlgorithm.h"
 #include "simulator/Simulator.h"
 #include "simulator/UpDownButtonAlgorithm.h"
+#include "builder/Factory.h"
 #include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
 #include <cstring>
 
-static void print_building(Building &building);
-static Time run(bool graph, bool verbose);
+static void print_building(Building &);
+static void run(Simulator &, bool graph, bool verbose);
 static void print_usage(const char *arg);
 
 
@@ -49,36 +50,35 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    return run(opt_graphical, opt_verbose);
+    if (optind == argc) {
+        print_usage(argv[0]);
+    }
+
+    for (int index = optind; index < argc; index++) {
+        Factory factory;
+        factory.build_from_xml(argv[index]);
+        Simulator simulator(factory.traffic(), factory.algorithm(), factory.building());
+        run(simulator, opt_graphical, opt_verbose);
+    }
+    return 0;
 }
 
 /**
  * Run the simulator.
  *
+ * @param simulator
  * @param graph ncurses output
  * @param verbose
- * @return simulation time in seconds
  */
-static Time run(bool graph, bool verbose) {
-    ConstantTraffic traffic(NUMBER_OF_FLOORS, NUMBER_OF_PASSENGERS, PASSENGER_RATE);
-
-    //CallButtonAlgorithm algorithm;
-    UpDownButtonAlgorithm algorithm;
-
-    Building building(NUMBER_OF_FLOORS);
-    building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
-    building.elevators().push_back(Elevator(0, NUMBER_OF_FLOORS));
-
-    Simulator simulator(traffic, algorithm, building);
-
-    // Run
+static void run(Simulator &simulator, bool graph, bool verbose) {
     Time time = 0;
+
     if (graph) {
         initscr();
         while (!simulator.done()) {
             simulator.step(time, SIMULATION_RATE);
             time += SIMULATION_RATE;
-            print_building(building);
+            print_building(simulator.building());
             sleep(1);
         }
         endwin();
@@ -109,8 +109,7 @@ static Time run(bool graph, bool verbose) {
     std::cout << "Total simulation time:    " << time << std::endl;
     std::cout << "Average waiting time:     " << waiting_time / count << std::endl;
     std::cout << "Average traveling time:   " << traveling_time / count << std::endl;
-
-    return 0;
+    std::cout << std::endl;
 }
 
 /**
@@ -190,9 +189,10 @@ static void print_usage(const char *arg) {
     } else {
         program = arg;
     }
-    fprintf(stderr, "Usage: %s <options>\n", program);
-    fprintf(stderr, " Elevator simulator\n");
-    fprintf(stderr, " Options: \n");
+    fprintf(stderr, "Usage: %s [OPTIONS]... CONFIG...\n", program);
+    fprintf(stderr, " Elevator simulator\n\n");
+    fprintf(stderr, " CONFIG: Configuration xml file\n");
+    fprintf(stderr, " OPTIONS: \n");
     fprintf(stderr, "  -g: graphical\n");
     fprintf(stderr, "  -v: verbose\n");
 
