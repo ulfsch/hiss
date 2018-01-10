@@ -4,10 +4,13 @@ This repository contain the "hiss" project written in c++
 
 ### Dependencies
 
-Create symbolic link to googletest
+Install gtest
 
-      cd chiss
-      ln -s ../../path/to/googletest gtest-1.7.0
+      sudo apt-get install libgtest-dev
+      cd /usr/src/gtest
+      sudo cmake CMakeLists.txt
+      sudo make
+      sudo cp *.a /usr/lib
 
 ### Build
 
