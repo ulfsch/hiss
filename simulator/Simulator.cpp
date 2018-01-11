@@ -53,7 +53,7 @@ void Simulator::inject_passenger(std::shared_ptr<Passenger> passenger) {
 void Simulator::move_passengers(Time time) {
     for (auto &floor : building_.floors()) {
         for (auto &elevator : building_.elevators()) {
-            if (elevator.standing_on_floor(floor.number())) {
+            if (elevator.car().is_idle_on_floor(floor.number())) {
                 floor.clear_buttons();
                 elevator.clear_floor_button(floor.number());
 
@@ -98,7 +98,7 @@ void Simulator::embark(Floor &floor, Elevator &elevator, Time time) {
 
 void Simulator::move_elevators(Duration dt) {
     for (auto &elevator : building_.elevators()) {
-        elevator.move(dt);
+        elevator.car().move(dt);
     }
 }
 

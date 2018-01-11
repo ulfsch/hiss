@@ -30,9 +30,9 @@ void UpDownButtonAlgorithm::operator()(Building &building) {
         }
 
         if (!stops.empty()) {
-            Comp comp(elevator.current_floor(), elevator.direction());
+            Comp comp(elevator.car().current_floor(), elevator.car().direction());
             std::sort(stops.begin(), stops.end(), comp);
-            elevator.go_to(stops.begin()->floor);
+            elevator.car().go_to(stops.begin()->floor);
         }
     }
 }

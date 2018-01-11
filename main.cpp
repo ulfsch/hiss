@@ -148,7 +148,7 @@ static void print_building(Building &building) {
 
     column = 30;
     for (Elevator &elevator : building.elevators()) {
-        row = building.floors().size() - elevator.current_floor();
+        row = building.floors().size() - elevator.car().current_floor();
 
         wmove(stdscr, row - 1, column);
         waddch(stdscr, ACS_ULCORNER);
