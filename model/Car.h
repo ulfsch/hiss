@@ -16,21 +16,18 @@ public:
     // Access methods
     FloorNumber current_floor() const;
 
-    FloorNumber next_floor() const;
-
     bool is_idle() const;
-
     bool is_idle_on_floor(FloorNumber i) const;
 
     Direction direction() const { return direction_; }
 
     // Elevator movement methods
-    void go_to(FloorNumber floor_number);
-
+    void set_next_floor(FloorNumber floor_number);
     void move(Duration dt);
 
     // Testing only
     void set_position(FloorNumber number, Direction direction);
+    FloorNumber next_floor() const;
 
 private:
     const int velocity_;

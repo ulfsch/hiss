@@ -57,20 +57,18 @@ void Simulator::move_passengers(Time time) {
                 floor.clear_buttons();
                 elevator.clear_floor_button(floor.number());
 
-                disembark(elevator, floor, time);
+                disembark(elevator, time);
                 embark(floor, elevator, time);
             }
         }
     }
 }
 
-void Simulator::disembark(Elevator &elevator, Floor &floor, Time time) {
+void Simulator::disembark(Elevator &elevator, Time time) {
     PassengerList new_list;
     for (auto passenger : elevator.passengers()) {
         if (elevator.can_disembark(passenger)) {
             passenger->set_on_destination(time);
-//            floor.passengers().push_back(passenger);
-//            floor.press_floor_button(passenger);
         } else {
             new_list.push_back(passenger);
         }

@@ -1,3 +1,6 @@
-gtest-1.7.0
 .idea/
 cmake-build-debug/
+doc/
+build/
+chiss.sublime-project
+chiss.sublime-workspace

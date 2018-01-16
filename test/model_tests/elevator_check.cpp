@@ -24,14 +24,14 @@ TEST(ElevatorBasic, direction) {
 TEST(ElevatorBasic, move) {
     Elevator e(10, 20, 12);
     EXPECT_TRUE(e.car().is_idle_on_floor(10));
-    e.car().go_to(17);
+    e.car().set_next_floor(17);
 
     e.car().move(1);
     EXPECT_FALSE(e.car().is_idle());
     EXPECT_EQ(13, e.car().current_floor());
     EXPECT_FALSE(e.car().is_idle_on_floor(17));
 
-    e.car().go_to(15);
+    e.car().set_next_floor(15);
 
     e.car().move(1);
     EXPECT_FALSE(e.car().is_idle());
@@ -67,7 +67,7 @@ TEST(ElevatorBasic, move2) {
     Elevator e(floor_array, 4);
     EXPECT_TRUE(e.car().is_idle_on_floor(10));
 
-    e.car().go_to(21);
+    e.car().set_next_floor(21);
 
     e.car().move(1);
     EXPECT_FALSE(e.car().is_idle());

@@ -14,13 +14,13 @@ void CallButtonAlgorithm::operator()(Building &building) {
         if (!elevator.buttons().empty()) {
 
             // First check elevator buttons
-            elevator.car().go_to(*elevator.buttons().begin());
+            elevator.car().set_next_floor(*elevator.buttons().begin());
         } else {
 
             // No elevator buttons pressed. Check floor buttons.
             for (const auto &floor : building.floors()) {
                 if (floor.call_button()) {
-                    elevator.car().go_to(floor.number());
+                    elevator.car().set_next_floor(floor.number());
                 }
             }
         }

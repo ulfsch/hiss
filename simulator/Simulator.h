@@ -21,7 +21,7 @@ public:
 private:
     void inject_passenger(std::shared_ptr<Passenger> passenger);
     void move_passengers(Time time);
-    void disembark(Elevator &elevator, Floor &floor, Time time);
+    void disembark(Elevator &elevator, Time time);
     void embark(Floor &floor, Elevator &elevator, Time time);
     void move_elevators(Duration dt);
 

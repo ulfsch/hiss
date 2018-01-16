@@ -41,7 +41,7 @@ bool Car::is_idle_on_floor(FloorNumber i) const {
  *
  * @param floor_number
  */
-void Car::go_to(FloorNumber floor_number) {
+void Car::set_next_floor(FloorNumber floor_number) {
     next_floor_ = floor_number;
 }
 

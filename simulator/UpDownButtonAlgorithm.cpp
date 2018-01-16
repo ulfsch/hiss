@@ -32,7 +32,7 @@ void UpDownButtonAlgorithm::operator()(Building &building) {
         if (!stops.empty()) {
             Comp comp(elevator.car().current_floor(), elevator.car().direction());
             std::sort(stops.begin(), stops.end(), comp);
-            elevator.car().go_to(stops.begin()->floor);
+            elevator.car().set_next_floor(stops.begin()->floor);
         }
     }
 }
