@@ -26,7 +26,7 @@ Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, int velocity, i
  * @param velocity  elevator speed in m/s
  * @param floor_height in meter
  */
-Elevator::Elevator(FloorNumber floor_array[], size_t len, int velocity, int floor_height) :
+Elevator::Elevator(FloorNumber* floor_array, size_t len, int velocity, int floor_height) :
         car_(floor_array[0], velocity, floor_height),
         floors_(floor_array, floor_array + len) {
 }

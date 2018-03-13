@@ -4,9 +4,9 @@
 
 #include "Factory.h"
 #include "tinyxml2.h"
-#include "../simulator/UpDownButtonAlgorithm.h"
-#include "../simulator/ConstantTraffic.h"
-#include "../simulator/CallButtonAlgorithm.h"
+#include "UpDownButtonAlgorithm.h"
+#include "ConstantTraffic.h"
+#include "CallButtonAlgorithm.h"
 
 using namespace tinyxml2;
 

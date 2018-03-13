@@ -22,78 +22,77 @@ TEST(ElevatorBasic, direction) {
 }
 
 TEST(ElevatorBasic, move) {
-    Elevator e(10, 20, 12);
-    EXPECT_TRUE(e.car().is_idle_on_floor(10));
-    e.car().set_next_floor(17);
+    Car car(10, 12, 4);
+    EXPECT_TRUE(car.is_idle_on_floor(10));
+    car.set_next_floor(17);
 
-    e.car().move(1);
-    EXPECT_FALSE(e.car().is_idle());
-    EXPECT_EQ(13, e.car().current_floor());
-    EXPECT_FALSE(e.car().is_idle_on_floor(17));
+    car.move(1);
+    EXPECT_FALSE(car.is_idle());
+    EXPECT_EQ(13, car.current_floor());
+    EXPECT_FALSE(car.is_idle_on_floor(17));
 
-    e.car().set_next_floor(15);
+    car.set_next_floor(15);
 
-    e.car().move(1);
-    EXPECT_FALSE(e.car().is_idle());
-    EXPECT_EQ(16, e.car().current_floor());
-    EXPECT_FALSE(e.car().is_idle_on_floor(17));
+    car.move(1);
+    EXPECT_FALSE(car.is_idle());
+    EXPECT_EQ(16, car.current_floor());
+    EXPECT_FALSE(car.is_idle_on_floor(17));
 
-    e.car().move(1);
-    EXPECT_FALSE(e.car().is_idle()); // Waiting
-    EXPECT_EQ(17, e.car().current_floor());
-    EXPECT_FALSE(e.car().is_idle_on_floor(17));
+    car.move(1);
+    EXPECT_FALSE(car.is_idle()); // Waiting
+    EXPECT_EQ(17, car.current_floor());
+    EXPECT_FALSE(car.is_idle_on_floor(17));
 
-    e.car().move(1);
-    EXPECT_TRUE(e.car().is_idle());
-    EXPECT_EQ(17, e.car().current_floor());
-    EXPECT_TRUE(e.car().is_idle_on_floor(17));
+    car.move(1);
+    EXPECT_TRUE(car.is_idle());
+    EXPECT_EQ(17, car.current_floor());
+    EXPECT_TRUE(car.is_idle_on_floor(17));
 
     // New target (15)
 
-    e.car().move(1);
-    EXPECT_FALSE(e.car().is_idle());
-    EXPECT_EQ(15, e.car().current_floor());
-    EXPECT_FALSE(e.car().is_idle_on_floor(15));
+    car.move(1);
+    EXPECT_FALSE(car.is_idle());
+    EXPECT_EQ(15, car.current_floor());
+    EXPECT_FALSE(car.is_idle_on_floor(15));
 
-    e.car().move(1);
-    EXPECT_TRUE(e.car().is_idle());
-    EXPECT_EQ(15, e.car().current_floor());
-    EXPECT_TRUE(e.car().is_idle_on_floor(15));
+    car.move(1);
+    EXPECT_TRUE(car.is_idle());
+    EXPECT_EQ(15, car.current_floor());
+    EXPECT_TRUE(car.is_idle_on_floor(15));
 
 }
 
 TEST(ElevatorBasic, move2) {
-    FloorNumber floor_array[] = {10, 20, 21, 22};
-    Elevator e(floor_array, 4);
-    EXPECT_TRUE(e.car().is_idle_on_floor(10));
+    Car car(10, 5, 4);
+    EXPECT_TRUE(car.is_idle_on_floor(10));
 
-    e.car().set_next_floor(21);
+    car.set_next_floor(21);
 
-    e.car().move(1);
-    EXPECT_FALSE(e.car().is_idle());
-    EXPECT_EQ(11, e.car().current_floor());
-    EXPECT_FALSE(e.car().is_idle_on_floor(17));
+    car.move(1);
+    EXPECT_FALSE(car.is_idle());
+    EXPECT_EQ(11, car.current_floor());
+    EXPECT_FALSE(car.is_idle_on_floor(17));
 
-    e.car().move(1);
-    EXPECT_EQ(12, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(13, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(15, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(16, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(17, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(18, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(20, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_EQ(21, e.car().current_floor());
-    e.car().move(1);
-    EXPECT_TRUE(e.car().is_idle());
-    EXPECT_EQ(21, e.car().current_floor());
-    EXPECT_TRUE(e.car().is_idle_on_floor(21));
+    car.move(1);
+    EXPECT_EQ(12, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(13, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(15, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(16, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(17, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(18, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(20, car.current_floor());
+    car.move(1);
+    EXPECT_EQ(21, car.current_floor());
+    car.move(1);
+    EXPECT_TRUE(car.is_idle());
+    EXPECT_EQ(21, car.current_floor());
+    EXPECT_TRUE(car.is_idle_on_floor(21));
 
 }
 

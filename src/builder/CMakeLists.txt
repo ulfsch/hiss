@@ -1,5 +1,7 @@
 
-
+include_directories(../builder)
+include_directories(../model)
+include_directories(../simulator)
 
 set(SOURCE_FILES
         Factory.cpp

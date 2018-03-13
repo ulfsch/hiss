@@ -11,6 +11,8 @@ set(SOURCE_FILES
         Elevator.cpp
         Elevator.h
         Floor.cpp
-        Floor.h Car.cpp Car.h)
+        Floor.h
+        Car.cpp
+        Car.h)
 
 add_library(model ${SOURCE_FILES})

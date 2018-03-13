@@ -1,12 +1,12 @@
 //
 // main.cpp
 //
-#include "model/Building.h"
-#include "simulator/ConstantTraffic.h"
-#include "simulator/CallButtonAlgorithm.h"
-#include "simulator/Simulator.h"
-#include "simulator/UpDownButtonAlgorithm.h"
-#include "builder/Factory.h"
+#include "Building.h"
+#include "ConstantTraffic.h"
+#include "CallButtonAlgorithm.h"
+#include "Simulator.h"
+#include "UpDownButtonAlgorithm.h"
+#include "Factory.h"
 #include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
