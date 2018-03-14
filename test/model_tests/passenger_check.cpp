@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../model/Passenger.h"
+#include "Passenger.h"
 
 TEST(PassengerBasic, access_methods) {
     Passenger *p = new Passenger(7, 14, 10);

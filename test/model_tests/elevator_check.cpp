@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../model/Elevator.h"
+#include "Elevator.h"
 
 TEST(ElevatorBasic, direction) {
     Direction a = Direction::DOWN;

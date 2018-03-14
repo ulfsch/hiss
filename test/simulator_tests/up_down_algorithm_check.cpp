@@ -3,8 +3,8 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../model/Building.h"
-#include "../../simulator/UpDownButtonAlgorithm.h"
+#include "Building.h"
+#include "UpDownButtonAlgorithm.h"
 
 static const FloorNumber NUMBER_OF_FLOORS = 10;
 
