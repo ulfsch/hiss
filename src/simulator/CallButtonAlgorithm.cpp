@@ -5,21 +5,28 @@
 #include "Building.h"
 
 
-CallButtonAlgorithm::CallButtonAlgorithm() {
+CallButtonAlgorithm::CallButtonAlgorithm()
+{
 
 }
 
-void CallButtonAlgorithm::operator()(Building &building) {
-    for (Elevator &elevator : building.elevators()) {
-        if (!elevator.buttons().empty()) {
+void CallButtonAlgorithm::operator()(Building &building)
+{
+    for (Elevator &elevator : building.elevators())
+    {
+        if (!elevator.buttons().empty())
+        {
 
             // First check elevator buttons
             elevator.car().set_next_floor(*elevator.buttons().begin());
-        } else {
+        } else
+        {
 
             // No elevator buttons pressed. Check floor buttons.
-            for (const auto &floor : building.floors()) {
-                if (floor.call_button()) {
+            for (const auto &floor : building.floors())
+            {
+                if (floor.call_button())
+                {
                     elevator.car().set_next_floor(floor.number());
                 }
             }
