@@ -1,5 +1,7 @@
-.idea/
-cmake-build-debug/
+.idea/workspace/
+.idea/usage-statistics/
+.idea/tasks/
+cmake-build-*/
 doc/
 build/
 chiss.sublime-project

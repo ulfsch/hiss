@@ -6,10 +6,7 @@
 #include "CallButtonAlgorithm.h"
 #include "Simulator.h"
 #include "Factory.h"
-#include <iostream>
 #include <ncurses.h>
-#include <unistd.h>
-#include <cstring>
 
 static void print_building(Building &);
 static void run(Simulator &, bool graph, bool verbose);
@@ -52,12 +49,13 @@ int main(int argc, char *argv[])
     if (optind == argc)
     {
         print_usage(argv[0]);
-    }
-
-    for (int index = optind; index < argc; index++)
+    } else
     {
         Factory factory;
-        factory.build_from_xml(argv[index]);
+        for (int index = optind; index < argc; index++) {
+            factory.build_from_xml(argv[index]);
+        }
+
         Simulator simulator(factory.traffic(), factory.algorithm(), factory.building());
         run(simulator, opt_graphical, opt_verbose);
     }
