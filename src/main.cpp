@@ -4,9 +4,14 @@
 #include "Building.h"
 #include "CallButtonAlgorithm.h"
 #include "Configuration.h"
+#include "ConstantTraffic.h"
 #include "Result.h"
 #include "Simulator.h"
+#include <cstring>
+#include <getopt.h>
 #include <ncurses.h>
+#include <iostream>
+#include <unistd.h>
 
 static void print_building(Building &);
 
