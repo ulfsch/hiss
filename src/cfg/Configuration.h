@@ -15,7 +15,7 @@ public:
     Configuration();
     ~Configuration();
 
-    void from_xml(const char *file_name);
+    void parse_from_xml(const char *file_name);
 
     Building &building() const;
     Algorithm &algorithm() const;

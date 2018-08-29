@@ -2,16 +2,11 @@
 // main.cpp
 //
 #include "Building.h"
-#include "ConstantTraffic.h"
 #include "CallButtonAlgorithm.h"
-#include "Simulator.h"
 #include "Configuration.h"
-#include <cstring>
-#include <getopt.h>
+#include "Result.h"
+#include "Simulator.h"
 #include <ncurses.h>
-#include <iostream>
-#include <unistd.h>
-#include <Result.h>
 
 static void print_building(Building &);
 
@@ -63,7 +58,7 @@ int main(int argc, char *argv[])
         Configuration configuration;
         for (int index = optind; index < argc; index++)
         {
-            configuration.from_xml(argv[index]);
+            configuration.parse_from_xml(argv[index]);
         }
 
         Simulator simulator(configuration);

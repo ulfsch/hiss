@@ -2,6 +2,8 @@
 
 set(SOURCE_FILES
         common.h
+        Algorithm.h
+        Traffic.h
         Passenger.cpp
         Passenger.h
         Direction.cpp

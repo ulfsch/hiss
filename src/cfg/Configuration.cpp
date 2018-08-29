@@ -35,7 +35,7 @@ Configuration::~Configuration()
 }
 
 
-void Configuration::from_xml(const char *file_name)
+void Configuration::parse_from_xml(const char *file_name)
 {
     XMLDocument doc;
     doc.LoadFile(file_name);

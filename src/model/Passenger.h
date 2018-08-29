@@ -14,7 +14,8 @@ class Passenger;
 typedef std::list<std::shared_ptr<Passenger> > PassengerList;
 
 
-class Passenger {
+class Passenger
+{
 public:
     Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time);
 
