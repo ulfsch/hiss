@@ -11,6 +11,10 @@ Install gtest
       sudo cmake CMakeLists.txt
       sudo make
       sudo cp *.a /usr/lib
+      
+Install ncurses
+
+      sudo apt-get install ncurses-dev
 
 ### Build
 
