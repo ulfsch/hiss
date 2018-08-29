@@ -15,8 +15,7 @@
 
 static void print_building(Building &);
 
-static void run(Simulator &, bool graph, bool verbose);
-
+static void run_simulation(Configuration &configuration, bool graph, bool verbose);
 static void print_usage(const char *arg);
 
 
@@ -66,13 +65,8 @@ int main(int argc, char *argv[])
             configuration.parse_from_xml(argv[index]);
         }
 
-        Simulator simulator(configuration);
-        run(simulator, opt_graphical, opt_verbose);
-
-        // Print the result
-        Result result;
-        result.compute_result(simulator.all_passengers());
-        std::cout << result << std::endl;
+        run_simulation(configuration, opt_graphical, opt_verbose);
+        std::cout << configuration.result() << std::endl;
     }
     return 0;
 }
@@ -84,8 +78,9 @@ int main(int argc, char *argv[])
  * @param graph ncurses output
  * @param verbose
  */
-static void run(Simulator &simulator, bool graph, bool verbose)
+static void run_simulation(Configuration &configuration, bool graph, bool verbose)
 {
+    Simulator simulator(configuration);
     Time time = 0;
 
     if (graph)
@@ -112,6 +107,8 @@ static void run(Simulator &simulator, bool graph, bool verbose)
             }
         }
     }
+
+    simulator.end(time);
 }
 
 /**

@@ -95,4 +95,9 @@ Building &Configuration::building() const
     return *building_;
 }
 
+Result &Configuration::result()
+{
+    return result_;
+}
+
 // End of file

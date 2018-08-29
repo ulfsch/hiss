@@ -8,6 +8,7 @@
 #include "Algorithm.h"
 #include "Traffic.h"
 #include "Building.h"
+#include "Result.h"
 
 class Configuration
 {
@@ -21,11 +22,14 @@ public:
     Algorithm &algorithm() const;
     Traffic &traffic() const;
 
+    Result &result();
+
 private:
     Building *building_;
     Algorithm *algorithm_;
     Traffic *traffic_;
-};
+    Result result_;
 
+};
 
 #endif //CHISS_FACTORY_H

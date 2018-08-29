@@ -5,7 +5,8 @@
 #include <algorithm>
 #include <iostream>
 
-Simulator::Simulator(const Configuration &configuration) :
+Simulator::Simulator(Configuration &configuration) :
+        result_(configuration.result()),
         traffic_generator_(configuration.traffic()),
         algorithm_(configuration.algorithm()),
         building_(configuration.building())
@@ -43,9 +44,9 @@ bool Simulator::done() const
     return true;
 }
 
-PassengerList &Simulator::all_passengers()
+void Simulator::end(Time time)
 {
-    return passengers_;
+    result_.compute_result(time, passengers_);
 }
 
 void Simulator::inject_passenger(std::shared_ptr<Passenger> passenger)

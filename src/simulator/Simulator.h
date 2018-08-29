@@ -11,13 +11,13 @@
 
 class Simulator {
 public:
-    explicit Simulator(const Configuration &configuration);
+    explicit Simulator(Configuration &configuration);
     void execute(Time time, Duration dt);
     bool done() const;
 
-    Building &building() { return building_; }
+    void end(Time time);
 
-    PassengerList &all_passengers();
+    Building &building() { return building_; }
 
 private:
     void inject_passenger(std::shared_ptr<Passenger> passenger);
@@ -27,6 +27,7 @@ private:
     void move_elevators(Duration dt);
 
 private:
+    Result &result_;
     Traffic &traffic_generator_;
     Algorithm &algorithm_;
     Building &building_;
