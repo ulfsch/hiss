@@ -11,6 +11,7 @@
 #include <ncurses.h>
 #include <iostream>
 #include <unistd.h>
+#include <Result.h>
 
 static void print_building(Building &);
 
@@ -67,6 +68,11 @@ int main(int argc, char *argv[])
 
         Simulator simulator(configuration);
         run(simulator, opt_graphical, opt_verbose);
+
+        // Print the result
+        Result result;
+        result.compute_result(simulator.all_passengers());
+        std::cout << result << std::endl;
     }
     return 0;
 }
@@ -106,27 +112,6 @@ static void run(Simulator &simulator, bool graph, bool verbose)
             }
         }
     }
-
-    // Print the result
-    double waiting_time = 0;
-    double traveling_time = 0;
-    size_t count = 0;
-    for (const auto &passenger : simulator.all_passengers())
-    {
-        if (passenger->on_destination())
-        {
-            waiting_time += passenger->waiting_time();
-            traveling_time += passenger->traveling_time();
-            count += 1;
-        }
-    }
-
-    std::cout << "Number of passengers:     " << simulator.all_passengers().size() << std::endl;
-    std::cout << "Passengers at destination:" << count << std::endl;
-    std::cout << "Total simulation time:    " << time << std::endl;
-    std::cout << "Average waiting time:     " << waiting_time / count << std::endl;
-    std::cout << "Average traveling time:   " << traveling_time / count << std::endl;
-    std::cout << std::endl;
 }
 
 /**
