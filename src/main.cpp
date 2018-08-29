@@ -5,18 +5,24 @@
 #include "ConstantTraffic.h"
 #include "CallButtonAlgorithm.h"
 #include "Simulator.h"
-#include "Factory.h"
+#include "Configuration.h"
+#include <cstring>
+#include <getopt.h>
 #include <ncurses.h>
+#include <iostream>
+#include <unistd.h>
 
 static void print_building(Building &);
+
 static void run(Simulator &, bool graph, bool verbose);
+
 static void print_usage(const char *arg);
 
 
 /**
  * Constants.
  */
-const Duration SIMULATION_RATE = 1;      // Seconds/step
+const Duration SIMULATION_RATE = 1;      // Seconds/execute
 
 /**
  * Main program.
@@ -41,22 +47,25 @@ int main(int argc, char *argv[])
             case 'v':
                 opt_verbose = true;
                 break;
-            case '?':
+            default:
                 print_usage(argv[0]);
+                exit(2);
         }
     }
 
     if (optind == argc)
     {
         print_usage(argv[0]);
-    } else
+    }
+    else
     {
-        Factory factory;
-        for (int index = optind; index < argc; index++) {
-            factory.build_from_xml(argv[index]);
+        Configuration configuration;
+        for (int index = optind; index < argc; index++)
+        {
+            configuration.from_xml(argv[index]);
         }
 
-        Simulator simulator(factory.traffic(), factory.algorithm(), factory.building());
+        Simulator simulator(configuration);
         run(simulator, opt_graphical, opt_verbose);
     }
     return 0;
@@ -78,21 +87,22 @@ static void run(Simulator &simulator, bool graph, bool verbose)
         initscr();
         while (!simulator.done())
         {
-            simulator.step(time, SIMULATION_RATE);
+            simulator.execute(time, SIMULATION_RATE);
             time += SIMULATION_RATE;
             print_building(simulator.building());
             sleep(1);
         }
         endwin();
-    } else
+    }
+    else
     {
         while (!simulator.done())
         {
-            simulator.step(time, SIMULATION_RATE);
+            simulator.execute(time, SIMULATION_RATE);
             time += SIMULATION_RATE;
             if (verbose)
             {
-                std::cout << simulator << std::endl;
+                std::cout << simulator.building() << std::endl;
             }
         }
     }
@@ -142,7 +152,7 @@ static void print_building(Building &building)
         waddch(stdscr, ACS_VLINE);
 
         wprintw(stdscr, "%2d: ", i->number());
-        for (auto passenger : i->passengers())
+        for (const auto passenger : i->passengers())
         {
             wprintw(stdscr, " p%-2d ", passenger->id());
         }
@@ -169,7 +179,7 @@ static void print_building(Building &building)
 
         wmove(stdscr, row, column);
         waddch(stdscr, ACS_VLINE);
-        for (auto passenger : elevator.passengers())
+        for (const auto passenger : elevator.passengers())
         {
             wprintw(stdscr, " p%-2d ", passenger->id());
         }
@@ -200,7 +210,8 @@ static void print_usage(const char *arg)
     if (program)
     {
         program += 1;
-    } else
+    }
+    else
     {
         program = arg;
     }

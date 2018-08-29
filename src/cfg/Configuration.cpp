@@ -1,8 +1,8 @@
 //
-// Factory.cpp.
+// Configuration.cpp.
 //
 
-#include "Factory.h"
+#include "Configuration.h"
 #include "tinyxml2.h"
 #include "UpDownButtonAlgorithm.h"
 #include "ConstantTraffic.h"
@@ -10,52 +10,47 @@
 
 using namespace tinyxml2;
 
-Factory::Factory() :
+Configuration::Configuration() :
         building_(nullptr),
         algorithm_(nullptr),
-        traffic_(nullptr) {
+        traffic_(nullptr)
+{
 }
 
 
-Factory::~Factory() {
-    if (building_) {
+Configuration::~Configuration()
+{
+    if (building_)
+    {
         delete building_;
     }
-    if (algorithm_) {
+    if (algorithm_)
+    {
         delete algorithm_;
     }
-    if (traffic_) {
+    if (traffic_)
+    {
         delete traffic_;
     }
 }
 
 
-void Factory::build_from_xml(const char *file_name) {
-    if (building_) {
-        delete building_;
-        building_ = nullptr;
-    }
-    if (algorithm_) {
-        delete algorithm_;
-        algorithm_ = nullptr;
-    }
-    if (traffic_) {
-        delete traffic_;
-        traffic_ = nullptr;
-    }
-
+void Configuration::from_xml(const char *file_name)
+{
     XMLDocument doc;
     doc.LoadFile(file_name);
 
     const XMLElement *elem = doc.FirstChildElement("configuration");
 
     elem = elem->FirstChildElement("building");
-    if (elem) {
+    if (elem)
+    {
         FloorNumber floors = 10;
         elem->QueryAttribute("floors", &floors);
         building_ = new Building(floors);
 
-        for (const XMLElement *p = elem->FirstChildElement("elevator"); p; p = p->NextSiblingElement("elevator")) {
+        for (const XMLElement *p = elem->FirstChildElement("elevator"); p; p = p->NextSiblingElement("elevator"))
+        {
             FloorNumber min_floor = 0;
             FloorNumber max_floor = floors;
             p->QueryAttribute("min_floor", &min_floor);
@@ -66,29 +61,37 @@ void Factory::build_from_xml(const char *file_name) {
     }
 
     elem = elem->NextSiblingElement("algorithm");
-    if (elem) {
-        if (elem->Attribute("type", "CallButton")) {
+    if (elem)
+    {
+        if (elem->Attribute("type", "CallButton"))
+        {
             algorithm_ = new CallButtonAlgorithm();
-        } else if (elem->Attribute("type", "UpDownButton")) {
+        }
+        else if (elem->Attribute("type", "UpDownButton"))
+        {
             algorithm_ = new UpDownButtonAlgorithm();
         }
     }
 
     elem = elem->NextSiblingElement("traffic");
-    if (elem) {
+    if (elem)
+    {
         traffic_ = new ConstantTraffic(10, 100, 1);
     }
 }
 
-Traffic &Factory::traffic() const {
+Traffic &Configuration::traffic() const
+{
     return *traffic_;
 }
 
-Algorithm &Factory::algorithm() const {
+Algorithm &Configuration::algorithm() const
+{
     return *algorithm_;
 }
 
-Building &Factory::building() const {
+Building &Configuration::building() const
+{
     return *building_;
 }
 

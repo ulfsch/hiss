@@ -1,20 +1,21 @@
 //
-// Factory.h.
+// Configuration.h.
 //
 #ifndef CHISS_FACTORY_H
 #define CHISS_FACTORY_H
 
 
-#include "../model/Building.h"
-#include "../simulator/Algorithm.h"
-#include "../simulator/Traffic.h"
+#include "Algorithm.h"
+#include "Traffic.h"
+#include "Building.h"
 
-class Factory {
+class Configuration
+{
 public:
-    Factory();
-    ~Factory();
+    Configuration();
+    ~Configuration();
 
-    void build_from_xml(const char *file_name);
+    void from_xml(const char *file_name);
 
     Building &building() const;
     Algorithm &algorithm() const;

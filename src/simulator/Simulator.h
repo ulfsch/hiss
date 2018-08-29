@@ -4,14 +4,15 @@
 #ifndef CHISS_SIMULATOR_H
 #define CHISS_SIMULATOR_H
 
+#include "Configuration.h"
 #include "Building.h"
 #include "Traffic.h"
 #include "Algorithm.h"
 
 class Simulator {
 public:
-    Simulator(Traffic &traffic, Algorithm &algorithm, Building &building);
-    void step(Time time, Duration dt);
+    explicit Simulator(const Configuration &configuration);
+    void execute(Time time, Duration dt);
     bool done() const;
 
     Building &building() { return building_; }

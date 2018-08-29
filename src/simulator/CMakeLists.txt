@@ -1,11 +1,12 @@
 
 include_directories(../model)
+include_directories(../cfg)
 
 set(SOURCE_FILES
         Simulator.cpp
         Simulator.h
-        Algorithm.h
-        Traffic.h
+        ../model/Algorithm.h
+        ../model/Traffic.h
         ConstantTraffic.cpp
         ConstantTraffic.h
         CallButtonAlgorithm.cpp
