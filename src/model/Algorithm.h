@@ -6,10 +6,12 @@
 
 class Building;
 
-class Algorithm {
+class Algorithm
+{
 public:
     virtual ~Algorithm() = default;
-    virtual void operator()(Building&) = 0;
+
+    virtual void operator()(Building *) = 0;
 };
 
 #endif //CHISS_ALGORITHM_H

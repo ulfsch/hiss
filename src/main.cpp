@@ -13,16 +13,17 @@
 #include <iostream>
 #include <unistd.h>
 
-static void print_building(Building &);
+static void print_building(Building *);
 
-static void run_simulation(Configuration &configuration, bool graph, bool verbose);
+static void run_simulation(Configuration &, Result &, bool graph, bool verbose);
+
 static void print_usage(const char *arg);
 
 
 /**
  * Constants.
  */
-const Duration SIMULATION_RATE = 1;      // Seconds/execute
+const Duration SIMULATION_RATE = 1;      // Seconds/tick
 
 /**
  * Main program.
@@ -65,8 +66,9 @@ int main(int argc, char *argv[])
             configuration.parse_from_xml(argv[index]);
         }
 
-        run_simulation(configuration, opt_graphical, opt_verbose);
-        std::cout << configuration.result() << std::endl;
+        Result result;
+        run_simulation(configuration, result, opt_graphical, opt_verbose);
+        std::cout << result << std::endl;
     }
     return 0;
 }
@@ -78,9 +80,9 @@ int main(int argc, char *argv[])
  * @param graph ncurses output
  * @param verbose
  */
-static void run_simulation(Configuration &configuration, bool graph, bool verbose)
+static void run_simulation(Configuration &configuration, Result &result, bool graph, bool verbose)
 {
-    Simulator simulator(configuration);
+    Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
     Time time = 0;
 
     if (graph)
@@ -88,7 +90,7 @@ static void run_simulation(Configuration &configuration, bool graph, bool verbos
         initscr();
         while (!simulator.done())
         {
-            simulator.execute(time, SIMULATION_RATE);
+            simulator.tick(time, SIMULATION_RATE);
             time += SIMULATION_RATE;
             print_building(simulator.building());
             sleep(1);
@@ -99,7 +101,7 @@ static void run_simulation(Configuration &configuration, bool graph, bool verbos
     {
         while (!simulator.done())
         {
-            simulator.execute(time, SIMULATION_RATE);
+            simulator.tick(time, SIMULATION_RATE);
             time += SIMULATION_RATE;
             if (verbose)
             {
@@ -108,7 +110,8 @@ static void run_simulation(Configuration &configuration, bool graph, bool verbos
         }
     }
 
-    simulator.end(time);
+    result.compute_result(time, simulator.passengers());
+
 }
 
 /**
@@ -116,7 +119,7 @@ static void run_simulation(Configuration &configuration, bool graph, bool verbos
  *
  * @param building
  */
-static void print_building(Building &building)
+static void print_building(Building *building)
 {
     int row = 0;
     int column = 0;
@@ -128,13 +131,13 @@ static void print_building(Building &building)
     wmove(stdscr, row, 29);
     waddch(stdscr, ACS_URCORNER);
 
-    for (auto i = building.floors().rbegin(); i != building.floors().rend(); ++i)
+    for (auto i = building->floors().rbegin(); i != building->floors().rend(); ++i)
     {
         wmove(stdscr, ++row, 0);
         waddch(stdscr, ACS_VLINE);
 
-        wprintw(stdscr, "%2d: ", i->number());
-        for (const auto passenger : i->passengers())
+        wprintw(stdscr, "%2d: ", (*i)->number());
+        for (const auto passenger : (*i)->passengers())
         {
             wprintw(stdscr, " p%-2d ", passenger->id());
         }
@@ -149,9 +152,9 @@ static void print_building(Building &building)
     waddch(stdscr, ACS_LRCORNER);
 
     column = 30;
-    for (Elevator &elevator : building.elevators())
+    for (Elevator *elevator : building->elevators())
     {
-        row = building.floors().size() - elevator.car().current_floor();
+        row = building->floors().size() - elevator->car().current_floor();
 
         wmove(stdscr, row - 1, column);
         waddch(stdscr, ACS_ULCORNER);
@@ -161,7 +164,7 @@ static void print_building(Building &building)
 
         wmove(stdscr, row, column);
         waddch(stdscr, ACS_VLINE);
-        for (const auto passenger : elevator.passengers())
+        for (const auto passenger : elevator->passengers())
         {
             wprintw(stdscr, " p%-2d ", passenger->id());
         }

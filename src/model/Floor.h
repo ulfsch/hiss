@@ -6,22 +6,32 @@
 
 #include "Passenger.h"
 #include <set>
+#include <QtCore>
 
-class Floor {
+class Floor : public QObject
+{
+Q_OBJECT
+
 public:
     explicit Floor(FloorNumber floor_number);
 
-    FloorNumber number() const { return number_; }
+    FloorNumber number() const
+    { return number_; }
 
-    PassengerList &passengers() { return passengers_; }
+    PassengerList &passengers()
+    { return passengers_; }
 
-    bool call_button() const { return call_button_; }
+    bool call_button() const
+    { return call_button_; }
 
-    bool down_button() const { return down_button_; }
+    bool down_button() const
+    { return down_button_; }
 
-    bool up_button() const { return up_button_; }
+    bool up_button() const
+    { return up_button_; }
 
     void press_buttons(FloorNumber destination_floor);
+
     void clear_buttons();
 
 private:

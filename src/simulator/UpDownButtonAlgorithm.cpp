@@ -12,27 +12,34 @@
  *
  * @param building
  */
-void UpDownButtonAlgorithm::operator()(Building &building) {
-    for (Elevator &elevator : building.elevators()) {
+void UpDownButtonAlgorithm::operator()(Building *building)
+{
+    for (Elevator *elevator : building->elevators())
+    {
         std::vector<Stop> stops;
 
-        for (FloorNumber x : elevator.buttons()) {
+        for (FloorNumber x : elevator->buttons())
+        {
             stops.push_back(Stop(x));
         }
 
-        for (const Floor &floor : building.floors()) {
-            if (floor.down_button()) {
-                stops.push_back(Stop(floor.number(), Direction::DOWN));
+        for (const Floor *floor : building->floors())
+        {
+            if (floor->down_button())
+            {
+                stops.push_back(Stop(floor->number(), Direction::DOWN));
             }
-            if (floor.up_button()) {
-                stops.push_back(Stop(floor.number(), Direction::UP));
+            if (floor->up_button())
+            {
+                stops.push_back(Stop(floor->number(), Direction::UP));
             }
         }
 
-        if (!stops.empty()) {
-            Comp comp(elevator.car().current_floor(), elevator.car().direction());
+        if (!stops.empty())
+        {
+            Comp comp(elevator->car().current_floor(), elevator->car().direction());
             std::sort(stops.begin(), stops.end(), comp);
-            elevator.car().set_next_floor(stops.begin()->floor);
+            elevator->car().set_next_floor(stops.begin()->floor);
         }
     }
 }
@@ -44,25 +51,30 @@ void UpDownButtonAlgorithm::operator()(Building &building) {
  * @param b
  * @return true if stop a is better than stop b given a elevator position and direction
  */
-bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b) {
+bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b)
+{
     int a_delta = a.floor - current_;
     int b_delta = b.floor - current_;
     Direction approach_dir_a = (a_delta < 0) ? Direction::DOWN : Direction::UP;
     Direction approach_dir_b = (b_delta < 0) ? Direction::DOWN : Direction::UP;
 
     // Prefer a stop in the elevator direction.
-    if (approach_dir_a == direction_ && approach_dir_b != direction_) {
+    if (approach_dir_a == direction_ && approach_dir_b != direction_)
+    {
         return true;
     }
-    if (approach_dir_a != direction_ && approach_dir_b == direction_) {
+    if (approach_dir_a != direction_ && approach_dir_b == direction_)
+    {
         return false;
     }
 
     // Prefer stop in travel direction
-    if (a.direction == approach_dir_a && b.direction != approach_dir_b) {
+    if (a.direction == approach_dir_a && b.direction != approach_dir_b)
+    {
         return true;
     }
-    if (a.direction != approach_dir_a && b.direction == approach_dir_b) {
+    if (a.direction != approach_dir_a && b.direction == approach_dir_b)
+    {
         return false;
     }
 
@@ -80,7 +92,8 @@ bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b) {
     return std::abs(a_delta) < std::abs(b_delta);
 }
 
-std::ostream &operator<<(std::ostream &os, UpDownButtonAlgorithm::Stop &s) {
+std::ostream &operator<<(std::ostream &os, UpDownButtonAlgorithm::Stop &s)
+{
     if (s.direction == Direction::UP)
         os << std::string(" ") << s.floor << "u";
     if (s.direction == Direction::DOWN)

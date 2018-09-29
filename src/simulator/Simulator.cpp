@@ -5,29 +5,28 @@
 #include <algorithm>
 #include <iostream>
 
-Simulator::Simulator(Configuration &configuration) :
-        result_(configuration.result()),
-        traffic_generator_(configuration.traffic()),
-        algorithm_(configuration.algorithm()),
-        building_(configuration.building())
+Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building) :
+        traffic_generator_(traffic),
+        algorithm_(algorithm),
+        building_(building)
 {
 }
 
-void Simulator::execute(Time time, Duration dt)
+void Simulator::tick(Time time, Duration dt)
 {
-    for (auto p : traffic_generator_(time))
+    for (auto p : (*traffic_generator_)(time))
     {
         inject_passenger(p);
         passengers_.push_back(p);
     }
     move_passengers(time);
-    algorithm_(building_);
+    (*algorithm_)(building_);
     move_elevators(dt);
 }
 
 bool Simulator::done() const
 {
-    if (!traffic_generator_.done())
+    if (!traffic_generator_->done())
     {
         return false;
     }
@@ -44,33 +43,28 @@ bool Simulator::done() const
     return true;
 }
 
-void Simulator::end(Time time)
-{
-    result_.compute_result(time, passengers_);
-}
-
 void Simulator::inject_passenger(std::shared_ptr<Passenger> passenger)
 {
-    for (Floor &floor : building_.floors())
+    for (Floor *floor : building_->floors())
     {
-        if (floor.number() == passenger->begin_floor())
+        if (floor->number() == passenger->begin_floor())
         {
-            floor.passengers().push_back(passenger);
-            floor.press_buttons(passenger->end_floor());
+            floor->passengers().push_back(passenger);
+            floor->press_buttons(passenger->end_floor());
         }
     }
 }
 
 void Simulator::move_passengers(Time time)
 {
-    for (auto &floor : building_.floors())
+    for (auto floor : building_->floors())
     {
-        for (auto &elevator : building_.elevators())
+        for (auto elevator : building_->elevators())
         {
-            if (elevator.car().is_idle_on_floor(floor.number()))
+            if (elevator->car().is_idle_on_floor(floor->number()))
             {
-                floor.clear_buttons();
-                elevator.clear_floor_button(floor.number());
+                floor->clear_buttons();
+                elevator->clear_floor_button(floor->number());
 
                 disembark(elevator, time);
                 embark(floor, elevator, time);
@@ -79,12 +73,12 @@ void Simulator::move_passengers(Time time)
     }
 }
 
-void Simulator::disembark(Elevator &elevator, Time time)
+void Simulator::disembark(Elevator *elevator, Time time)
 {
     PassengerList new_list;
-    for (auto passenger : elevator.passengers())
+    for (auto passenger : elevator->passengers())
     {
-        if (elevator.can_disembark(passenger))
+        if (elevator->can_disembark(passenger))
         {
             passenger->set_on_destination(time);
         }
@@ -94,20 +88,20 @@ void Simulator::disembark(Elevator &elevator, Time time)
         }
     }
 
-    elevator.passengers().clear();
-    std::copy(new_list.begin(), new_list.end(), std::back_inserter(elevator.passengers()));
+    elevator->passengers().clear();
+    std::copy(new_list.begin(), new_list.end(), std::back_inserter(elevator->passengers()));
 }
 
-void Simulator::embark(Floor &floor, Elevator &elevator, Time time)
+void Simulator::embark(Floor *floor, Elevator *elevator, Time time)
 {
     PassengerList new_list;
-    for (const auto &passenger : floor.passengers())
+    for (const auto passenger : floor->passengers())
     {
-        if (elevator.can_embark(passenger))
+        if (elevator->can_embark(passenger))
         {
             passenger->set_start_traveling(time);
-            elevator.passengers().push_back(passenger);
-            elevator.press_floor_button(passenger->end_floor());
+            elevator->passengers().push_back(passenger);
+            elevator->press_floor_button(passenger->end_floor());
         }
         else
         {
@@ -115,15 +109,15 @@ void Simulator::embark(Floor &floor, Elevator &elevator, Time time)
         }
     }
 
-    floor.passengers().clear();
-    std::copy(new_list.begin(), new_list.end(), std::back_inserter(floor.passengers()));
+    floor->passengers().clear();
+    std::copy(new_list.begin(), new_list.end(), std::back_inserter(floor->passengers()));
 }
 
 void Simulator::move_elevators(Duration dt)
 {
-    for (auto &elevator : building_.elevators())
+    for (auto *elevator : building_->elevators())
     {
-        elevator.car().move(dt);
+        elevator->car().move(dt);
     }
 }
 

@@ -6,11 +6,14 @@
 
 #include "Traffic.h"
 
-class ConstantTraffic : public Traffic {
+class ConstantTraffic : public Traffic
+{
 public:
     ConstantTraffic(size_t number_of_floors, size_t total_no_of_passengers, double rate);
+
     PassengerList operator()(Time time) override;
-    virtual bool done() const override;
+
+    bool done() const override;
 
 private:
     const size_t number_of_floors_;

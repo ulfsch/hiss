@@ -1,4 +1,8 @@
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt4 REQUIRED QtCore)
 
 set(SOURCE_FILES
         common.h
@@ -18,3 +22,4 @@ set(SOURCE_FILES
         Car.h)
 
 add_library(model ${SOURCE_FILES})
+target_link_libraries(model Qt4::QtCore)

@@ -14,7 +14,7 @@ void Result::compute_result(Time time, PassengerList &passengers)
     double waiting_time = 0;
     double traveling_time = 0;
 
-    for (const auto &passenger : passengers)
+    for (const auto passenger : passengers)
     {
         if (passenger->on_destination())
         {

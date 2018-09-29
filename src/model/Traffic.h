@@ -11,7 +11,9 @@ class Traffic
 {
 public:
     virtual ~Traffic() = default;
+
     virtual PassengerList operator()(Time) = 0;
+
     virtual bool done() const = 0;
 
 };

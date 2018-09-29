@@ -14,22 +14,27 @@ Car::Car(FloorNumber min_floor, int velocity, int floor_height) :
 
         height_(min_floor * floor_height),
         state_(State::IDLE),
-        direction_(Direction::NONE) {
+        direction_(Direction::NONE)
+{
 }
 
-FloorNumber Car::current_floor() const {
+FloorNumber Car::current_floor() const
+{
     return current_floor_;
 }
 
-FloorNumber Car::next_floor() const {
+FloorNumber Car::next_floor() const
+{
     return next_floor_;
 }
 
-bool Car::is_idle() const {
+bool Car::is_idle() const
+{
     return state_ == State::IDLE;
 }
 
-bool Car::is_idle_on_floor(FloorNumber i) const {
+bool Car::is_idle_on_floor(FloorNumber i) const
+{
     return is_idle() && current_floor_ == i;
 }
 
@@ -41,7 +46,8 @@ bool Car::is_idle_on_floor(FloorNumber i) const {
  *
  * @param floor_number
  */
-void Car::set_next_floor(FloorNumber floor_number) {
+void Car::set_next_floor(FloorNumber floor_number)
+{
     next_floor_ = floor_number;
 }
 
@@ -53,38 +59,48 @@ void Car::set_next_floor(FloorNumber floor_number) {
  *
  * @param duration in seconds
  */
-void Car::move(Duration duration) {
-    if (is_idle()) {
+void Car::move(Duration duration)
+{
+    if (is_idle())
+    {
         target_floor_ = next_floor_;
     }
 
-    if (target_floor_ > current_floor_) {
+    if (target_floor_ > current_floor_)
+    {
         state_ = State::MOVING;
         direction_ = Direction::UP;
         height_ += velocity_ * duration;
         current_floor_ = static_cast<FloorNumber>(height_ / floor_height_);
-        if (height_ >= (int) target_floor_ * floor_height_) {
+        if (height_ >= (int) target_floor_ * floor_height_)
+        {
             height_ = target_floor_ * floor_height_;
             current_floor_ = target_floor_;
             state_ = State::WAITING;
         }
-    } else if (target_floor_ < current_floor_) {
+    }
+    else if (target_floor_ < current_floor_)
+    {
         state_ = State::MOVING;
         direction_ = Direction::DOWN;
         height_ -= velocity_ * duration;
         current_floor_ = static_cast<FloorNumber>((height_ + (floor_height_ - 1)) / floor_height_);
-        if (height_ <= (int) target_floor_ * floor_height_) {
+        if (height_ <= (int) target_floor_ * floor_height_)
+        {
             height_ = target_floor_ * floor_height_;
             current_floor_ = target_floor_;
             state_ = State::WAITING;
         }
-    } else {
+    }
+    else
+    {
         // direction_ = Direction::NONE;
         state_ = State::IDLE;
     }
 }
 
-void Car::set_position(FloorNumber number, Direction direction) {
+void Car::set_position(FloorNumber number, Direction direction)
+{
     current_floor_ = number;
     direction_ = direction;
 }

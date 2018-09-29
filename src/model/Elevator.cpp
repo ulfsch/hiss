@@ -47,6 +47,11 @@ bool Elevator::can_disembark(std::shared_ptr<Passenger> passenger) {
     return (passenger->end_floor() == car().current_floor());
 }
 
+const std::set<FloorNumber> &Elevator::floorNumbers() const
+{
+    return floors_;
+}
+
 
 std::ostream &operator<<(std::ostream &os, Elevator &elevator) {
     os << std::string("elevator: ") << elevator.car().current_floor() << ": ";

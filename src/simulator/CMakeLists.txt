@@ -1,6 +1,10 @@
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt4 REQUIRED QtCore)
+
 include_directories(../model)
-include_directories(../cfg)
 
 set(SOURCE_FILES
         Simulator.cpp
@@ -13,3 +17,4 @@ set(SOURCE_FILES
         UpDownButtonAlgorithm.h)
 
 add_library(simulator ${SOURCE_FILES})
+target_link_libraries(simulator Qt4::QtCore)

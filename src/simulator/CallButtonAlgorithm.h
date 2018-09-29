@@ -7,10 +7,12 @@
 #include "Algorithm.h"
 
 
-class CallButtonAlgorithm : public Algorithm {
+class CallButtonAlgorithm : public Algorithm
+{
 public:
     CallButtonAlgorithm();
-    virtual void operator()(Building &) override;
+
+    void operator()(Building *) override;
 
 };
 

@@ -18,17 +18,16 @@ public:
 
     void parse_from_xml(const char *file_name);
 
-    Building &building() const;
-    Algorithm &algorithm() const;
-    Traffic &traffic() const;
+    Building *building() const;
 
-    Result &result();
+    Algorithm *algorithm() const;
+
+    Traffic *traffic() const;
 
 private:
     Building *building_;
     Algorithm *algorithm_;
     Traffic *traffic_;
-    Result result_;
 
 };
 

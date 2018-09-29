@@ -20,18 +20,9 @@ Configuration::Configuration() :
 
 Configuration::~Configuration()
 {
-    if (building_)
-    {
-        delete building_;
-    }
-    if (algorithm_)
-    {
-        delete algorithm_;
-    }
-    if (traffic_)
-    {
-        delete traffic_;
-    }
+    delete building_;
+    delete algorithm_;
+    delete traffic_;
 }
 
 
@@ -55,7 +46,7 @@ void Configuration::parse_from_xml(const char *file_name)
             FloorNumber max_floor = floors;
             p->QueryAttribute("min_floor", &min_floor);
             p->QueryAttribute("max_floor", &max_floor);
-            Elevator elevator(min_floor, max_floor);
+            Elevator *elevator = new Elevator(min_floor, max_floor);
             building_->add_elevator(elevator);
         }
     }
@@ -80,24 +71,19 @@ void Configuration::parse_from_xml(const char *file_name)
     }
 }
 
-Traffic &Configuration::traffic() const
+Traffic *Configuration::traffic() const
 {
-    return *traffic_;
+    return traffic_;
 }
 
-Algorithm &Configuration::algorithm() const
+Algorithm *Configuration::algorithm() const
 {
-    return *algorithm_;
+    return algorithm_;
 }
 
-Building &Configuration::building() const
+Building *Configuration::building() const
 {
-    return *building_;
-}
-
-Result &Configuration::result()
-{
-    return result_;
+    return building_;
 }
 
 // End of file

@@ -12,20 +12,25 @@
 #include "Floor.h"
 #include <ostream>
 
-class UpDownButtonAlgorithm : public Algorithm {
+class UpDownButtonAlgorithm : public Algorithm
+{
 public:
-    virtual void operator()(Building &) override;
+    virtual void operator()(Building *) override;
 
-    struct Stop {
-        Stop(FloorNumber n, Direction d = Direction::NONE) : floor(n), direction(d) {}
+    struct Stop
+    {
+        Stop(FloorNumber n, Direction d = Direction::NONE) : floor(n), direction(d)
+        {}
 
         FloorNumber floor;
         Direction direction;
     };
 
-    class Comp {
+    class Comp
+    {
     public:
-        Comp(FloorNumber n, Direction d) : current_(n), direction_(d) {}
+        Comp(FloorNumber n, Direction d) : current_(n), direction_(d)
+        {}
 
         bool operator()(const Stop &a, const Stop &b);
 
