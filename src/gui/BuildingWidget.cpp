@@ -3,6 +3,7 @@
 //
 
 #include <QHBoxLayout>
+#include <QLabel>
 #include "BuildingWidget.h"
 #include "Building.h"
 #include "ElevatorWidget.h"
@@ -18,7 +19,7 @@ BuildingWidget::BuildingWidget(Building *building, QWidget *parent) :
     setPalette(palette1);
 
     update_from_model();
-    // QObject::connect(building, SIGNAL(changed()), this, SLOT(update_from_model()));
+    connect(building, SIGNAL(changed()), this, SLOT(update_from_model()));
 }
 
 void BuildingWidget::update_from_model()
@@ -27,39 +28,43 @@ void BuildingWidget::update_from_model()
     floors2_.clear();
     elevators_.clear();
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    QVBoxLayout *floorLayout1 = new QVBoxLayout();
-    QHBoxLayout *elevatorLayout = new QHBoxLayout();
-    QVBoxLayout *floorLayout2 = new QVBoxLayout();
+    QGridLayout *layout = new QGridLayout(this);
 
-    layout->addLayout(floorLayout1);
-    layout->addLayout(elevatorLayout);
-    layout->addLayout(floorLayout2);
+    int column = 0;
+    for (auto floor : building_->floors())
+    {
+        int row = building_->getNumber_of_floors() - floor->number() - 1;
+        auto widget1 = new FloorWidget(floor, this);
+        layout->addWidget(widget1, row, column, Qt::AlignCenter);
+        floors1_.push_back(widget1);
+    }
 
+    column = 1;
     for (auto elevator : building_->elevators())
     {
-        auto widget = new ElevatorWidget(elevator);
-        elevatorLayout->addWidget(widget);
-        elevators_.push_back(widget);
+        for (auto floor_number : elevator->floorNumbers())
+        {
+            int row = building_->getNumber_of_floors() - floor_number - 1;
+            auto widget = new ElevatorWidget(elevator, floor_number, this);
+            layout->addWidget(widget, row, column, Qt::AlignCenter);
+            elevators_.push_back(widget);
+        }
+        column += 1;
     }
 
     for (auto floor : building_->floors())
     {
-        auto widget1 = new FloorWidget(floor);
-        floors1_.push_back(widget1);
-
-        auto widget2 = new FloorWidget(floor);
-        floors2_.push_back(widget2);
-    }
-
-    for (auto i_floor = floors1_.rbegin(); i_floor != floors1_.rend(); i_floor++)
-    {
-        floorLayout1->addWidget(*i_floor);
-    }
-    for (auto i_floor = floors2_.rbegin(); i_floor != floors2_.rend(); i_floor++)
-    {
-        floorLayout2->addWidget(*i_floor);
+        int row = building_->getNumber_of_floors() - floor->number() - 1;
+        auto widget2 = new FloorWidget(floor, this);
+        layout->addWidget(widget2, row, column, Qt::AlignCenter);
+        floors1_.push_back(widget2);
     }
 }
+
+//        QLabel *lbl = new QLabel(QString::number(*i_floor), this);
+//        layout->addWidget(lbl, row, column, Qt::AlignCenter);
+//        lbl->setAlignment(Qt::AlignCenter);
+//        lbl->setStyleSheet("background:white");
+//        lbl->setFixedSize(42, 42);
 
 // End of file

@@ -1,9 +1,4 @@
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-
-find_package(Qt4 REQUIRED QtGui)
-
 include_directories(../model)
 
 set(SOURCE_FILES

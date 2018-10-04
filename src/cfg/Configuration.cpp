@@ -10,7 +10,8 @@
 
 using namespace tinyxml2;
 
-Configuration::Configuration() :
+Configuration::Configuration(QObject *parent) :
+        QObject(parent),
         building_(nullptr),
         algorithm_(nullptr),
         traffic_(nullptr)
@@ -20,7 +21,7 @@ Configuration::Configuration() :
 
 Configuration::~Configuration()
 {
-    delete building_;
+    // delete building_;
     delete algorithm_;
     delete traffic_;
 }
@@ -38,7 +39,7 @@ void Configuration::parse_from_xml(const char *file_name)
     {
         FloorNumber floors = 10;
         elem->QueryAttribute("floors", &floors);
-        building_ = new Building(floors);
+        building_ = new Building(floors, this);
 
         for (const XMLElement *p = elem->FirstChildElement("elevator"); p; p = p->NextSiblingElement("elevator"))
         {
@@ -46,7 +47,7 @@ void Configuration::parse_from_xml(const char *file_name)
             FloorNumber max_floor = floors;
             p->QueryAttribute("min_floor", &min_floor);
             p->QueryAttribute("max_floor", &max_floor);
-            Elevator *elevator = new Elevator(min_floor, max_floor);
+            Elevator *elevator = new Elevator(min_floor, max_floor, building_);
             building_->add_elevator(elevator);
         }
     }
@@ -69,6 +70,8 @@ void Configuration::parse_from_xml(const char *file_name)
     {
         traffic_ = new ConstantTraffic(10, 100, 1);
     }
+
+    emit changed();
 }
 
 Traffic *Configuration::traffic() const

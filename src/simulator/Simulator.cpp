@@ -1,5 +1,5 @@
 //
-// Simulator.cpp.
+// Simulator.cpp
 //
 #include "Simulator.h"
 #include <algorithm>
@@ -95,7 +95,7 @@ void Simulator::disembark(Elevator *elevator, Time time)
 void Simulator::embark(Floor *floor, Elevator *elevator, Time time)
 {
     PassengerList new_list;
-    for (const auto passenger : floor->passengers())
+    for (const auto &passenger : floor->passengers())
     {
         if (elevator->can_embark(passenger))
         {
@@ -117,7 +117,7 @@ void Simulator::move_elevators(Duration dt)
 {
     for (auto *elevator : building_->elevators())
     {
-        elevator->car().move(dt);
+        elevator->move(dt);
     }
 }
 

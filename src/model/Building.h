@@ -6,7 +6,6 @@
 
 #include "Elevator.h"
 #include "Floor.h"
-#include <list>
 #include <vector>
 #include <QtCore>
 
@@ -19,11 +18,12 @@ class Building : public QObject
 Q_OBJECT
 
 public:
-    explicit Building(FloorNumber number_of_floors);
+    explicit Building(FloorNumber number_of_floors, QObject *parent);
 
     void add_elevator(Elevator *elevator);
-
     void add_floor(Floor *floor);
+
+    FloorNumber getNumber_of_floors() const;
 
     std::vector<Elevator *> &elevators()
     { return elevators_; }
@@ -31,7 +31,12 @@ public:
     std::vector<Floor *> &floors()
     { return floors_; }
 
-    virtual ~Building();
+signals:
+
+    void changed();
+
+private:
+    FloorNumber number_of_floors_;
 
 private:
     std::vector<Elevator *> elevators_;

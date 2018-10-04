@@ -10,19 +10,23 @@
 #include "Building.h"
 #include "Result.h"
 
-class Configuration
+class Configuration : public QObject
 {
+Q_OBJECT
+
 public:
-    Configuration();
+    explicit Configuration(QObject *parent = nullptr);
     ~Configuration();
 
     void parse_from_xml(const char *file_name);
 
     Building *building() const;
-
     Algorithm *algorithm() const;
-
     Traffic *traffic() const;
+
+signals:
+
+    void changed();
 
 private:
     Building *building_;

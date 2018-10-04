@@ -4,10 +4,10 @@
 #ifndef CHISS_SIMULATOR_H
 #define CHISS_SIMULATOR_H
 
-#include "Building.h"
-#include "Traffic.h"
 #include "Algorithm.h"
+#include "Building.h"
 #include "Result.h"
+#include "Traffic.h"
 
 class Simulator
 {
@@ -17,7 +17,7 @@ public:
     void tick(Time time, Duration dt);
     bool done() const;
 
-    Building *building()
+    Building *building() const
     { return building_; }
 
     PassengerList &passengers()
@@ -26,9 +26,7 @@ public:
 private:
     void inject_passenger(std::shared_ptr<Passenger> passenger);
     void move_passengers(Time time);
-
     void disembark(Elevator *elevator, Time time);
-
     void embark(Floor *floor, Elevator *elevator, Time time);
     void move_elevators(Duration dt);
 
@@ -37,6 +35,7 @@ private:
     Algorithm *algorithm_;
     Building *building_;
     PassengerList passengers_;
+
 };
 
 std::ostream &operator<<(std::ostream &os, Simulator &);

@@ -21,7 +21,6 @@ public:
     explicit BuildingWidget(Building *, QWidget *parent = nullptr);
 
 public slots:
-
     void update_from_model();
 
 private:

@@ -1,9 +1,4 @@
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-
-find_package(Qt4 REQUIRED QtCore)
-
 set(SOURCE_FILES
         common.h
         Algorithm.h

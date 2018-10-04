@@ -6,6 +6,7 @@
 #define CHISS_ELEVATORWIDGET_H
 
 #include <QWidget>
+#include <common.h>
 
 class Elevator;
 
@@ -14,7 +15,7 @@ class ElevatorWidget : public QWidget
 Q_OBJECT
 
 public:
-    explicit ElevatorWidget(Elevator *, QWidget *parent = nullptr);
+    explicit ElevatorWidget(Elevator *, FloorNumber floor, QWidget *parent = nullptr);
 
 public slots:
 
@@ -22,6 +23,7 @@ public slots:
 
 private:
     Elevator *elevator_;
+    FloorNumber floorNumber_;
 
 };
 

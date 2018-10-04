@@ -13,7 +13,7 @@ class Floor : public QObject
 Q_OBJECT
 
 public:
-    explicit Floor(FloorNumber floor_number);
+    explicit Floor(FloorNumber floor_number, QObject *parent);
 
     FloorNumber number() const
     { return number_; }
@@ -31,7 +31,6 @@ public:
     { return up_button_; }
 
     void press_buttons(FloorNumber destination_floor);
-
     void clear_buttons();
 
 private:
