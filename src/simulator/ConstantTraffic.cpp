@@ -2,7 +2,7 @@
 // ConstantTraffic.cpp.
 //
 #include "ConstantTraffic.h"
-
+#include "Building.h"
 /**
  * Constructor.
  *
@@ -28,25 +28,23 @@ ConstantTraffic::ConstantTraffic(size_t number_of_floors,
  * @param time the begin_time for the generated passengers
  * @return list of new passengers generated in one step
  */
-PassengerList ConstantTraffic::operator()(Time time)
+Passenger *ConstantTraffic::operator()(Building *building, Time time)
 {
-    PassengerList passengers;
-    count_ += rate_;
-
-    while (count_ > 1 && no_of_passengers_ < max_no_of_passengers_)
+    if (count_ >= 1 && no_of_passengers_ < max_no_of_passengers_)
     {
         auto from_floor = static_cast<FloorNumber>(std::rand() % number_of_floors_);
         auto to_floor = static_cast<FloorNumber>(std::rand() % number_of_floors_);
 
         if (from_floor != to_floor)
         {
-            passengers.push_back(std::make_shared<Passenger>(Passenger(from_floor, to_floor, time)));
+            Passenger *p = new Passenger(building->floor(from_floor), building->floor(to_floor), time);
             no_of_passengers_ += 1;
             count_ -= 1;
+            return p;
         }
     }
-
-    return passengers;
+    count_ += rate_;
+    return nullptr;
 }
 
 /**

@@ -37,10 +37,10 @@ void Floor::clear_buttons()
 std::ostream &operator<<(std::ostream &os, Floor &floor)
 {
     os << std::string("floor ") << floor.number() << ": ";
-    for (const auto passenger : floor.passengers())
-    {
-        os << *passenger << " ";
-    }
+//    for (const auto passenger : floor.passengers())
+//    {
+//        os << *passenger << " ";
+//    }
     return os;
 }
 

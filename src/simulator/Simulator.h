@@ -6,8 +6,10 @@
 
 #include "Algorithm.h"
 #include "Building.h"
-#include "Result.h"
 #include "Traffic.h"
+#include <list>
+
+typedef std::list<Passenger *> PassengerList;
 
 class Simulator
 {
@@ -17,17 +19,12 @@ public:
     void tick(Time time, Duration dt);
     bool done() const;
 
-    Building *building() const
-    { return building_; }
-
-    PassengerList &passengers()
-    { return passengers_; }
+    const Building *building() const { return building_; }
+    PassengerList &passengers() { return passengers_; }
 
 private:
-    void inject_passenger(std::shared_ptr<Passenger> passenger);
+    void inject_passenger(Passenger *passenger);
     void move_passengers(Time time);
-    void disembark(Elevator *elevator, Time time);
-    void embark(Floor *floor, Elevator *elevator, Time time);
     void move_elevators(Duration dt);
 
 private:

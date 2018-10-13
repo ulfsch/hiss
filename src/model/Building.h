@@ -18,18 +18,16 @@ class Building : public QObject
 Q_OBJECT
 
 public:
-    explicit Building(FloorNumber number_of_floors, QObject *parent);
+    explicit Building(FloorNumber number_of_floors, QObject *parent = nullptr);
 
     void add_elevator(Elevator *elevator);
     void add_floor(Floor *floor);
 
-    FloorNumber getNumber_of_floors() const;
+    FloorNumber number_of_floors() const;
+    Floor* floor(FloorNumber number) const;
 
-    std::vector<Elevator *> &elevators()
-    { return elevators_; }
-
-    std::vector<Floor *> &floors()
-    { return floors_; }
+    const std::vector<Elevator *> &elevators() const { return elevators_; }
+    const std::vector<Floor *> &floors() const { return floors_; }
 
 signals:
 
@@ -44,6 +42,6 @@ private:
 
 };
 
-std::ostream &operator<<(std::ostream &os, Building &);
+std::ostream &operator<<(std::ostream &os, const Building &);
 
 #endif //CHISS_BUILDING_H

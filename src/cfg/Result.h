@@ -6,6 +6,7 @@
 #define CHISS_RESULT_H
 
 
+#include "Simulator.h"
 #include "Passenger.h"
 
 class Result

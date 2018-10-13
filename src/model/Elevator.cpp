@@ -45,29 +45,17 @@ Elevator::Elevator(FloorNumber *floor_array, size_t len, QObject *parent, int ve
     }
 }
 
-void Elevator::clear_floor_button(FloorNumber number)
-{
-    buttons_.erase(number);
-}
-
-void Elevator::press_floor_button(FloorNumber number)
+void Elevator::press_destination_button(FloorNumber number)
 {
     buttons_.insert(number);
 }
 
-bool Elevator::can_embark(std::shared_ptr<Passenger> passenger)
+void Elevator::clear_destination_button()
 {
-    return (passenger->begin_floor() == car().current_floor());
-}
-
-bool Elevator::can_disembark(std::shared_ptr<Passenger> passenger)
-{
-    return (passenger->end_floor() == car().current_floor());
-}
-
-const std::set<FloorNumber> &Elevator::floorNumbers() const
-{
-    return floors_;
+    if (car_.is_idle())
+    {
+        buttons_.erase(car_.current_floor());
+    }
 }
 
 void Elevator::move(Duration dt)
@@ -75,14 +63,19 @@ void Elevator::move(Duration dt)
     car_.move(dt);
 }
 
+bool Elevator::is_idle_on(FloorNumber number)
+{
+    return car_.is_idle_on_floor(number);
+}
+
 
 std::ostream &operator<<(std::ostream &os, Elevator &elevator)
 {
     os << std::string("elevator: ") << elevator.car().current_floor() << ": ";
-    for (auto passenger : elevator.passengers())
-    {
-        os << *passenger << " ";
-    }
+//    for (auto passenger : elevator.passengers())
+//    {
+//        os << *passenger << " ";
+//    }
     return os;
 }
 

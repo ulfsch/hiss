@@ -26,11 +26,11 @@ void FloorWidget::update_from_model()
     QLabel *widget = new QLabel(QString::number(floor_->number()));
     layout->addWidget(widget);
 
-    for (auto p : floor_->passengers())
-    {
-        QLabel *widget = new QLabel(QString::number(p->begin_floor()));
-        layout->addWidget(widget);
-    }
+//    for (auto p : floor_->passengers())
+//    {
+//        QLabel *widget = new QLabel(QString::number(p->begin_floor()));
+//        layout->addWidget(widget);
+//    }
 }
 
 // End of file

@@ -2,8 +2,8 @@
 
 <configuration>
     <building floors="10">
-        <elevator min_floor="2" max_floor="10"></elevator>
-        <elevator min_floor="0" max_floor="8"></elevator>
+        <elevator min_floor="0" max_floor="10"></elevator>
+        <elevator min_floor="0" max_floor="10"></elevator>
     </building>
 
     <algorithm type="UpDownButton"></algorithm>

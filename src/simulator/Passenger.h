@@ -5,37 +5,37 @@
 #define CHISS_PASSENGER_H
 
 #include "common.h"
-#include <list>
 #include <ostream>
-#include <memory>
 
-class Passenger;
-
-typedef std::list<std::shared_ptr<Passenger> > PassengerList;
-
+class Building;
+class Floor;
+class Elevator;
 
 class Passenger
 {
 public:
-    Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time);
+    Passenger(Floor *begin_floor, Floor *end_floor, Time time);
 
     Id id() const;
-    FloorNumber begin_floor() const;
-    FloorNumber end_floor() const;
+    Floor *begin_floor() const;
+    Floor *end_floor() const;
+    Elevator *elevator() const;
+
+    bool on_start_floor() const;
     bool on_destination() const;
-
     Duration waiting_time() const;
-    Duration traveling_time() const;
 
-    void set_start_traveling(Time time);
+    Duration traveling_time() const;
+    void set_start_traveling(Elevator *elevator, Time time);
     void set_on_destination(Time time);
 
 private:
     static Id last_id_;
     Id id_;
 
-    FloorNumber begin_floor_;
-    FloorNumber end_floor_;
+    Floor *begin_floor_;
+    Floor *end_floor_;
+    Elevator* elevator_;
 
     Time begin_time_;
     Time pick_up_time_;

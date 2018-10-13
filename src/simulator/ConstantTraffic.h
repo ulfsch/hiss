@@ -11,7 +11,7 @@ class ConstantTraffic : public Traffic
 public:
     ConstantTraffic(size_t number_of_floors, size_t total_no_of_passengers, double rate);
 
-    PassengerList operator()(Time time) override;
+    Passenger * operator()(Building *building, Time time) override;
     bool done() const override;
 
 private:

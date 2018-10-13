@@ -18,15 +18,12 @@ public:
     FloorNumber current_floor() const;
 
     bool is_idle() const;
-
     bool is_idle_on_floor(FloorNumber i) const;
 
-    Direction direction() const
-    { return direction_; }
+    Direction direction() const { return direction_; }
 
     // Elevator movement methods
     void set_next_floor(FloorNumber floor_number);
-
     void move(Duration dt);
 
     // Testing only

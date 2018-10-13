@@ -13,7 +13,7 @@
 #include <iostream>
 #include <unistd.h>
 
-static void print_building(Building *);
+static void print_building(const Building *);
 
 static void run_simulation(Configuration &, Result &, bool graph, bool verbose);
 
@@ -105,7 +105,7 @@ static void run_simulation(Configuration &configuration, Result &result, bool gr
             time += SIMULATION_RATE;
             if (verbose)
             {
-                std::cout << simulator.building() << std::endl;
+                std::cout << *simulator.building() << std::endl;
             }
         }
     }
@@ -119,7 +119,7 @@ static void run_simulation(Configuration &configuration, Result &result, bool gr
  *
  * @param building
  */
-static void print_building(Building *building)
+static void print_building(const Building *building)
 {
     int row = 0;
     int column = 0;
@@ -137,10 +137,10 @@ static void print_building(Building *building)
         waddch(stdscr, ACS_VLINE);
 
         wprintw(stdscr, "%2d: ", (*i)->number());
-        for (const auto passenger : (*i)->passengers())
-        {
-            wprintw(stdscr, " p%-2d ", passenger->id());
-        }
+//        for (const auto passenger : (*i)->passengers())
+//        {
+//            wprintw(stdscr, " p%-2d ", passenger->id());
+//        }
 
         wmove(stdscr, row, 29);
         waddch(stdscr, ACS_VLINE);
@@ -164,10 +164,10 @@ static void print_building(Building *building)
 
         wmove(stdscr, row, column);
         waddch(stdscr, ACS_VLINE);
-        for (const auto passenger : elevator->passengers())
-        {
-            wprintw(stdscr, " p%-2d ", passenger->id());
-        }
+//        for (const auto passenger : elevator->passengers())
+//        {
+//            wprintw(stdscr, " p%-2d ", passenger->id());
+//        }
         wmove(stdscr, row, column + 29);
         waddch(stdscr, ACS_VLINE);
 

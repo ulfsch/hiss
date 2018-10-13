@@ -33,7 +33,7 @@ void BuildingWidget::update_from_model()
     int column = 0;
     for (auto floor : building_->floors())
     {
-        int row = building_->getNumber_of_floors() - floor->number() - 1;
+        int row = building_->number_of_floors() - floor->number() - 1;
         auto widget1 = new FloorWidget(floor, this);
         layout->addWidget(widget1, row, column, Qt::AlignCenter);
         floors1_.push_back(widget1);
@@ -44,7 +44,7 @@ void BuildingWidget::update_from_model()
     {
         for (auto floor_number : elevator->floorNumbers())
         {
-            int row = building_->getNumber_of_floors() - floor_number - 1;
+            int row = building_->number_of_floors() - floor_number - 1;
             auto widget = new ElevatorWidget(elevator, floor_number, this);
             layout->addWidget(widget, row, column, Qt::AlignCenter);
             elevators_.push_back(widget);
@@ -54,7 +54,7 @@ void BuildingWidget::update_from_model()
 
     for (auto floor : building_->floors())
     {
-        int row = building_->getNumber_of_floors() - floor->number() - 1;
+        int row = building_->number_of_floors() - floor->number() - 1;
         auto widget2 = new FloorWidget(floor, this);
         layout->addWidget(widget2, row, column, Qt::AlignCenter);
         floors1_.push_back(widget2);

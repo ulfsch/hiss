@@ -13,7 +13,7 @@ class UpDownAlgorithm : public ::testing::Test {
 
 protected:
     virtual void SetUp() {
-        building.elevators().push_back(new Elevator(0, NUMBER_OF_FLOORS));
+        building.add_elevator(new Elevator(0, NUMBER_OF_FLOORS));
     }
 
 public:
@@ -25,7 +25,7 @@ public:
 TEST_F(UpDownAlgorithm, basic1) {
     Elevator *elevator = building.elevators().front();
 
-    elevator->press_floor_button(7);
+    elevator->press_destination_button(7);
     building.floors()[5]->press_buttons(3);
     algorithm(&building);
     EXPECT_EQ(7, elevator->car().next_floor());
@@ -34,7 +34,7 @@ TEST_F(UpDownAlgorithm, basic1) {
 TEST_F(UpDownAlgorithm, basic2) {
     Elevator *elevator = building.elevators().front();
 
-    elevator->press_floor_button(7);
+    elevator->press_destination_button(7);
     building.floors()[5]->press_buttons(9);
     algorithm(&building);
     EXPECT_EQ(5, elevator->car().next_floor());
@@ -70,7 +70,7 @@ TEST_F(UpDownAlgorithm, OppositeDir) {
 //    EXPECT_EQ(9, elevator->car().next_floor());
 
     elevator->car().set_position(5, Direction::UP);
-    elevator->press_floor_button(7);
+    elevator->press_destination_button(7);
     building.floors()[9]->press_buttons(3);
     algorithm(&building);
     EXPECT_EQ(7, elevator->car().next_floor());
@@ -86,7 +86,7 @@ TEST_F(UpDownAlgorithm, OppositeDirIdle) {
 //    EXPECT_EQ(9, elevator->car().next_floor());
 
     elevator->car().set_position(5, Direction::NONE);
-    elevator->press_floor_button(7);
+    elevator->press_destination_button(7);
     building.floors()[9]->press_buttons(3);
     algorithm(&building);
     EXPECT_EQ(7, elevator->car().next_floor());
@@ -102,7 +102,7 @@ TEST_F(UpDownAlgorithm, OppositeDirDown) {
 //    EXPECT_EQ(9, elevator->car().next_floor());
 
     elevator->car().set_position(5, Direction::DOWN);
-    elevator->press_floor_button(7);
+    elevator->press_destination_button(7);
     building.floors()[9]->press_buttons(3);
     algorithm(&building);
     EXPECT_EQ(7, elevator->car().next_floor());
