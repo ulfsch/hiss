@@ -12,6 +12,15 @@ Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building)
 {
 }
 
+Simulator::~Simulator()
+{
+    for (const auto &passenger : passengers_)
+    {
+        delete passenger;
+    }
+    passengers_.clear();
+}
+
 void Simulator::tick(Time time, Duration dt)
 {
     while (Passenger *p = (*traffic_generator_)(building_, time))
@@ -44,8 +53,16 @@ bool Simulator::done() const
 
 void Simulator::inject_passenger(Passenger *passenger)
 {
-    passenger->begin_floor()->press_buttons(passenger->end_floor()->number());
     passengers_.push_back(passenger);
+
+    for (Elevator *elevator : building_->elevators())
+    {
+        if (elevator->current_floor() == passenger->begin_floor()->number())
+        {
+            return;
+        }
+    }
+    passenger->begin_floor()->press_buttons(passenger->end_floor()->number());
 }
 
 void Simulator::move_passengers(Time time)

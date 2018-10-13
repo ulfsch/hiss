@@ -34,13 +34,9 @@ void Floor::clear_buttons()
     down_button_ = false;
 }
 
-std::ostream &operator<<(std::ostream &os, Floor &floor)
+std::ostream &operator<<(std::ostream &os, const Floor &floor)
 {
-    os << std::string("floor ") << floor.number() << ": ";
-//    for (const auto passenger : floor.passengers())
-//    {
-//        os << *passenger << " ";
-//    }
+    os << std::string("floor ") << floor.number();
     return os;
 }
 

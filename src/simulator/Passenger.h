@@ -6,10 +6,12 @@
 
 #include "common.h"
 #include <ostream>
+#include <list>
 
 class Building;
 class Floor;
 class Elevator;
+
 
 class Passenger
 {
@@ -44,5 +46,7 @@ private:
 };
 
 std::ostream &operator<<(std::ostream &os, Passenger &p);
+
+typedef std::list<Passenger *> PassengerList;
 
 #endif //CHISS_PASSENGER_H

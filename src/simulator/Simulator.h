@@ -7,20 +7,19 @@
 #include "Algorithm.h"
 #include "Building.h"
 #include "Traffic.h"
-#include <list>
 
-typedef std::list<Passenger *> PassengerList;
 
 class Simulator
 {
 public:
     explicit Simulator(Traffic *traffic, Algorithm *algorithm, Building *building);
+    virtual ~Simulator();
 
     void tick(Time time, Duration dt);
     bool done() const;
 
     const Building *building() const { return building_; }
-    PassengerList &passengers() { return passengers_; }
+    const PassengerList &passengers() const { return passengers_; }
 
 private:
     void inject_passenger(Passenger *passenger);

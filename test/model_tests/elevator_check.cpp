@@ -98,12 +98,12 @@ TEST(ElevatorBasic, move2) {
 
 TEST(ElevatorBasic, butttons) {
     Elevator e(10, 20, nullptr, 12);
-    EXPECT_TRUE(e.buttons().empty());
+    EXPECT_TRUE(e.destination_buttons().empty());
 
     e.press_destination_button(17);
-    EXPECT_TRUE(e.buttons().count(17) == 1);
+    EXPECT_TRUE(e.destination_buttons().count(17) == 1);
 
     e.car().set_position(17, Direction::UP);
     e.clear_destination_button();
-    EXPECT_TRUE(e.buttons().empty());
+    EXPECT_TRUE(e.destination_buttons().empty());
 }

@@ -47,14 +47,14 @@ Elevator::Elevator(FloorNumber *floor_array, size_t len, QObject *parent, int ve
 
 void Elevator::press_destination_button(FloorNumber number)
 {
-    buttons_.insert(number);
+    destination_buttons_.insert(number);
 }
 
 void Elevator::clear_destination_button()
 {
     if (car_.is_idle())
     {
-        buttons_.erase(car_.current_floor());
+        destination_buttons_.erase(car_.current_floor());
     }
 }
 
@@ -63,19 +63,15 @@ void Elevator::move(Duration dt)
     car_.move(dt);
 }
 
-bool Elevator::is_idle_on(FloorNumber number)
+bool Elevator::is_idle_on(FloorNumber number) const
 {
     return car_.is_idle_on_floor(number);
 }
 
 
-std::ostream &operator<<(std::ostream &os, Elevator &elevator)
+std::ostream &operator<<(std::ostream &os, const Elevator &elevator)
 {
-    os << std::string("elevator: ") << elevator.car().current_floor() << ": ";
-//    for (auto passenger : elevator.passengers())
-//    {
-//        os << *passenger << " ";
-//    }
+    os << std::string("elevator: ") << elevator.current_floor();
     return os;
 }
 

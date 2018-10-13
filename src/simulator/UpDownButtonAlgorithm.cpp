@@ -18,7 +18,7 @@ void UpDownButtonAlgorithm::operator()(Building *building)
     {
         std::vector<Stop> stops;
 
-        for (FloorNumber x : elevator->buttons())
+        for (FloorNumber x : elevator->destination_buttons())
         {
             stops.push_back(Stop(x));
         }
@@ -39,7 +39,14 @@ void UpDownButtonAlgorithm::operator()(Building *building)
         {
             Comp comp(elevator->car().current_floor(), elevator->car().direction());
             std::sort(stops.begin(), stops.end(), comp);
-            elevator->car().set_next_floor(stops.begin()->floor);
+            for (auto stop : stops)
+            {
+                if (stop.floor != elevator->current_floor())
+                {
+                    elevator->car().set_next_floor(stop.floor);
+                    break;
+                }
+            }
         }
     }
 }

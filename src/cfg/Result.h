@@ -5,16 +5,15 @@
 #ifndef CHISS_RESULT_H
 #define CHISS_RESULT_H
 
-
-#include "Simulator.h"
 #include "Passenger.h"
+
 
 class Result
 {
 public:
     Result();
 
-    void compute_result(Time time, PassengerList &passengers);
+    void compute_result(Time time, const PassengerList &passengers);
 
     Time simulation_time() const;
     double average_traveling_time() const;

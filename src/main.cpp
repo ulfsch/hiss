@@ -111,7 +111,6 @@ static void run_simulation(Configuration &configuration, Result &result, bool gr
     }
 
     result.compute_result(time, simulator.passengers());
-
 }
 
 /**

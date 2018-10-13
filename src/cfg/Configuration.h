@@ -8,7 +8,6 @@
 #include "Algorithm.h"
 #include "Traffic.h"
 #include "Building.h"
-#include "Result.h"
 
 class Configuration : public QObject
 {
@@ -25,7 +24,6 @@ public:
     Traffic *traffic() const;
 
 signals:
-
     void changed();
 
 private:

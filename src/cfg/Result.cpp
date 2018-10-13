@@ -6,7 +6,7 @@
 
 Result::Result() = default;
 
-void Result::compute_result(Time time, PassengerList &passengers)
+void Result::compute_result(Time time, const PassengerList &passengers)
 {
     simulation_time_ = time;
     number_of_passengers_ = passengers.size();

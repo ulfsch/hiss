@@ -26,12 +26,13 @@ public:
     Elevator(FloorNumber *floor_array, size_t len, QObject *parent = nullptr,
              int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
 
-    const NumberSet &floorNumbers() const { return floors_; }
-    const NumberSet &buttons() const { return buttons_; }
     FloorNumber max_floor() const { return max_floor_; }
+    FloorNumber current_floor() const { return car_.current_floor(); }
+    const NumberSet &floorNumbers() const { return floors_; }
+    const NumberSet &destination_buttons() const { return destination_buttons_; }
 
     void move(Duration dt);
-    bool is_idle_on(FloorNumber);
+    bool is_idle_on(FloorNumber) const;
 
     // Button methods
     void clear_destination_button();
@@ -47,10 +48,10 @@ private:
     FloorNumber max_floor_;
     Car car_;
     NumberSet floors_;
-    NumberSet buttons_;
+    NumberSet destination_buttons_;
 
 };
 
-std::ostream &operator<<(std::ostream &os, Elevator &elevator);
+std::ostream &operator<<(std::ostream &os, const Elevator &elevator);
 
 #endif //CHISS_ELEVATOR_H
