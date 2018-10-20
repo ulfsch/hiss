@@ -80,6 +80,13 @@ Duration Passenger::traveling_time() const
     return (end_time_ > 0) ? end_time_ - pick_up_time_ : 0;
 }
 
+int Passenger::print() const
+{
+    return printf("(%d:%d)",
+                  begin_floor_->number(),
+                  end_floor_->number());
+}
+
 std::ostream &operator<<(std::ostream &os, Passenger &p)
 {
     os << std::string("p") << p.id() << "(" << p.begin_floor() << "-" << p.end_floor() << ")";

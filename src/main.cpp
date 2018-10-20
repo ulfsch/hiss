@@ -9,13 +9,12 @@
 #include "Simulator.h"
 #include <cstring>
 #include <getopt.h>
-#include <ncurses.h>
 #include <iostream>
 #include <unistd.h>
 
-static void print_building(const Building *);
+static void run_simulation(Configuration &, Result &, bool verbose);
 
-static void run_simulation(Configuration &, Result &, bool graph, bool verbose);
+static void print_building(const Building *building, const PassengerList &passengers);
 
 static void print_usage(const char *arg);
 
@@ -35,16 +34,12 @@ const Duration SIMULATION_RATE = 1;      // Seconds/tick
 int main(int argc, char *argv[])
 {
     bool opt_verbose = false;
-    bool opt_graphical = false;
     int c;
 
-    while ((c = getopt(argc, argv, "gv?")) != -1)
+    while ((c = getopt(argc, argv, "v?")) != -1)
     {
         switch (c)
         {
-            case 'g':
-                opt_graphical = true;
-                break;
             case 'v':
                 opt_verbose = true;
                 break;
@@ -67,7 +62,7 @@ int main(int argc, char *argv[])
         }
 
         Result result;
-        run_simulation(configuration, result, opt_graphical, opt_verbose);
+        run_simulation(configuration, result, opt_verbose);
         std::cout << result << std::endl;
     }
     return 0;
@@ -77,36 +72,20 @@ int main(int argc, char *argv[])
  * Run the simulator.
  *
  * @param simulator
- * @param graph ncurses output
  * @param verbose
  */
-static void run_simulation(Configuration &configuration, Result &result, bool graph, bool verbose)
+static void run_simulation(Configuration &configuration, Result &result, bool verbose)
 {
     Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
     Time time = 0;
 
-    if (graph)
+    while (!simulator.done())
     {
-        initscr();
-        while (!simulator.done())
+        simulator.tick(time, SIMULATION_RATE);
+        time += SIMULATION_RATE;
+        if (verbose)
         {
-            simulator.tick(time, SIMULATION_RATE);
-            time += SIMULATION_RATE;
-            print_building(simulator.building());
-            sleep(1);
-        }
-        endwin();
-    }
-    else
-    {
-        while (!simulator.done())
-        {
-            simulator.tick(time, SIMULATION_RATE);
-            time += SIMULATION_RATE;
-            if (verbose)
-            {
-                std::cout << *simulator.building() << std::endl;
-            }
+            print_building(simulator.building(), simulator.passengers());
         }
     }
 
@@ -114,73 +93,60 @@ static void run_simulation(Configuration &configuration, Result &result, bool gr
 }
 
 /**
- * Print on ncurses window.
+ * Print .
  *
  * @param building
  */
-static void print_building(const Building *building)
+static void print_building(const Building *building, const PassengerList &passengers)
 {
-    int row = 0;
-    int column = 0;
-    wclear(stdscr);
-
-    wmove(stdscr, row, 0);
-    waddch(stdscr, ACS_ULCORNER);
-    whline(stdscr, ACS_HLINE, 28);
-    wmove(stdscr, row, 29);
-    waddch(stdscr, ACS_URCORNER);
-
-    for (auto i = building->floors().rbegin(); i != building->floors().rend(); ++i)
-    {
-        wmove(stdscr, ++row, 0);
-        waddch(stdscr, ACS_VLINE);
-
-        wprintw(stdscr, "%2d: ", (*i)->number());
-//        for (const auto passenger : (*i)->passengers())
-//        {
-//            wprintw(stdscr, " p%-2d ", passenger->id());
-//        }
-
-        wmove(stdscr, row, 29);
-        waddch(stdscr, ACS_VLINE);
-    }
-    wmove(stdscr, ++row, 0);
-    waddch(stdscr, ACS_LLCORNER);
-    whline(stdscr, ACS_HLINE, 28);
-    wmove(stdscr, row, 29);
-    waddch(stdscr, ACS_LRCORNER);
-
-    column = 30;
+    printf("No:%-27s", "Floor");
     for (Elevator *elevator : building->elevators())
     {
-        row = building->floors().size() - elevator->car().current_floor();
-
-        wmove(stdscr, row - 1, column);
-        waddch(stdscr, ACS_ULCORNER);
-        whline(stdscr, ACS_HLINE, 28);
-        wmove(stdscr, row - 1, column + 29);
-        waddch(stdscr, ACS_URCORNER);
-
-        wmove(stdscr, row, column);
-        waddch(stdscr, ACS_VLINE);
-//        for (const auto passenger : elevator->passengers())
-//        {
-//            wprintw(stdscr, " p%-2d ", passenger->id());
-//        }
-        wmove(stdscr, row, column + 29);
-        waddch(stdscr, ACS_VLINE);
-
-        wmove(stdscr, row + 1, column);
-        waddch(stdscr, ACS_LLCORNER);
-        whline(stdscr, ACS_HLINE, 28);
-        wmove(stdscr, row + 1, column + 29);
-        waddch(stdscr, ACS_LRCORNER);
-
-        column += 30;
+        printf("No:%-27s", "Elevator");
     }
+    printf("\n");
 
-    wmove(stdscr, 0, 0);
-    wrefresh(stdscr);
+    for (auto iterator = building->floors().rbegin(); iterator != building->floors().rend(); ++iterator)
+    {
+        int row = (*iterator)->number();
+        int elevator_id = 0;
+        int column = 0;
+
+        column += printf("%2d: ", row);
+
+        for (const auto passenger : passengers)
+        {
+            if (passenger->on_start_floor() && passenger->begin_floor() == *iterator)
+            {
+                column += passenger->print();
+            }
+        }
+
+        for (Elevator *elevator : building->elevators())
+        {
+            elevator_id += 1;
+            while (column < 30 * elevator_id)
+            {
+                column += printf(" ");
+            }
+            column += printf("%2d: ", row);
+
+            if (elevator->current_floor() == row)
+            {
+                column += printf("[%d->%d ", elevator->current_floor(), elevator->next_floor());
+                for (const auto passenger : passengers)
+                {
+                    if (passenger->elevator() == elevator)
+                    {
+                        column += passenger->print();
+                    }
+                }
+                column += printf("]");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 /**

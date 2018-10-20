@@ -26,19 +26,25 @@ public:
     Elevator(FloorNumber *floor_array, size_t len, QObject *parent = nullptr,
              int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
 
+    // Get methods
     FloorNumber max_floor() const { return max_floor_; }
     FloorNumber current_floor() const { return car_.current_floor(); }
+    Direction direction() const { return car_.direction(); }
+    bool is_idle_on(FloorNumber) const;
     const NumberSet &floorNumbers() const { return floors_; }
     const NumberSet &destination_buttons() const { return destination_buttons_; }
 
+    //
+    void set_next_floor(FloorNumber floor_number) { car_.set_next_floor(floor_number); }
     void move(Duration dt);
-    bool is_idle_on(FloorNumber) const;
 
     // Button methods
     void clear_destination_button();
     void press_destination_button(FloorNumber);
 
-    Car &car() { return car_; }
+    // Testing only
+    void set_position(FloorNumber number, Direction direction) { car_.set_position(number, direction); }
+    FloorNumber next_floor() const { return car_.next_floor(); }
 
 signals:
     void changed();

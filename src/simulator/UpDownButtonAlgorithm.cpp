@@ -37,13 +37,13 @@ void UpDownButtonAlgorithm::operator()(Building *building)
 
         if (!stops.empty())
         {
-            Comp comp(elevator->car().current_floor(), elevator->car().direction());
+            Comp comp(elevator->current_floor(), elevator->direction());
             std::sort(stops.begin(), stops.end(), comp);
             for (auto stop : stops)
             {
                 if (stop.floor != elevator->current_floor())
                 {
-                    elevator->car().set_next_floor(stop.floor);
+                    elevator->set_next_floor(stop.floor);
                     break;
                 }
             }

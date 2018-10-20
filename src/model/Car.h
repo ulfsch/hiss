@@ -28,7 +28,6 @@ public:
 
     // Testing only
     void set_position(FloorNumber number, Direction direction);
-
     FloorNumber next_floor() const;
 
 private:

@@ -51,21 +51,21 @@ TEST(SimulatorBasic, one_passener_two_floors) {
     EXPECT_EQ(1, elevator.destination_buttons().count(1));
     EXPECT_FALSE(building.floor(0)->up_button());
     EXPECT_FALSE(building.floor(0)->down_button());
-    EXPECT_EQ(1, elevator.car().next_floor());
+    EXPECT_EQ(1, elevator.next_floor());
 
     simulator->tick(++time, 1);        // time=2, move elevator to destination floor
     EXPECT_FALSE(simulator->done());
     // EXPECT_EQ(1, elevator.destination_buttons().count(1));
     EXPECT_FALSE(building.floor(0)->up_button());
     EXPECT_FALSE(building.floor(0)->down_button());
-    EXPECT_EQ(1, elevator.car().next_floor());
+    EXPECT_EQ(1, elevator.next_floor());
 
     simulator->tick(++time, 1);        // time=3, elevator on destination floor, passenger done
     EXPECT_TRUE(simulator->done());
     EXPECT_EQ(0, elevator.destination_buttons().count(1));
     EXPECT_FALSE(building.floor(0)->up_button());
     EXPECT_FALSE(building.floor(0)->down_button());
-    EXPECT_EQ(1, elevator.car().next_floor());
+    EXPECT_EQ(1, elevator.next_floor());
 
     simulator->tick(++time, 1);        // elevator idle
     EXPECT_TRUE(simulator->done());

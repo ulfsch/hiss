@@ -103,7 +103,7 @@ TEST(ElevatorBasic, butttons) {
     e.press_destination_button(17);
     EXPECT_TRUE(e.destination_buttons().count(17) == 1);
 
-    e.car().set_position(17, Direction::UP);
+    e.set_position(17, Direction::UP);
     e.clear_destination_button();
     EXPECT_TRUE(e.destination_buttons().empty());
 }

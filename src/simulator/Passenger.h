@@ -30,6 +30,7 @@ public:
     Duration traveling_time() const;
     void set_start_traveling(Elevator *elevator, Time time);
     void set_on_destination(Time time);
+    int print() const;
 
 private:
     static Id last_id_;

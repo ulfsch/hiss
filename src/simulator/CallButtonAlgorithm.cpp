@@ -18,7 +18,7 @@ void CallButtonAlgorithm::operator()(Building *building)
         {
 
             // First check elevator destination_buttons
-            elevator->car().set_next_floor(*elevator->destination_buttons().begin());
+            elevator->set_next_floor(*elevator->destination_buttons().begin());
         }
         else
         {
@@ -28,7 +28,7 @@ void CallButtonAlgorithm::operator()(Building *building)
             {
                 if (floor->call_button())
                 {
-                    elevator->car().set_next_floor(floor->number());
+                    elevator->set_next_floor(floor->number());
                 }
             }
         }
