@@ -6,6 +6,7 @@
 #include <QLabel>
 #include "ElevatorWidget.h"
 #include "Elevator.h"
+#include "Floor.h"
 
 ElevatorWidget::ElevatorWidget(Elevator *elevator, FloorNumber floor, QWidget *parent) :
         QWidget(parent),
@@ -16,7 +17,7 @@ ElevatorWidget::ElevatorWidget(Elevator *elevator, FloorNumber floor, QWidget *p
     palette1.setColor(QPalette::Background, QColor(255, 255, 200));
     setAutoFillBackground(true);
     setPalette(palette1);
-    setFixedWidth(100);
+    setFixedWidth(200);
 
     update_from_model();
 }
@@ -26,13 +27,29 @@ void ElevatorWidget::update_from_model()
     //setFixedSize(100, 50);
     QGridLayout *layout = new QGridLayout(this);
 
-    QLabel *lbl = new QLabel(QString::number(floorNumber_), this);
-    layout->addWidget(lbl, 0, 0, Qt::AlignCenter);
-    lbl->setAlignment(Qt::AlignCenter);
-    lbl->setStyleSheet("background:white");
-    lbl->setFixedSize(42, 42);
+    widget_ = new QLabel(QString::number(floorNumber_), this);
+    layout->addWidget(widget_, 0, 0, Qt::AlignCenter);
+    widget_->setAlignment(Qt::AlignCenter);
+    widget_->setStyleSheet("background:white");
+    //widget_->setFixedSize(42, 42);
 
     // floorLayout->setContentsMargins(0, 0, 0, 0);
+}
+
+void ElevatorWidget::update_passenger(const std::list<Passenger *> &passengers)
+{
+    QString text = QString::number(floorNumber_) + ":";
+    for (auto p : passengers)
+    {
+        if (p->elevator() == elevator_ && elevator_->current_floor() == floorNumber_)
+        {
+            text += " (" +
+                    QString::number(p->begin_floor()->number()) + "," +
+                    QString::number(p->end_floor()->number()) +
+                    ")";
+        }
+    }
+    widget_->setText(text);
 }
 
 // End of file

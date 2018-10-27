@@ -6,6 +6,8 @@
 #define CHISS_FLOORWIDGET_H
 
 #include <QWidget>
+#include <QLabel>
+#include <Passenger.h>
 
 class Floor;
 
@@ -15,6 +17,7 @@ Q_OBJECT
 
 public:
     explicit FloorWidget(Floor *, QWidget *parent = nullptr);
+    void update_passenger(const std::list<Passenger *> &list);
 
 public slots:
 
@@ -22,6 +25,7 @@ public slots:
 
 private:
     Floor *floor_;
+    QLabel *widget_;
 
 };
 

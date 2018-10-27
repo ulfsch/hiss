@@ -59,6 +59,7 @@ void ConfigurationWindow::tick()
     else
     {
         simulator_->tick(simulation_time_, SIMULATION_RATE);
+        buildingWidget_->update_passenger(simulator_->passengers());
         simulation_time_ += SIMULATION_RATE;
     }
 

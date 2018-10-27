@@ -6,7 +6,9 @@
 #define CHISS_ELEVATORWIDGET_H
 
 #include <QWidget>
-#include <common.h>
+#include <QLabel>
+#include "common.h"
+#include "Passenger.h"
 
 class Elevator;
 
@@ -16,14 +18,15 @@ Q_OBJECT
 
 public:
     explicit ElevatorWidget(Elevator *, FloorNumber floor, QWidget *parent = nullptr);
+    void update_passenger(const std::list<Passenger *> &passengers);
 
 public slots:
-
     void update_from_model();
 
 private:
     Elevator *elevator_;
     FloorNumber floorNumber_;
+    QLabel *widget_;
 
 };
 

@@ -15,7 +15,7 @@ FloorWidget::FloorWidget(Floor *floor, QWidget *parent) :
     palette1.setColor(QPalette::Background, QColor(200, 255, 255));
     setAutoFillBackground(true);
     setPalette(palette1);
-    setFixedWidth(100);
+    setFixedWidth(200);
 
     update_from_model();
 }
@@ -23,14 +23,25 @@ FloorWidget::FloorWidget(Floor *floor, QWidget *parent) :
 void FloorWidget::update_from_model()
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    QLabel *widget = new QLabel(QString::number(floor_->number()));
-    layout->addWidget(widget);
+    widget_ = new QLabel(QString::number(floor_->number()));
+    layout->addWidget(widget_);
 
-//    for (auto p : floor_->passengers())
-//    {
-//        QLabel *widget = new QLabel(QString::number(p->begin_floor()));
-//        layout->addWidget(widget);
-//    }
+}
+
+void FloorWidget::update_passenger(const std::list<Passenger *> &passengers)
+{
+    QString text = QString::number(floor_->number()) + ":";
+    for (auto p : passengers)
+    {
+        if (p->begin_floor() == floor_ && p->on_start_floor())
+        {
+            text += " (" +
+                    QString::number(p->begin_floor()->number()) + "," +
+                    QString::number(p->end_floor()->number()) +
+                    ")";
+        }
+    }
+    widget_->setText(text);
 }
 
 // End of file

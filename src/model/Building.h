@@ -30,7 +30,6 @@ public:
     const std::vector<Floor *> &floors() const { return floors_; }
 
 signals:
-
     void changed();
 
 private:

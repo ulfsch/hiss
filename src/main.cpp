@@ -100,8 +100,10 @@ static void run_simulation(Configuration &configuration, Result &result, bool ve
 static void print_building(const Building *building, const PassengerList &passengers)
 {
     printf("No:%-27s", "Floor");
-    for (Elevator *elevator : building->elevators())
+
+    for (Elevator* e: building->elevators())
     {
+        (void)e;
         printf("No:%-27s", "Elevator");
     }
     printf("\n");

@@ -52,19 +52,25 @@ void BuildingWidget::update_from_model()
         column += 1;
     }
 
-    for (auto floor : building_->floors())
-    {
-        int row = building_->number_of_floors() - floor->number() - 1;
-        auto widget2 = new FloorWidget(floor, this);
-        layout->addWidget(widget2, row, column, Qt::AlignCenter);
-        floors1_.push_back(widget2);
-    }
+//    for (auto floor : building_->floors())
+//    {
+//        int row = building_->number_of_floors() - floor->number() - 1;
+//        auto widget2 = new FloorWidget(floor, this);
+//        layout->addWidget(widget2, row, column, Qt::AlignCenter);
+//        floors1_.push_back(widget2);
+//    }
 }
 
-//        QLabel *lbl = new QLabel(QString::number(*i_floor), this);
-//        layout->addWidget(lbl, row, column, Qt::AlignCenter);
-//        lbl->setAlignment(Qt::AlignCenter);
-//        lbl->setStyleSheet("background:white");
-//        lbl->setFixedSize(42, 42);
+void BuildingWidget::update_passenger(const std::list<Passenger *> &passengers)
+{
+    for (auto floor : floors1_)
+    {
+        floor->update_passenger(passengers);
+    }
+    for (auto elevator : elevators_)
+    {
+        elevator->update_passenger(passengers);
+    }
+}
 
 // End of file
