@@ -36,6 +36,19 @@ void ElevatorWidget::update_from_model()
     // floorLayout->setContentsMargins(0, 0, 0, 0);
 }
 
+void ElevatorWidget::update_car()
+{
+    if (elevator_->current_floor() == floorNumber_)
+    {
+        widget_->setStyleSheet("background:red");
+    }
+    else
+    {
+        widget_->setStyleSheet("background:white");
+    }
+
+}
+
 void ElevatorWidget::update_passenger(const std::list<Passenger *> &passengers)
 {
     QString text = QString::number(floorNumber_) + ":";

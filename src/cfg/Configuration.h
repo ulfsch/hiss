@@ -17,7 +17,7 @@ public:
     explicit Configuration(QObject *parent = nullptr);
     ~Configuration();
 
-    void parse_from_xml(const char *file_name);
+    bool parse_from_xml(const char *file_name);
 
     Building *building() const;
     Algorithm *algorithm() const;

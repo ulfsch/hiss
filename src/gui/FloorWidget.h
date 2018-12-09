@@ -20,7 +20,6 @@ public:
     void update_passenger(const std::list<Passenger *> &list);
 
 public slots:
-
     void update_from_model();
 
 private:

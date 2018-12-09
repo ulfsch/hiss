@@ -8,6 +8,6 @@
 
     <algorithm type="UpDownButton"></algorithm>
 
-    <traffic type="Random"></traffic>
+    <traffic type="Random" rate="0,2"></traffic>
 </configuration>
 

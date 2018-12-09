@@ -1,21 +1,18 @@
 //
-// main.cpp
+// main.cpp - Main for command line version of chiss
 //
 #include "Building.h"
-#include "CallButtonAlgorithm.h"
 #include "Configuration.h"
-#include "ConstantTraffic.h"
 #include "Result.h"
+#include "Passenger.h"
 #include "Simulator.h"
+
 #include <cstring>
 #include <getopt.h>
 #include <iostream>
-#include <unistd.h>
 
 static void run_simulation(Configuration &, Result &, bool verbose);
-
 static void print_building(const Building *building, const PassengerList &passengers);
-
 static void print_usage(const char *arg);
 
 
@@ -45,7 +42,6 @@ int main(int argc, char *argv[])
                 break;
             default:
                 print_usage(argv[0]);
-                exit(2);
         }
     }
 
@@ -53,25 +49,33 @@ int main(int argc, char *argv[])
     {
         print_usage(argv[0]);
     }
-    else
-    {
-        Configuration configuration;
-        for (int index = optind; index < argc; index++)
-        {
-            configuration.parse_from_xml(argv[index]);
-        }
 
+    Configuration configuration;
+    bool ok = true;
+    for (int i = optind; i < argc && ok; i++)
+    {
+        ok = configuration.parse_from_xml(argv[i]);
+        if (!ok)
+        {
+            printf("Can't parse configuration file %s\n", argv[i]);
+        }
+    }
+
+    if (ok)
+    {
         Result result;
         run_simulation(configuration, result, opt_verbose);
         std::cout << result << std::endl;
     }
-    return 0;
+
+    return ok ? 0  : 1;
 }
 
 /**
- * Run the simulator.
+ * Run a simulation.
  *
- * @param simulator
+ * @param configuration
+ * @param result
  * @param verbose
  */
 static void run_simulation(Configuration &configuration, Result &result, bool verbose)
@@ -93,32 +97,33 @@ static void run_simulation(Configuration &configuration, Result &result, bool ve
 }
 
 /**
- * Print .
+ * Print a building with passengers.
  *
  * @param building
+ * @param passengers
  */
 static void print_building(const Building *building, const PassengerList &passengers)
 {
-    printf("No:%-27s", "Floor");
+    printf("%-30s", "Floor");
 
     for (Elevator* e: building->elevators())
     {
         (void)e;
-        printf("No:%-27s", "Elevator");
+        printf("%-30s", "Elevator");
     }
     printf("\n");
 
-    for (auto iterator = building->floors().rbegin(); iterator != building->floors().rend(); ++iterator)
+    for (auto row = building->floors().rbegin(); row != building->floors().rend(); ++row)
     {
-        int row = (*iterator)->number();
+        int row_number = (*row)->number();
         int elevator_id = 0;
         int column = 0;
 
-        column += printf("%2d: ", row);
+        column += printf("%2d: ", row_number);
 
         for (const auto passenger : passengers)
         {
-            if (passenger->on_start_floor() && passenger->begin_floor() == *iterator)
+            if (passenger->on_start_floor() && passenger->begin_floor() == *row)
             {
                 column += passenger->print();
             }
@@ -131,9 +136,9 @@ static void print_building(const Building *building, const PassengerList &passen
             {
                 column += printf(" ");
             }
-            column += printf("%2d: ", row);
+            column += printf("%2d: ", row_number);
 
-            if (elevator->current_floor() == row)
+            if (elevator->current_floor() == row_number)
             {
                 column += printf("[%d->%d ", elevator->current_floor(), elevator->next_floor());
                 for (const auto passenger : passengers)
@@ -154,7 +159,7 @@ static void print_building(const Building *building, const PassengerList &passen
 /**
  * Print program help text and exit.
  *
- * @param arg
+ * @param arg program name
  */
 static void print_usage(const char *arg)
 {
@@ -167,11 +172,10 @@ static void print_usage(const char *arg)
     {
         program = arg;
     }
-    fprintf(stderr, "Usage: %s [OPTIONS]... CONFIG...\n", program);
+    fprintf(stderr, "Usage: %s [OPTIONS] <config_files>\n", program);
     fprintf(stderr, " Elevator simulator\n\n");
-    fprintf(stderr, " CONFIG: Configuration xml file\n");
+    fprintf(stderr, " config_files: Configuration xml files\n");
     fprintf(stderr, " OPTIONS: \n");
-    fprintf(stderr, "  -g: graphical\n");
     fprintf(stderr, "  -v: verbose\n");
 
     exit(2);

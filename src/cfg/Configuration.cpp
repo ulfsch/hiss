@@ -27,51 +27,62 @@ Configuration::~Configuration()
 }
 
 
-void Configuration::parse_from_xml(const char *file_name)
+bool Configuration::parse_from_xml(const char *file_name)
 {
     XMLDocument doc;
     doc.LoadFile(file_name);
 
     const XMLElement *elem = doc.FirstChildElement("configuration");
-
-    elem = elem->FirstChildElement("building");
     if (elem)
     {
-        FloorNumber floors = 10;
-        elem->QueryAttribute("floors", &floors);
-        building_ = new Building(floors, this);
-
-        for (const XMLElement *p = elem->FirstChildElement("elevator"); p; p = p->NextSiblingElement("elevator"))
+        elem = elem->FirstChildElement("building");
+        if (elem)
         {
-            FloorNumber min_floor = 0;
-            FloorNumber max_floor = floors;
-            p->QueryAttribute("min_floor", &min_floor);
-            p->QueryAttribute("max_floor", &max_floor);
-            Elevator *elevator = new Elevator(min_floor, max_floor, building_);
-            building_->add_elevator(elevator);
+            FloorNumber floors = 10;
+            elem->QueryAttribute("floors", &floors);
+            building_ = new Building(floors, this);
+
+            for (const XMLElement *p = elem->FirstChildElement("elevator"); p; p = p->NextSiblingElement("elevator"))
+            {
+                FloorNumber min_floor = 0;
+                FloorNumber max_floor = floors;
+                p->QueryAttribute("min_floor", &min_floor);
+                p->QueryAttribute("max_floor", &max_floor);
+                Elevator *elevator = new Elevator(min_floor, max_floor, building_);
+                building_->add_elevator(elevator);
+            }
         }
     }
 
-    elem = elem->NextSiblingElement("algorithm");
     if (elem)
     {
-        if (elem->Attribute("type", "CallButton"))
+        elem = elem->NextSiblingElement("algorithm");
+        if (elem)
         {
-            algorithm_ = new CallButtonAlgorithm();
-        }
-        else if (elem->Attribute("type", "UpDownButton"))
-        {
-            algorithm_ = new UpDownButtonAlgorithm();
+            if (elem->Attribute("type", "CallButton"))
+            {
+                algorithm_ = new CallButtonAlgorithm();
+            }
+            else if (elem->Attribute("type", "UpDownButton"))
+            {
+                algorithm_ = new UpDownButtonAlgorithm();
+            }
         }
     }
 
-    elem = elem->NextSiblingElement("traffic");
     if (elem)
     {
-        traffic_ = new ConstantTraffic(10, 100, 1);
+        elem = elem->NextSiblingElement("traffic");
+        if (elem)
+        {
+            double rate;
+            elem->QueryAttribute("rate", &rate);
+            traffic_ = new ConstantTraffic(10, 100, rate);
+        }
     }
 
     emit changed();
+    return (building_ && algorithm_ && traffic_);
 }
 
 Traffic *Configuration::traffic() const

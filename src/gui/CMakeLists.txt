@@ -2,8 +2,8 @@
 include_directories(../model)
 
 set(SOURCE_FILES
-        ConfigurationWindow.cpp
-        ConfigurationWindow.h
+        MainWindow.cpp
+        MainWindow.h
         BuildingWidget.cpp
         BuildingWidget.h
         ElevatorWidget.cpp

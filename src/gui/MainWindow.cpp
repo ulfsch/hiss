@@ -1,9 +1,12 @@
 //
-// ConfigurationWindow.cpp
+// MainWindow.cpp
 //
 
 #include <QVBoxLayout>
-#include "ConfigurationWindow.h"
+#include <QLabel>
+#include <QStatusBar>
+#include <Result.h>
+#include "MainWindow.h"
 #include "Configuration.h"
 #include "BuildingWidget.h"
 #include "Simulator.h"
@@ -11,11 +14,11 @@
 #define SIMULATION_RATE 1   // Seconds/tick
 
 
-ConfigurationWindow::ConfigurationWindow(Configuration *configuration, QWidget *parent) :
+MainWindow::MainWindow(Configuration *configuration, QWidget *parent) :
         QMainWindow(parent),
         configuration_(configuration),
         buildingWidget_(nullptr),
-        simulation_timer_(nullptr)
+        timer_(nullptr)
 {
     update_from_model();
     connect(configuration, SIGNAL(changed()), this, SLOT(update_from_model()));
@@ -23,7 +26,7 @@ ConfigurationWindow::ConfigurationWindow(Configuration *configuration, QWidget *
     start_simulation(); // TODO
 }
 
-void ConfigurationWindow::update_from_model()
+void MainWindow::update_from_model()
 {
     QWidget *central = new QWidget(this);
 
@@ -35,32 +38,45 @@ void ConfigurationWindow::update_from_model()
     layout->addWidget(buildingWidget_);
 
     setCentralWidget(central);
+
+    QStatusBar *status_bar = statusBar();
+    awtWidget = new QLabel("AWT: 55");
+    status_bar->addWidget(awtWidget);
+
     setWindowTitle(tr("hiss"));
 }
 
-void ConfigurationWindow::start_simulation()
+void MainWindow::start_simulation()
 {
     simulator_ = new Simulator(configuration_->traffic(), configuration_->algorithm(), configuration_->building());
 
-    auto *simulation_timer_ = new QTimer(this);
-    connect(simulation_timer_, SIGNAL(timeout()), this, SLOT(tick()));
-    simulation_timer_->start(1000);
+    timer_ = new QTimer(this);
+    connect(timer_, SIGNAL(timeout()), this, SLOT(tick()));
+    timer_->start(1000);
 
 }
 
-void ConfigurationWindow::tick()
+void MainWindow::tick()
 {
     if (simulator_->done())
     {
-        simulation_timer_->stop();
-        delete simulation_timer_;
-        simulation_timer_ = nullptr;
+        timer_->stop();
+        delete timer_;
+        timer_ = nullptr;
     }
     else
     {
         simulator_->tick(simulation_time_, SIMULATION_RATE);
+        buildingWidget_->update_car();
         buildingWidget_->update_passenger(simulator_->passengers());
         simulation_time_ += SIMULATION_RATE;
+
+        Result result;
+        result.compute_result(simulation_time_, simulator_->passengers());
+        awtWidget->setText(QString("   AWT: %1,  ATT: %2")
+                                   .arg(result.average_waiting_time(), 0, 'g', 2)
+                                   .arg(result.average_traveling_time(), 0, 'g', 2)
+        );
     }
 
 }

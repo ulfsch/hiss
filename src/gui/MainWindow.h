@@ -1,12 +1,13 @@
 //
-// ConfigurationWindow.h
+// MainWindow.h
 //
 
-#ifndef CHISS_CONFIGURATIONWINDOW_H
-#define CHISS_CONFIGURATIONWINDOW_H
+#ifndef CHISS_MAINWINDOW_H
+#define CHISS_MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QLabel>
 #include "BuildingWidget.h"
 #include "common.h"
 
@@ -14,18 +15,16 @@ class Configuration;
 
 class Simulator;
 
-class ConfigurationWindow : public QMainWindow
+class MainWindow : public QMainWindow
 {
 Q_OBJECT
 
 public:
-    explicit ConfigurationWindow(Configuration *, QWidget *parent = nullptr);
+    explicit MainWindow(Configuration *, QWidget *parent = nullptr);
 
 public slots:
     void update_from_model();
-
     void start_simulation();
-
     void tick();
 
 private:
@@ -33,8 +32,8 @@ private:
     BuildingWidget *buildingWidget_;
     Simulator *simulator_;
     Time simulation_time_;
-    QTimer *simulation_timer_;
-
+    QTimer *timer_;
+    QLabel *awtWidget;
 };
 
-#endif //CHISS_CONFIGURATIONWINDOW_H
+#endif //CHISS_MAINWINDOW_H

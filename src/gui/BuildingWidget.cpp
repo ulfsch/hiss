@@ -24,9 +24,8 @@ BuildingWidget::BuildingWidget(Building *building, QWidget *parent) :
 
 void BuildingWidget::update_from_model()
 {
-    floors1_.clear();
-    floors2_.clear();
-    elevators_.clear();
+    floorWidgets_.clear();
+    elevatorWidgets_.clear();
 
     QGridLayout *layout = new QGridLayout(this);
 
@@ -36,7 +35,7 @@ void BuildingWidget::update_from_model()
         int row = building_->number_of_floors() - floor->number() - 1;
         auto widget1 = new FloorWidget(floor, this);
         layout->addWidget(widget1, row, column, Qt::AlignCenter);
-        floors1_.push_back(widget1);
+        floorWidgets_.push_back(widget1);
     }
 
     column = 1;
@@ -47,7 +46,7 @@ void BuildingWidget::update_from_model()
             int row = building_->number_of_floors() - floor_number - 1;
             auto widget = new ElevatorWidget(elevator, floor_number, this);
             layout->addWidget(widget, row, column, Qt::AlignCenter);
-            elevators_.push_back(widget);
+            elevatorWidgets_.push_back(widget);
         }
         column += 1;
     }
@@ -57,17 +56,25 @@ void BuildingWidget::update_from_model()
 //        int row = building_->number_of_floors() - floor->number() - 1;
 //        auto widget2 = new FloorWidget(floor, this);
 //        layout->addWidget(widget2, row, column, Qt::AlignCenter);
-//        floors1_.push_back(widget2);
+//        floorWidgets_.push_back(widget2);
 //    }
+}
+
+void BuildingWidget::update_car()
+{
+    for (auto elevator : elevatorWidgets_)
+    {
+        elevator->update_car();
+    }
 }
 
 void BuildingWidget::update_passenger(const std::list<Passenger *> &passengers)
 {
-    for (auto floor : floors1_)
+    for (auto floor : floorWidgets_)
     {
         floor->update_passenger(passengers);
     }
-    for (auto elevator : elevators_)
+    for (auto elevator : elevatorWidgets_)
     {
         elevator->update_passenger(passengers);
     }

@@ -18,6 +18,7 @@ Q_OBJECT
 
 public:
     explicit ElevatorWidget(Elevator *, FloorNumber floor, QWidget *parent = nullptr);
+    void update_car();
     void update_passenger(const std::list<Passenger *> &passengers);
 
 public slots:

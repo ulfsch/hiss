@@ -2,7 +2,7 @@
 // main_gui.cpp.
 //
 
-#include "ConfigurationWindow.h"
+#include "MainWindow.h"
 #include "Configuration.h"
 #include <QApplication>
 
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     Configuration configuration(&application);
     configuration.parse_from_xml(argv[1]);
 
-    ConfigurationWindow window(&configuration);
+    MainWindow window(&configuration);
     window.show();
     return application.exec();
 }

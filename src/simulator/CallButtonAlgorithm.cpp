@@ -23,7 +23,7 @@ void CallButtonAlgorithm::operator()(Building *building)
         else
         {
 
-            // No elevator buttons pressed. Check floor destination_buttons.
+            // No elevator buttons pressed. Check floor call buttons.
             for (const auto *floor : building->floors())
             {
                 if (floor->call_button())

@@ -19,6 +19,7 @@ Q_OBJECT
 
 public:
     explicit BuildingWidget(Building *, QWidget *parent = nullptr);
+    void update_car();
     void update_passenger(const std::list<Passenger *> &passengers);
 
 public slots:
@@ -26,9 +27,8 @@ public slots:
 
 private:
     Building *building_;
-    std::vector<ElevatorWidget *> elevators_;
-    std::vector<FloorWidget *> floors1_;
-    std::vector<FloorWidget *> floors2_;
+    std::vector<ElevatorWidget *> elevatorWidgets_;
+    std::vector<FloorWidget *> floorWidgets_;
 
 };
 

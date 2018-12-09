@@ -24,8 +24,16 @@ void Result::compute_result(Time time, const PassengerList &passengers)
         }
     }
 
-    average_traveling_time_ = traveling_time / passengers_at_destination_;
-    average_waiting_time_ = waiting_time / passengers_at_destination_;
+    if (passengers_at_destination_)
+    {
+        average_traveling_time_ = traveling_time / passengers_at_destination_;
+        average_waiting_time_ = waiting_time / passengers_at_destination_;
+    }
+    else
+    {
+        average_traveling_time_ = -1;
+        average_waiting_time_   = -1;
+    }
 }
 
 Time Result::simulation_time() const
