@@ -12,11 +12,14 @@ int main(int argc, char *argv[])
     application.setStyle("cleanlooks");  // Removes a annoying error message when number clicked
 
     Configuration configuration(&application);
-    configuration.parse_from_xml(argv[1]);
+    bool ok = configuration.parse_from_xml(argv[1]);
 
-    MainWindow window(&configuration);
-    window.show();
-    return application.exec();
+    if (ok)
+    {
+        MainWindow window(&configuration);
+        window.show();
+        return application.exec();
+    }
 }
 
 // End of file

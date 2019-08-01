@@ -4,8 +4,6 @@ include_directories(../model ../simulator)
 set(SOURCE_FILES
         Configuration.cpp
         Configuration.h
-        tinyxml2.cpp
-        tinyxml2.h
         Result.cpp
         Result.h)
 

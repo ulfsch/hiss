@@ -3,12 +3,10 @@
 //
 
 #include "Configuration.h"
-#include "tinyxml2.h"
 #include "UpDownButtonAlgorithm.h"
 #include "ConstantTraffic.h"
 #include "CallButtonAlgorithm.h"
 
-using namespace tinyxml2;
 
 Configuration::Configuration(QObject *parent) :
         QObject(parent),
@@ -21,7 +19,7 @@ Configuration::Configuration(QObject *parent) :
 
 Configuration::~Configuration()
 {
-    // delete building_;
+    delete building_;
     delete algorithm_;
     delete traffic_;
 }
@@ -35,67 +33,79 @@ bool Configuration::parse_from_xml(const char *file_name)
     if (file.open(QFile::ReadOnly | QFile::Text))
     {
         QXmlStreamReader xml(&file);
-        Q_ASSERT(xml.readNextStartElement() && xml.name() == QLatin1String("configuration"));
+        ok = parse_xml_stream(xml);
+    }
+    return ok;
+}
 
-        while (xml.readNextStartElement())
+bool Configuration::parse_xml_stream(QXmlStreamReader &xml)
+{
+    bool ok = xml.readNextStartElement() && xml.name() == QLatin1String("configuration");
+
+    while (xml.readNextStartElement() && ok)
+    {
+        if (xml.name() == QLatin1String("building"))
         {
-            if (xml.name() == QLatin1String("building"))
-            {
-                int floors = xml.attributes().value("floors").toString().toInt(&ok);
-                building_ = new Building(floors, this);
+            int floors = xml.attributes().value("floors").toString().toInt(&ok);
+            building_ = new Building(floors, this);
 
-                while (xml.readNextStartElement())
-                {
-                    if (xml.name() == "Elevator")
-                    {
-                        int min_floor = 0;
-                        int max_floor = 10;
-                        building_->add_elevator(new Elevator(min_floor, max_floor, building_));
-
-                        xml.readNext();
-                    }
-                }
-            }
-            else if (xml.name() == QLatin1String("algorithm"))
+            while (xml.readNextStartElement() && ok)
             {
-                QStringRef type = xml.attributes().value("type");
-                if (type == "CallButton")
+                if (xml.name() == "elevator")
                 {
-                    algorithm_ = new CallButtonAlgorithm();
-                }
-                else if (type == "UpDownButton")
-                {
-                    algorithm_ = new UpDownButtonAlgorithm();
+                    int min_floor = xml.attributes().value("min_floor").toString().toInt(&ok);
+                    int max_floor = xml.attributes().value("max_floor").toString().toInt(&ok);
+                    building_->add_elevator(new Elevator(min_floor, max_floor, building_));
+                    xml.readNext();
                 }
                 else
                 {
-                    break;  // Error
+                    ok = false;
+                    break;
                 }
-
             }
-            else if (xml.name() == QLatin1String("traffic"))
+        }
+        else if (xml.name() == QLatin1String("algorithm"))
+        {
+            QStringRef type = xml.attributes().value("type");
+            if (type == "CallButton")
             {
-                QStringRef type = xml.attributes().value("type");
-                if (type == "Random")
-                {
-                    double rate = xml.attributes().value("rate").toString().toFloat(&ok);
-                    traffic_ = new ConstantTraffic(10, 100, rate);
-                }
-                else
-                {
-                    break;  // Error
-                }
-
+                algorithm_ = new CallButtonAlgorithm();
+            }
+            else if (type == "UpDownButton")
+            {
+                algorithm_ = new UpDownButtonAlgorithm();
             }
             else
             {
-                break; // Error
+                ok = false;
+                break;
             }
+            xml.readNext();
         }
-        ok = ok && !xml.hasError();
+        else if (xml.name() == QLatin1String("traffic"))
+        {
+            QStringRef type = xml.attributes().value("type");
+            if (type == "Random")
+            {
+                double rate = xml.attributes().value("rate").toString().toFloat(&ok);
+                traffic_ = new ConstantTraffic(10, 100, rate);
+            }
+            else
+            {
+                ok = false;
+                break;
+            }
+            xml.readNext();
+        }
+        else
+        {
+            ok = false;
+            break;
+        }
     }
 
-    return ok;
+    return ok && !xml.hasError();
 }
 
 #if 0
