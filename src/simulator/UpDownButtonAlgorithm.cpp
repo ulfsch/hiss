@@ -48,6 +48,10 @@ void UpDownButtonAlgorithm::operator()(Building *building)
                 }
             }
         }
+        else
+        {
+            printf("XXX %d\n", stops.size());
+        }
     }
 }
 
@@ -96,7 +100,15 @@ bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b)
 //    assert(false);
 
     // Shortest distance
-    return std::abs(a_delta) < std::abs(b_delta);
+    if (std::abs(a_delta) < std::abs(b_delta))
+    {
+        return true;
+    }
+    if (std::abs(a_delta) > std::abs(b_delta))
+    {
+        return false;
+    }
+    return &a < &b;
 }
 
 std::ostream &operator<<(std::ostream &os, UpDownButtonAlgorithm::Stop &s)

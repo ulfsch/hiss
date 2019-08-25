@@ -57,8 +57,8 @@ void ElevatorWidget::update_passenger(const std::list<Passenger *> &passengers)
         if (p->elevator() == elevator_ && elevator_->current_floor() == floorNumber_)
         {
             text += " (" +
-                    QString::number(p->begin_floor()->number()) + "," +
-                    QString::number(p->end_floor()->number()) +
+                    QString::number(p->begin_floor()) + "," +
+                    QString::number(p->end_floor()) +
                     ")";
         }
     }

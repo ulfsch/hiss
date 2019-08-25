@@ -123,7 +123,7 @@ static void print_building(const Building *building, const PassengerList &passen
 
         for (const auto passenger : passengers)
         {
-            if (passenger->on_start_floor() && passenger->begin_floor() == *row)
+            if (passenger->on_start_floor() && passenger->begin_floor() == (*row)->number())
             {
                 column += passenger->print();
             }

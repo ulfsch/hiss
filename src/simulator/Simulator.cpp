@@ -54,15 +54,7 @@ bool Simulator::done() const
 void Simulator::inject_passenger(Passenger *passenger)
 {
     passengers_.push_back(passenger);
-
-    for (Elevator *elevator : building_->elevators())
-    {
-        if (elevator->current_floor() == passenger->begin_floor()->number())
-        {
-            return;
-        }
-    }
-    passenger->begin_floor()->press_buttons(passenger->end_floor()->number());
+    building_->floor(passenger->begin_floor())->press_buttons(passenger->end_floor());
 }
 
 void Simulator::move_passengers(Time time)
@@ -70,7 +62,7 @@ void Simulator::move_passengers(Time time)
     // Disembark
     for (Passenger *p : passengers_)
     {
-        if (p->elevator() && p->elevator()->is_idle_on(p->end_floor()->number()))
+        if (p->elevator() && p->elevator()->is_idle_on(p->end_floor()))
         {
             p->set_on_destination(time);
         }
@@ -83,9 +75,9 @@ void Simulator::move_passengers(Time time)
         {
             for (Elevator *elevator : building_->elevators())
             {
-                if (elevator->is_idle_on(p->begin_floor()->number()))
+                if (elevator->is_idle_on(p->begin_floor()))
                 {
-                    elevator->press_destination_button(p->end_floor()->number());
+                    elevator->press_destination_button(p->end_floor());
                     p->set_start_traveling(elevator, time);
                     break;
                 }

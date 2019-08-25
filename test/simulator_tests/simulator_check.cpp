@@ -17,7 +17,7 @@ public:
             return nullptr;
         }
         count_ += 1;
-        return new Passenger(building->floor(0), building->floor(1), time);
+        return new Passenger(0, 1, time);
     }
 
     bool done() const override

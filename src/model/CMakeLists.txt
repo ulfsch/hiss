@@ -3,6 +3,8 @@ set(SOURCE_FILES
         common.h
         Algorithm.h
         Traffic.h
+        Car.cpp
+        Car.h
         Direction.cpp
         Direction.h
         Building.cpp
@@ -11,8 +13,7 @@ set(SOURCE_FILES
         Elevator.h
         Floor.cpp
         Floor.h
-        Car.cpp
-        Car.h)
+)
 
 add_library(model ${SOURCE_FILES})
 target_link_libraries(model Qt4::QtCore)

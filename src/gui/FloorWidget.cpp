@@ -33,11 +33,11 @@ void FloorWidget::update_passenger(const std::list<Passenger *> &passengers)
     QString text = QString::number(floor_->number()) + ":";
     for (auto p : passengers)
     {
-        if (p->begin_floor() == floor_ && p->on_start_floor())
+        if (p->begin_floor() == floor_->number() && p->on_start_floor())
         {
             text += " (" +
-                    QString::number(p->begin_floor()->number()) + "," +
-                    QString::number(p->end_floor()->number()) +
+                    QString::number(p->begin_floor()) + "," +
+                    QString::number(p->end_floor()) +
                     ")";
         }
     }

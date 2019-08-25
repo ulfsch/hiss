@@ -13,7 +13,7 @@ Id Passenger::last_id_ = 0;
  * @param end_floor
  * @param time
  */
-Passenger::Passenger(Floor *begin_floor, Floor *end_floor, Time time) :
+Passenger::Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time) :
         id_(++last_id_),
         begin_floor_(begin_floor),
         end_floor_(end_floor),
@@ -22,6 +22,11 @@ Passenger::Passenger(Floor *begin_floor, Floor *end_floor, Time time) :
         pick_up_time_(0),
         end_time_(0)
 {
+    if (begin_floor_ == end_floor_)
+    {
+        exit(99);
+    }
+    assert(begin_floor_ != end_floor_);
 }
 
 Id Passenger::id() const
@@ -29,12 +34,12 @@ Id Passenger::id() const
     return id_;
 }
 
-Floor *Passenger::begin_floor() const
+FloorNumber Passenger::begin_floor() const
 {
     return begin_floor_;
 }
 
-Floor *Passenger::end_floor() const
+FloorNumber Passenger::end_floor() const
 {
     return end_floor_;
 }
@@ -83,8 +88,8 @@ Duration Passenger::traveling_time() const
 int Passenger::print() const
 {
     return printf("(%d:%d)",
-                  begin_floor_->number(),
-                  end_floor_->number());
+                  begin_floor_,
+                  end_floor_);
 }
 
 std::ostream &operator<<(std::ostream &os, Passenger &p)

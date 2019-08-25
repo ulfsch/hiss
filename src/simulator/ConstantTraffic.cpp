@@ -37,7 +37,7 @@ Passenger *ConstantTraffic::operator()(Building *building, Time time)
 
         if (from_floor != to_floor)
         {
-            Passenger *p = new Passenger(building->floor(from_floor), building->floor(to_floor), time);
+            Passenger *p = new Passenger(from_floor, to_floor, time);
             no_of_passengers_ += 1;
             count_ -= 1;
             return p;

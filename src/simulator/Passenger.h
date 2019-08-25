@@ -8,19 +8,17 @@
 #include <ostream>
 #include <list>
 
-class Building;
-class Floor;
 class Elevator;
 
 
 class Passenger
 {
 public:
-    Passenger(Floor *begin_floor, Floor *end_floor, Time time);
+    Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time);
 
     Id id() const;
-    Floor *begin_floor() const;
-    Floor *end_floor() const;
+    FloorNumber begin_floor() const;
+    FloorNumber end_floor() const;
     Elevator *elevator() const;
 
     bool on_start_floor() const;
@@ -36,8 +34,8 @@ private:
     static Id last_id_;
     Id id_;
 
-    Floor *begin_floor_;
-    Floor *end_floor_;
+    FloorNumber begin_floor_;
+    FloorNumber end_floor_;
     Elevator* elevator_;
 
     Time begin_time_;

@@ -7,6 +7,8 @@
 #include "common.h"
 #include "Passenger.h"
 
+class Building;
+
 class Traffic
 {
 public:
