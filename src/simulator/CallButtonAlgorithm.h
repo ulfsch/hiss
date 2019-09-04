@@ -12,7 +12,7 @@ class CallButtonAlgorithm : public Algorithm
 public:
     CallButtonAlgorithm();
 
-    void operator()(Building *) override;
+    void operator()(Building *, std::vector<Stop>& result) override;
 
 };
 

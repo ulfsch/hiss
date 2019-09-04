@@ -4,122 +4,65 @@
 
 #include "UpDownButtonAlgorithm.h"
 #include "Building.h"
+#include "Stop.h"
 #include <algorithm>
 #include <iostream>
+
+struct IsSame
+{
+    IsSame(const Stop &stop) : stop_(stop)
+    {}
+
+    bool operator()(const Stop &b)
+    {
+        return (stop_.elevator == b.elevator) ||
+               ((stop_.floor == b.floor) && (stop_.direction == b.direction)
+                && (b.direction != Direction::NONE));
+        //&& (stop_.direction != Direction::NONE));
+    }
+
+    Stop stop_;
+};
 
 /**
  * Algorithm for two call buttons (up/down) on each floor.
  *
  * @param building
  */
-void UpDownButtonAlgorithm::operator()(Building *building)
+void UpDownButtonAlgorithm::operator()(Building *building, std::vector<Stop> &result)
 {
+    std::vector<Stop> stops;
+
     for (Elevator *elevator : building->elevators())
     {
-        std::vector<Stop> stops;
-
-        for (FloorNumber x : elevator->destination_buttons())
+        for (FloorNumber floor_number : elevator->destination_buttons())
         {
-            stops.push_back(Stop(x));
+            stops.push_back(Stop(elevator, floor_number));
         }
 
-        for (const Floor *floor : building->floors())
+        for (Floor *floor : building->floors())
         {
             if (floor->down_button())
             {
-                stops.push_back(Stop(floor->number(), Direction::DOWN));
+                stops.push_back(Stop(elevator, floor->number(), Direction::DOWN));
             }
             if (floor->up_button())
             {
-                stops.push_back(Stop(floor->number(), Direction::UP));
+                stops.push_back(Stop(elevator, floor->number(), Direction::UP));
             }
         }
+    }
 
-        if (!stops.empty())
+    std::sort(stops.begin(), stops.end());
+
+    result.clear();
+    for (auto stop : stops)
+    {
+        if (std::find_if(result.begin(), result.end(), IsSame(stop)) == result.end())
         {
-            Comp comp(elevator->current_floor(), elevator->direction());
-            std::sort(stops.begin(), stops.end(), comp);
-            for (auto stop : stops)
-            {
-                if (stop.floor != elevator->current_floor())
-                {
-                    elevator->set_next_floor(stop.floor);
-                    break;
-                }
-            }
-        }
-        else
-        {
-            printf("XXX %d\n", stops.size());
+            result.push_back(stop);
         }
     }
-}
-
-/**
- * The compare function.
- *
- * @param a
- * @param b
- * @return true if stop a is better than stop b given a elevator position and direction
- */
-bool UpDownButtonAlgorithm::Comp::operator()(const Stop &a, const Stop &b)
-{
-    int a_delta = a.floor - current_;
-    int b_delta = b.floor - current_;
-    Direction approach_dir_a = (a_delta < 0) ? Direction::DOWN : Direction::UP;
-    Direction approach_dir_b = (b_delta < 0) ? Direction::DOWN : Direction::UP;
-
-    // Prefer a stop in the elevator direction.
-    if (approach_dir_a == direction_ && approach_dir_b != direction_)
-    {
-        return true;
-    }
-    if (approach_dir_a != direction_ && approach_dir_b == direction_)
-    {
-        return false;
-    }
-
-    // Prefer stop in travel direction
-    if (a.direction == approach_dir_a && b.direction != approach_dir_b)
-    {
-        return true;
-    }
-    if (a.direction != approach_dir_a && b.direction == approach_dir_b)
-    {
-        return false;
-    }
-
-//    //
-//    if (a.direction == Direction::DOWN && b.direction == Direction::DOWN) {
-//        return a.floor > b.floor;
-//    }
-//    if (a.direction == Direction::UP && b.direction == Direction::UP) {
-//        return a.floor < b.floor;
-//    }
-//
-//    assert(false);
-
-    // Shortest distance
-    if (std::abs(a_delta) < std::abs(b_delta))
-    {
-        return true;
-    }
-    if (std::abs(a_delta) > std::abs(b_delta))
-    {
-        return false;
-    }
-    return &a < &b;
-}
-
-std::ostream &operator<<(std::ostream &os, UpDownButtonAlgorithm::Stop &s)
-{
-    if (s.direction == Direction::UP)
-        os << std::string(" ") << s.floor << "u";
-    if (s.direction == Direction::DOWN)
-        os << std::string(" ") << s.floor << "d";
-    if (s.direction == Direction::NONE)
-        os << std::string(" ") << s.floor << "-";
-    return os;
 }
 
 // End of file

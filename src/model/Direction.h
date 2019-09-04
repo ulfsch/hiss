@@ -6,10 +6,10 @@
 #define CHISS_DIRECTION_H
 
 enum class Direction {
-    NONE, UP, DOWN
+    NONE, DOWN, UP, BOTH
 };
 
 bool operator==(Direction a, Direction b);
-bool operator!=(Direction a, Direction b);
+// bool operator!=(Direction a, Direction b);
 
 #endif //CHISS_DIRECTION_H

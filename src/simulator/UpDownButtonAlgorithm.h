@@ -8,39 +8,14 @@
 
 #include "Algorithm.h"
 #include "common.h"
-#include "Elevator.h"
-#include "Floor.h"
 #include <ostream>
 
 class UpDownButtonAlgorithm : public Algorithm
 {
 public:
-    virtual void operator()(Building *) override;
-
-    struct Stop
-    {
-        Stop(FloorNumber n, Direction d = Direction::NONE) : floor(n), direction(d)
-        {}
-
-        FloorNumber floor;
-        Direction direction;
-    };
-
-    class Comp
-    {
-    public:
-        Comp(FloorNumber n, Direction d) : current_(n), direction_(d)
-        {}
-
-        bool operator()(const Stop &a, const Stop &b);
-
-    private:
-        FloorNumber current_;
-        Direction direction_;
-    };
-
+    virtual void operator()(Building *, std::vector<Stop>& result) override;
 };
 
-std::ostream &operator<<(std::ostream &os, UpDownButtonAlgorithm::Stop &s);
+std::ostream &operator<<(std::ostream &os, Stop &s);
 
 #endif //CHISS_UPDOWNBUTTONALGORITHM_H

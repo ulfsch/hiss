@@ -6,6 +6,8 @@ set(SOURCE_FILES
         Simulator.h
         Passenger.cpp
         Passenger.h
+        Stop.cpp
+        Stop.h
         ConstantTraffic.cpp
         ConstantTraffic.h
         CallButtonAlgorithm.cpp

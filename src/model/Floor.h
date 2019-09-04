@@ -36,7 +36,6 @@ private:
 
     // One button for each floor
     std::set<FloorNumber> floor_buttons_;
-
 };
 
 std::ostream &operator<<(std::ostream &os, const Floor &floor);
