@@ -14,7 +14,7 @@ Car::Car(FloorNumber min_floor, int velocity, int floor_height) :
 
         height_(min_floor * floor_height),
         state_(State::IDLE),
-        direction_(Direction::NONE)
+        direction_(Direction::UP)
 {
 }
 

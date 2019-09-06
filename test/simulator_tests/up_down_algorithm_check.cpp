@@ -4,12 +4,12 @@
 
 #include "gtest/gtest.h"
 #include "Building.h"
-#include "UpDownButtonAlgorithm.h"
+#include "StandardAlgorithm.h"
 
 static const FloorNumber NUMBER_OF_FLOORS = 10;
 
 
-class UpDownAlgorithm : public ::testing::Test {
+class StandardAlgoTest : public ::testing::Test {
 
 protected:
     virtual void SetUp() {
@@ -18,92 +18,99 @@ protected:
 
 public:
     Building building{NUMBER_OF_FLOORS};
-    UpDownButtonAlgorithm algorithm;
+    StandardAlgorithm algorithm;
 
 };
 
-TEST_F(UpDownAlgorithm, basic1) {
+TEST_F(StandardAlgoTest, basic1) {
     Elevator *elevator = building.elevators().front();
 
     elevator->press_destination_button(7);
     building.floors()[5]->press_buttons(3);
-    algorithm(&building);
-    EXPECT_EQ(7, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(7, result.front().floor);
 }
 
-TEST_F(UpDownAlgorithm, basic2) {
+TEST_F(StandardAlgoTest, basic2) {
     Elevator *elevator = building.elevators().front();
 
     elevator->press_destination_button(7);
     building.floors()[5]->press_buttons(9);
-    algorithm(&building);
-    EXPECT_EQ(5, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(5, result.front().floor);
 }
 
-TEST_F(UpDownAlgorithm, preferElevatorDirection) {
+TEST_F(StandardAlgoTest, preferElevatorDirection) {
     Elevator *elevator = building.elevators().front();
 
     elevator->set_position(7, Direction::UP);
     building.floors()[9]->press_buttons(3);
     building.floors()[6]->press_buttons(3);
-    algorithm(&building);
-    EXPECT_EQ(9, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(9, result.front().floor);
 }
 
-TEST_F(UpDownAlgorithm, SameDir) {
+TEST_F(StandardAlgoTest, SameDir) {
     Elevator *elevator = building.elevators().front();
 
     elevator->set_position(5, Direction::UP);
     building.floors()[7]->press_buttons(10);
     building.floors()[9]->press_buttons(3);
-    algorithm(&building);
-    EXPECT_EQ(7, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(7, result.front().floor);
 }
 
-TEST_F(UpDownAlgorithm, OppositeDir) {
+TEST_F(StandardAlgoTest, OppositeDir) {
     Elevator *elevator = building.elevators().front();
 
 //    elevator->set_position(5, Direction::UP);
 //    building.floors()[7]->press_buttons(3);
 //    building.floors()[9]->press_buttons(3);
 //    algorithm(&building);
-//    EXPECT_EQ(9, elevator->next_floor());
+//    EXPECT_EQ(9, result.front().floor);
 
     elevator->set_position(5, Direction::UP);
     elevator->press_destination_button(7);
     building.floors()[9]->press_buttons(3);
-    algorithm(&building);
-    EXPECT_EQ(7, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(7, result.front().floor);
 }
 
-TEST_F(UpDownAlgorithm, OppositeDirIdle) {
+TEST_F(StandardAlgoTest, OppositeDirIdle) {
     Elevator *elevator = building.elevators().front();
 
 //    elevator->set_position(5, Direction::NONE);
 //    building.floors()[7]->press_buttons(3);
 //    building.floors()[9]->press_buttons(3);
 //    algorithm(&building);
-//    EXPECT_EQ(9, elevator->next_floor());
+//    EXPECT_EQ(9, result.front().floor);
 
     elevator->set_position(5, Direction::NONE);
     elevator->press_destination_button(7);
     building.floors()[9]->press_buttons(3);
-    algorithm(&building);
-    EXPECT_EQ(7, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(7, result.front().floor);
 }
 
-TEST_F(UpDownAlgorithm, OppositeDirDown) {
+TEST_F(StandardAlgoTest, OppositeDirDown) {
     Elevator *elevator = building.elevators().front();
 
 //    elevator->set_position(5, Direction::DOWN);
 //    building.floors()[7]->press_buttons(3);
 //    building.floors()[9]->press_buttons(3);
 //    algorithm(&building);
-//    EXPECT_EQ(9, elevator->next_floor());
+//    EXPECT_EQ(9, result.front().floor);
 
     elevator->set_position(5, Direction::DOWN);
     elevator->press_destination_button(7);
     building.floors()[9]->press_buttons(3);
-    algorithm(&building);
-    EXPECT_EQ(7, elevator->next_floor());
+    std::vector<Stop> result;
+    algorithm(&building, result);
+    EXPECT_EQ(7, result.front().floor);
 }

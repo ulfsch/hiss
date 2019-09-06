@@ -13,16 +13,7 @@
 class Stop
 {
 public:
-    Stop(Elevator *e, FloorNumber n, Direction d = Direction::NONE) :
-            elevator(e),
-            floor(n),
-            direction(d)
-    {
-        in_elevator_direction_ = (d == e->direction());
-        in_travel_direction_ = (d == e->direction());
-        distance_ = std::abs(n - e->current_floor());
-    }
-
+    Stop(Elevator *e, FloorNumber n, Direction d = Direction::NONE);
     bool operator<(const Stop &b) const;
 
 public:

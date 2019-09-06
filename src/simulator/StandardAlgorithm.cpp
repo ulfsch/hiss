@@ -1,8 +1,8 @@
 //
-// UpDownButtonAlgorithm.cpp.
+// StandardAlgorithm.cpp.
 //
 
-#include "UpDownButtonAlgorithm.h"
+#include "StandardAlgorithm.h"
 #include "Building.h"
 #include "Stop.h"
 #include <algorithm>
@@ -15,10 +15,23 @@ struct IsSame
 
     bool operator()(const Stop &b)
     {
-        return (stop_.elevator == b.elevator) ||
-               ((stop_.floor == b.floor) && (stop_.direction == b.direction)
-                && (b.direction != Direction::NONE));
-        //&& (stop_.direction != Direction::NONE));
+        if (stop_.elevator == b.elevator)
+        {
+            return true;
+        }
+
+        if (stop_.floor != b.floor)
+        {
+            return false;
+        }
+
+//        if (stop_.direction == Direction::NONE)
+//        {
+//            return false;
+//        }
+
+
+        return (stop_.direction == b.direction);
     }
 
     Stop stop_;
@@ -29,7 +42,7 @@ struct IsSame
  *
  * @param building
  */
-void UpDownButtonAlgorithm::operator()(Building *building, std::vector<Stop> &result)
+void StandardAlgorithm::operator()(Building *building, std::vector<Stop> &result)
 {
     std::vector<Stop> stops;
 
@@ -37,7 +50,7 @@ void UpDownButtonAlgorithm::operator()(Building *building, std::vector<Stop> &re
     {
         for (FloorNumber floor_number : elevator->destination_buttons())
         {
-            stops.push_back(Stop(elevator, floor_number));
+            stops.push_back(Stop(elevator, floor_number, Direction::NONE));
         }
 
         for (Floor *floor : building->floors())

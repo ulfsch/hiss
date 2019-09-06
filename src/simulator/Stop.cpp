@@ -4,6 +4,23 @@
 
 #include "Stop.h"
 
+Stop::Stop(Elevator *e, FloorNumber n, Direction d) :
+elevator(e),
+floor(n),
+direction(d)
+{
+    Direction a = Direction::NONE;
+    int delta = n - e->current_floor();
+    if (delta > 0)
+        a = Direction::UP;
+    if (delta < 0)
+        a = Direction::DOWN;
+
+    in_elevator_direction_ = (a == e->direction()) ;
+    in_travel_direction_ = (d == e->direction()) ;
+    distance_ = std::abs(n - e->current_floor());
+}
+
 bool Stop::operator<(const Stop &b) const
 {
     // Prefer a stop in the elevator direction.
@@ -31,6 +48,7 @@ bool Stop::operator<(const Stop &b) const
     {
         return true;
     }
+
     return this < &b;
 }
 

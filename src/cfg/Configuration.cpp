@@ -3,7 +3,7 @@
 //
 
 #include "Configuration.h"
-#include "UpDownButtonAlgorithm.h"
+#include "StandardAlgorithm.h"
 #include "ConstantTraffic.h"
 #include "CallButtonAlgorithm.h"
 
@@ -74,7 +74,7 @@ bool Configuration::parse_xml_stream(QXmlStreamReader &xml)
             }
             else if (type == "UpDownButton")
             {
-                algorithm_ = new UpDownButtonAlgorithm();
+                algorithm_ = new StandardAlgorithm();
             }
             else
             {
@@ -147,7 +147,7 @@ bool Configuration::parse_from_xml_old(const char *file_name)
             }
             else if (elem->Attribute("type", "UpDownButton"))
             {
-                algorithm_ = new UpDownButtonAlgorithm();
+                algorithm_ = new StandardAlgorithm();
             }
         }
     }

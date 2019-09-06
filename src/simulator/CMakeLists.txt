@@ -12,8 +12,8 @@ set(SOURCE_FILES
         ConstantTraffic.h
         CallButtonAlgorithm.cpp
         CallButtonAlgorithm.h
-        UpDownButtonAlgorithm.cpp
-        UpDownButtonAlgorithm.h)
+        StandardAlgorithm.cpp
+        StandardAlgorithm.h)
 
 add_library(simulator ${SOURCE_FILES})
 target_link_libraries(simulator Qt4::QtCore)
