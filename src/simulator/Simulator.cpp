@@ -32,8 +32,10 @@ void Simulator::tick(Time time, Duration dt)
     (*algorithm_)(building_, stops);
     for (const auto &stop : stops)
     {
-        // if (stop.floor != elevator->current_floor())
-        stop.elevator->set_next_floor(stop.floor);
+        if (stop.floor != stop.elevator->current_floor())
+        {
+            stop.elevator->set_next_floor(stop.floor);
+        }
     }
     move_elevators(dt);
 }
