@@ -2,6 +2,7 @@
 include_directories(../model)
 
 set(SOURCE_FILES
+        Algorithm.h
         Simulator.cpp
         Simulator.h
         Passenger.cpp
@@ -10,8 +11,8 @@ set(SOURCE_FILES
         Stop.h
         ConstantTraffic.cpp
         ConstantTraffic.h
-        CallButtonAlgorithm.cpp
-        CallButtonAlgorithm.h
+        TrivialAlgorithm.cpp
+        TrivialAlgorithm.h
         StandardAlgorithm.cpp
         StandardAlgorithm.h)
 

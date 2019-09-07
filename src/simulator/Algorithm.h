@@ -4,10 +4,12 @@
 #ifndef CHISS_ALGORITHM_H
 #define CHISS_ALGORITHM_H
 
-#include <Stop.h>
+#include "common.h"
+#include "Stop.h"
 #include <vector>
 
 class Building;
+
 
 class Algorithm
 {

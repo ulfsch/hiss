@@ -24,12 +24,17 @@ public:
     void add_floor(Floor *floor);
 
     FloorNumber number_of_floors() const;
-    Floor* floor(FloorNumber number) const;
 
-    const std::vector<Elevator *> &elevators() const { return elevators_; }
-    const std::vector<Floor *> &floors() const { return floors_; }
+    Floor *floor(FloorNumber number) const;
+
+    const std::vector<Elevator *> &elevators() const
+    { return elevators_; }
+
+    const std::vector<Floor *> &floors() const
+    { return floors_; }
 
 signals:
+
     void changed();
 
 private:

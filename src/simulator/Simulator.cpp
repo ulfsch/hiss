@@ -2,6 +2,7 @@
 // Simulator.cpp
 //
 #include "Simulator.h"
+#include "Stop.h"
 #include <algorithm>
 #include <iostream>
 
@@ -27,7 +28,6 @@ void Simulator::tick(Time time, Duration dt)
     {
         inject_passenger(p);
     }
-    move_passengers(time);
     std::vector<Stop> stops;
     (*algorithm_)(building_, stops);
     for (const auto &stop : stops)
@@ -38,6 +38,7 @@ void Simulator::tick(Time time, Duration dt)
         }
     }
     move_elevators(dt);
+    move_passengers(time);
 }
 
 bool Simulator::done() const

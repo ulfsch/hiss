@@ -10,7 +10,7 @@
 class SingleTraffic : public Traffic
 {
 public:
-    Passenger * operator()(Building *building, Time time) override
+    Passenger *operator()(Building *, Time time) override
     {
         if (count_ >= no_of_passengers_)
         {

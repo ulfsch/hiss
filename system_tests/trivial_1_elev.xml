@@ -5,7 +5,7 @@
         <elevator min_floor="0" max_floor="10"></elevator>
     </building>
 
-    <algorithm type="Standard"></algorithm>
+    <algorithm type="Trivial"></algorithm>
 
     <traffic type="Random" rate="0,2"></traffic>
 </configuration>

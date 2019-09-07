@@ -3,6 +3,8 @@
 //
 #include "ConstantTraffic.h"
 #include "Building.h"
+#include "Passenger.h"
+
 /**
  * Constructor.
  *
@@ -28,7 +30,7 @@ ConstantTraffic::ConstantTraffic(size_t number_of_floors,
  * @param time the begin_time for the generated passengers
  * @return list of new passengers generated in one step
  */
-Passenger *ConstantTraffic::operator()(Building *building, Time time)
+Passenger *ConstantTraffic::operator()(Building *, Time time)
 {
     if (count_ >= 1 && no_of_passengers_ < max_no_of_passengers_)
     {
@@ -37,7 +39,7 @@ Passenger *ConstantTraffic::operator()(Building *building, Time time)
 
         if (from_floor != to_floor)
         {
-            Passenger *p = new Passenger(from_floor, to_floor, time);
+            auto *p = new Passenger(from_floor, to_floor, time);
             no_of_passengers_ += 1;
             count_ -= 1;
             return p;

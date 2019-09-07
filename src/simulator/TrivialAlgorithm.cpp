@@ -1,16 +1,16 @@
 //
-// CallButtonAlgorithm.cpp
+// TrivialAlgorithm.cpp
 //
-#include "CallButtonAlgorithm.h"
+#include "TrivialAlgorithm.h"
 #include "Building.h"
 
 
-CallButtonAlgorithm::CallButtonAlgorithm()
+TrivialAlgorithm::TrivialAlgorithm()
 {
 
 }
 
-void CallButtonAlgorithm::operator()(Building *building, std::vector<Stop> &result)
+void TrivialAlgorithm::operator()(Building *building, std::vector<Stop> &stops)
 {
     for (Elevator *elevator : building->elevators())
     {
@@ -26,7 +26,7 @@ void CallButtonAlgorithm::operator()(Building *building, std::vector<Stop> &resu
             {
                 if (floor->call_button())
                 {
-                    elevator->set_next_floor(floor->number());
+                    stops.push_back(Stop(elevator, floor->number()));
                 }
             }
         }

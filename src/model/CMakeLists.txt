@@ -1,7 +1,6 @@
 
 set(SOURCE_FILES
         common.h
-        Algorithm.h
         Traffic.h
         Car.cpp
         Car.h

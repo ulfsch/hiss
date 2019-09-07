@@ -5,9 +5,10 @@
 #define CHISS_TRAFFIC_H
 
 #include "common.h"
-#include "Passenger.h"
 
 class Building;
+
+class Passenger;
 
 class Traffic
 {

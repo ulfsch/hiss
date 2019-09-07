@@ -6,6 +6,7 @@
 
 #include "Algorithm.h"
 #include "Building.h"
+#include "Passenger.h"
 #include "Traffic.h"
 
 

@@ -25,12 +25,6 @@ struct IsSame
             return false;
         }
 
-//        if (stop_.direction == Direction::NONE)
-//        {
-//            return false;
-//        }
-
-
         return (stop_.direction == b.direction);
     }
 

@@ -5,7 +5,7 @@
 #include "Configuration.h"
 #include "StandardAlgorithm.h"
 #include "ConstantTraffic.h"
-#include "CallButtonAlgorithm.h"
+#include "TrivialAlgorithm.h"
 
 
 Configuration::Configuration(QObject *parent) :
@@ -68,11 +68,11 @@ bool Configuration::parse_xml_stream(QXmlStreamReader &xml)
         else if (xml.name() == QLatin1String("algorithm"))
         {
             QStringRef type = xml.attributes().value("type");
-            if (type == "CallButton")
+            if (type == "Trivial")
             {
-                algorithm_ = new CallButtonAlgorithm();
+                algorithm_ = new TrivialAlgorithm();
             }
-            else if (type == "UpDownButton")
+            else if (type == "Standard")
             {
                 algorithm_ = new StandardAlgorithm();
             }
@@ -143,7 +143,7 @@ bool Configuration::parse_from_xml_old(const char *file_name)
         {
             if (elem->Attribute("type", "CallButton"))
             {
-                algorithm_ = new CallButtonAlgorithm();
+                algorithm_ = new TrivialAlgorithm();
             }
             else if (elem->Attribute("type", "UpDownButton"))
             {

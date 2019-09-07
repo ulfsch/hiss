@@ -5,9 +5,9 @@
 #ifndef CHISS_CAR_H
 #define CHISS_CAR_H
 
-
 #include "common.h"
 #include "Direction.h"
+
 
 class Car
 {
