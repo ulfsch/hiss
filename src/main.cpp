@@ -140,7 +140,7 @@ static void print_building(const Building *building, const PassengerList &passen
 
             if (elevator->current_floor() == row_number)
             {
-                column += printf("[%d->%d ", elevator->current_floor(), elevator->next_floor());
+                column += printf("e[to %d ", elevator->next_floor());
                 for (const auto passenger : passengers)
                 {
                     if (passenger->elevator() == elevator)

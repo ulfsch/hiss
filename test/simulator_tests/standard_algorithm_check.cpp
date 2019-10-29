@@ -1,5 +1,5 @@
 //
-// up_down_algorithm_check.cpp.
+// standard_algorithm_check.cpp.
 //
 
 #include "gtest/gtest.h"
@@ -12,7 +12,7 @@ static const FloorNumber NUMBER_OF_FLOORS = 10;
 class StandardAlgoTest : public ::testing::Test {
 
 protected:
-    virtual void SetUp() {
+    void SetUp() override {
         building.add_elevator(new Elevator(0, NUMBER_OF_FLOORS));
     }
 

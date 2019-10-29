@@ -87,13 +87,13 @@ Duration Passenger::traveling_time() const
 
 int Passenger::print() const
 {
-    return printf("(%d:%d)",
+    return printf("p(%d->%d) ",
                   begin_floor_,
                   end_floor_);
 }
 
 std::ostream &operator<<(std::ostream &os, Passenger &p)
 {
-    os << std::string("p") << p.id() << "(" << p.begin_floor() << "-" << p.end_floor() << ")";
+    os << std::string("p") << p.id() << "(" << p.begin_floor() << "->" << p.end_floor() << ") ";
     return os;
 }
