@@ -4,7 +4,6 @@
 #include "Simulator.h"
 #include "Stop.h"
 #include <algorithm>
-#include <iostream>
 
 Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building) :
         traffic_generator_(traffic),
@@ -20,6 +19,12 @@ Simulator::~Simulator()
         delete passenger;
     }
     passengers_.clear();
+
+    for (const auto &car : cars_)
+    {
+        delete car;
+    }
+    cars_.clear();
 }
 
 void Simulator::tick(Time time, Duration dt)
@@ -29,15 +34,15 @@ void Simulator::tick(Time time, Duration dt)
         inject_passenger(p);
     }
     std::vector<Stop> stops;
-    (*algorithm_)(building_, stops);
+    (*algorithm_)(this, stops);
     for (const auto &stop : stops)
     {
-        if (stop.floor != stop.elevator->current_floor())
+        if (stop.floor != stop.car->current_floor())
         {
-            stop.elevator->set_next_floor(stop.floor);
+            stop.car->set_next_floor(stop.floor);
         }
     }
-    move_elevators(dt);
+    move_cars(dt);
     move_passengers(time);
 }
 
@@ -66,12 +71,21 @@ void Simulator::inject_passenger(Passenger *passenger)
     building_->floor(passenger->begin_floor())->press_buttons(passenger->end_floor());
 }
 
+void Simulator::inject_cars()
+{
+    for (Elevator *elevator : building_->elevators())
+    {
+        Car *car = new Car(elevator);
+        cars_.push_back(car);
+    }
+}
+
 void Simulator::move_passengers(Time time)
 {
     // Disembark
     for (Passenger *p : passengers_)
     {
-        if (p->elevator() && p->elevator()->is_idle_on(p->end_floor()))
+        if (p->car() && p->car()->is_idle_on_floor(p->end_floor()))
         {
             p->set_on_destination(time);
         }
@@ -82,12 +96,12 @@ void Simulator::move_passengers(Time time)
     {
         if (p->on_start_floor())
         {
-            for (Elevator *elevator : building_->elevators())
+            for (Car *car : cars_)
             {
-                if (elevator->is_idle_on(p->begin_floor()))
+                if (car->is_idle_on_floor(p->begin_floor()))
                 {
-                    elevator->press_destination_button(p->end_floor());
-                    p->set_start_traveling(elevator, time);
+                    car->press_destination_button(p->end_floor());
+                    p->set_start_traveling(car, time);
                     break;
                 }
             }
@@ -95,15 +109,15 @@ void Simulator::move_passengers(Time time)
     }
 }
 
-void Simulator::move_elevators(Duration dt)
+void Simulator::move_cars(Duration dt)
 {
-    for (Elevator *elevator : building_->elevators())
+    for (Car *car : cars_)
     {
-        elevator->move(dt);
-        elevator->clear_destination_button();
+        car->move(dt);
+        car->clear_destination_button();
         for (Floor *floor : building_->floors())
         {
-            if (elevator->is_idle_on(floor->number()))
+            if (car->is_idle_on_floor(floor->number()))
             {
                 floor->clear_buttons();
                 break;

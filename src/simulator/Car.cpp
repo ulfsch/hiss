@@ -4,18 +4,24 @@
 
 #include "Car.h"
 
-Car::Car(FloorNumber min_floor, int velocity, int floor_height) :
+Car::Car(Elevator *elevator, int velocity, int floor_height) :
+        elevator_(elevator),
         velocity_(velocity),
         floor_height_(floor_height),
 
-        current_floor_(min_floor),
-        target_floor_(min_floor),
-        next_floor_(min_floor),
+        current_floor_(elevator->min_floor()),
+        target_floor_(elevator->min_floor()),
+        next_floor_(elevator->min_floor()),
 
-        height_(min_floor * floor_height),
+        height_(elevator->min_floor() * floor_height),
         state_(State::IDLE),
         direction_(Direction::UP)
 {
+}
+
+Elevator *Car::elevator() const
+{
+    return elevator_;
 }
 
 FloorNumber Car::current_floor() const
@@ -103,4 +109,18 @@ void Car::set_position(FloorNumber number, Direction direction)
 {
     current_floor_ = number;
     direction_ = direction;
+}
+
+void Car::press_destination_button(FloorNumber number)
+{
+    destination_buttons_.insert(number);
+
+}
+
+void Car::clear_destination_button()
+{
+    if (is_idle())
+    {
+        destination_buttons_.erase(current_floor_);
+    }
 }

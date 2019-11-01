@@ -7,14 +7,19 @@
 
 #include "common.h"
 #include "Direction.h"
+#include "Elevator.h"
+
+static const int VELOCITY = 5;
+static const int FLOOR_HEIGHT = 4;
 
 
 class Car
 {
 public:
-    Car(FloorNumber min_floor, int velocity, int floor_height);
+    Car(Elevator *elevator, int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
 
     // Access methods
+    Elevator *elevator() const;
     FloorNumber current_floor() const;
 
     bool is_idle() const;
@@ -26,18 +31,30 @@ public:
     void set_next_floor(FloorNumber floor_number);
     void move(Duration dt);
 
+    // Button methods
+    NumberSet destination_buttons() const
+    { return destination_buttons_; }
+
+    void press_destination_button(FloorNumber);
+
+    void clear_destination_button();
+
     // Testing only
     void set_position(FloorNumber number, Direction direction);
     FloorNumber next_floor() const;
 
+
 private:
+    Elevator *elevator_;
     const int velocity_;
     const int floor_height_;
 
     FloorNumber current_floor_;
     FloorNumber target_floor_;
     FloorNumber next_floor_;
+
     int height_;
+    NumberSet destination_buttons_;
 
     enum class State
     {
@@ -47,5 +64,6 @@ private:
 
 };
 
+typedef std::list<Car *> CarList;
 
 #endif //CHISS_CAR_H

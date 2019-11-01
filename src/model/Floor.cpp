@@ -1,7 +1,6 @@
 //
 // Floor.cpp
 //
-#include <ostream>
 #include "Floor.h"
 
 Floor::Floor(FloorNumber floor_number, QObject *parent) :
@@ -34,10 +33,5 @@ void Floor::clear_buttons()
     down_button_ = false;
 }
 
-std::ostream &operator<<(std::ostream &os, const Floor &floor)
-{
-    os << std::string("floor ") << floor.number();
-    return os;
-}
 
 // End of file

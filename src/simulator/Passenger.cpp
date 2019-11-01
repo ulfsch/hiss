@@ -17,7 +17,7 @@ Passenger::Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time) 
         id_(++last_id_),
         begin_floor_(begin_floor),
         end_floor_(end_floor),
-        elevator_(nullptr),
+        car_(nullptr),
         begin_time_(time),
         pick_up_time_(0),
         end_time_(0)
@@ -44,9 +44,9 @@ FloorNumber Passenger::end_floor() const
     return end_floor_;
 }
 
-Elevator *Passenger::elevator() const
+Car *Passenger::car() const
 {
-    return elevator_;
+    return car_;
 }
 
 bool Passenger::on_destination() const
@@ -59,12 +59,12 @@ bool Passenger::on_start_floor() const
     return pick_up_time_ == 0;
 }
 
-void Passenger::set_start_traveling(Elevator *elevator, Time time)
+void Passenger::set_start_traveling(Car *car, Time time)
 {
     assert(pick_up_time_ == 0);
     assert(end_time_ == 0);
     pick_up_time_ = time;
-    elevator_ = elevator;
+    car_ = car;
 }
 
 void Passenger::set_on_destination(Time time)
@@ -72,7 +72,7 @@ void Passenger::set_on_destination(Time time)
     assert(pick_up_time_ != 0);
     assert(end_time_ == 0);
     end_time_ = time;
-    elevator_ = nullptr;
+    car_ = nullptr;
 }
 
 Duration Passenger::waiting_time() const

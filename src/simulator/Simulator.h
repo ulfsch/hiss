@@ -6,6 +6,7 @@
 
 #include "Algorithm.h"
 #include "Building.h"
+#include "Car.h"
 #include "Passenger.h"
 #include "Traffic.h"
 
@@ -22,19 +23,26 @@ public:
     const Building *building() const { return building_; }
     const PassengerList &passengers() const { return passengers_; }
 
-private:
+    const CarList &cars() const
+    { return cars_; }
+
     void inject_passenger(Passenger *passenger);
+
+    void inject_cars();
+
+private:
     void move_passengers(Time time);
-    void move_elevators(Duration dt);
+
+    void move_cars(Duration dt);
 
 private:
     Traffic *traffic_generator_;
     Algorithm *algorithm_;
     Building *building_;
+
     PassengerList passengers_;
+    CarList cars_;
 
 };
-
-std::ostream &operator<<(std::ostream &os, Simulator &);
 
 #endif //CHISS_SIMULATOR_H

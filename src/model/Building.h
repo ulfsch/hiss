@@ -46,6 +46,4 @@ private:
 
 };
 
-std::ostream &operator<<(std::ostream &os, const Building &);
-
 #endif //CHISS_BUILDING_H

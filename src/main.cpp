@@ -12,7 +12,8 @@
 #include <iostream>
 
 static void run_simulation(Configuration &, Result &, bool verbose);
-static void print_building(const Building *building, const PassengerList &passengers);
+
+static void print_simulator(const Simulator *simulator);
 static void print_usage(const char *arg);
 
 
@@ -81,15 +82,16 @@ int main(int argc, char *argv[])
 static void run_simulation(Configuration &configuration, Result &result, bool verbose)
 {
     Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
+    simulator.inject_cars();
+    
     Time time = 0;
-
     while (!simulator.done())
     {
         simulator.tick(time, SIMULATION_RATE);
         time += SIMULATION_RATE;
         if (verbose)
         {
-            print_building(simulator.building(), simulator.passengers());
+            print_simulator(&simulator);
         }
     }
 
@@ -102,11 +104,14 @@ static void run_simulation(Configuration &configuration, Result &result, bool ve
  * @param building
  * @param passengers
  */
-static void print_building(const Building *building, const PassengerList &passengers)
+static void print_simulator(const Simulator *simulator)
 {
+    const Building *building = simulator->building();
+    const PassengerList &passengers = simulator->passengers();
+
     printf("%-30s", "Floor");
 
-    for (Elevator* e: building->elevators())
+    for (Car *e: simulator->cars())
     {
         (void)e;
         printf("%-30s", "Elevator");
@@ -129,7 +134,7 @@ static void print_building(const Building *building, const PassengerList &passen
             }
         }
 
-        for (Elevator *elevator : building->elevators())
+        for (Car *car : simulator->cars())
         {
             elevator_id += 1;
             while (column < 30 * elevator_id)
@@ -138,12 +143,12 @@ static void print_building(const Building *building, const PassengerList &passen
             }
             column += printf("%2d: ", row_number);
 
-            if (elevator->current_floor() == row_number)
+            if (car->current_floor() == row_number)
             {
-                column += printf("e[to %d ", elevator->next_floor());
+                column += printf("e[to %d ", car->next_floor());
                 for (const auto passenger : passengers)
                 {
-                    if (passenger->elevator() == elevator)
+                    if (passenger->car() == car)
                     {
                         column += passenger->print();
                     }

@@ -6,18 +6,18 @@
 #define CHISS_STOP_H
 
 #include <common.h>
+#include <Car.h>
 #include <Direction.h>
-#include <Elevator.h>
 
 
 class Stop
 {
 public:
-    Stop(Elevator *e, FloorNumber n, Direction d = Direction::NONE);
+    Stop(Car *car, FloorNumber n, Direction d = Direction::NONE);
     bool operator<(const Stop &b) const;
 
 public:
-    Elevator *elevator;
+    Car *car;
     FloorNumber floor;
     Direction direction;
 

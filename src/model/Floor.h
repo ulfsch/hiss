@@ -38,6 +38,4 @@ private:
     std::set<FloorNumber> floor_buttons_;
 };
 
-std::ostream &operator<<(std::ostream &os, const Floor &floor);
-
 #endif //CHISS_FLOOR_H

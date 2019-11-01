@@ -8,7 +8,7 @@
 #include "Stop.h"
 #include <vector>
 
-class Building;
+class Simulator;
 
 
 class Algorithm
@@ -16,7 +16,7 @@ class Algorithm
 public:
     virtual ~Algorithm() = default;
 
-    virtual void operator()(Building *, std::vector<Stop>& result) = 0;
+    virtual void operator()(Simulator *, std::vector<Stop> &result) = 0;
 };
 
 #endif //CHISS_ALGORITHM_H

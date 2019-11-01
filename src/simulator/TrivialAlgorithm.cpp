@@ -3,6 +3,7 @@
 //
 #include "TrivialAlgorithm.h"
 #include "Building.h"
+#include "Simulator.h"
 
 
 TrivialAlgorithm::TrivialAlgorithm()
@@ -10,26 +11,25 @@ TrivialAlgorithm::TrivialAlgorithm()
 
 }
 
-void TrivialAlgorithm::operator()(Building *building, std::vector<Stop> &stops)
+void TrivialAlgorithm::operator()(Simulator *simulator, std::vector<Stop> &stops)
 {
-    for (Elevator *elevator : building->elevators())
+    for (Car *car : simulator->cars())
     {
-        if (!elevator->destination_buttons().empty())
+        // First check elevator buttons
+        for (FloorNumber floorNumber : car->destination_buttons())
         {
-            // First check elevator destination_buttons
-            elevator->set_next_floor(*elevator->destination_buttons().begin());
+            stops.push_back(Stop(car, floorNumber));
         }
-        else
+
+        // Check floor call buttons.
+        for (const auto *floor : simulator->building()->floors())
         {
-            // No elevator buttons pressed. Check floor call buttons.
-            for (const auto *floor : building->floors())
+            if (floor->call_button())
             {
-                if (floor->call_button())
-                {
-                    stops.push_back(Stop(elevator, floor->number()));
-                }
+                stops.push_back(Stop(car, floor->number()));
             }
         }
+
     }
 }
 

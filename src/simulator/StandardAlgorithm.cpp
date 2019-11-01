@@ -4,9 +4,9 @@
 
 #include "StandardAlgorithm.h"
 #include "Building.h"
+#include "Simulator.h"
 #include "Stop.h"
 #include <algorithm>
-#include <iostream>
 
 struct IsSame
 {
@@ -15,7 +15,7 @@ struct IsSame
 
     bool operator()(const Stop &b)
     {
-        if (stop_.elevator == b.elevator)
+        if (stop_.car == b.car)
         {
             return true;
         }
@@ -34,28 +34,28 @@ struct IsSame
 /**
  * Algorithm for two call buttons (up/down) on each floor.
  *
- * @param building
+ * @param simulator
  */
-void StandardAlgorithm::operator()(Building *building, std::vector<Stop> &result)
+void StandardAlgorithm::operator()(Simulator *simulator, std::vector<Stop> &result)
 {
     std::vector<Stop> stops;
 
-    for (Elevator *elevator : building->elevators())
+    for (Car *car : simulator->cars())
     {
-        for (FloorNumber floor_number : elevator->destination_buttons())
+        for (FloorNumber floor_number : car->destination_buttons())
         {
-            stops.push_back(Stop(elevator, floor_number, Direction::NONE));
+            stops.push_back(Stop(car, floor_number, Direction::NONE));
         }
 
-        for (Floor *floor : building->floors())
+        for (Floor *floor : simulator->building()->floors())
         {
             if (floor->down_button())
             {
-                stops.push_back(Stop(elevator, floor->number(), Direction::DOWN));
+                stops.push_back(Stop(car, floor->number(), Direction::DOWN));
             }
             if (floor->up_button())
             {
-                stops.push_back(Stop(elevator, floor->number(), Direction::UP));
+                stops.push_back(Stop(car, floor->number(), Direction::UP));
             }
         }
     }
