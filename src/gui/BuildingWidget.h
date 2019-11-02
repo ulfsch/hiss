@@ -6,6 +6,7 @@
 #define CHISS_BUILDINGWIDGET_H
 
 #include <QWidget>
+#include <Car.h>
 #include <Passenger.h>
 
 class Building;
@@ -18,9 +19,7 @@ class BuildingWidget : public QWidget
 Q_OBJECT
 
 public:
-    explicit BuildingWidget(Building *, QWidget *parent = nullptr);
-    void update_car();
-    void update_passenger(const std::list<Passenger *> &passengers);
+    explicit BuildingWidget(Building *building, QWidget *parent = nullptr);
 
 public slots:
     void update_from_model();

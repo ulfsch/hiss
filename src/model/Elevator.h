@@ -15,7 +15,6 @@ Q_OBJECT
 
 public:
     Elevator(FloorNumber min_floor, FloorNumber max_floor, QObject *parent = nullptr);
-
     Elevator(FloorNumber *floor_array, size_t len, QObject *parent = nullptr);
 
     // Get methods

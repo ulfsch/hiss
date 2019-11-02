@@ -20,19 +20,18 @@ public:
     void tick(Time time, Duration dt);
     bool done() const;
 
-    const Building *building() const { return building_; }
+    Building *building() const
+    { return building_; }
     const PassengerList &passengers() const { return passengers_; }
 
     const CarList &cars() const
     { return cars_; }
 
     void inject_passenger(Passenger *passenger);
-
     void inject_cars();
 
 private:
     void move_passengers(Time time);
-
     void move_cars(Duration dt);
 
 private:

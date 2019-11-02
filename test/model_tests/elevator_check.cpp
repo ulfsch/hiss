@@ -4,6 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "Elevator.h"
+#include "Direction.h"
 
 TEST(ElevatorBasic, direction) {
     Direction a = Direction::DOWN;

@@ -4,6 +4,12 @@
 
 #include "Car.h"
 
+/**
+ *
+ * @param elevator
+ * @param velocity
+ * @param floor_height
+ */
 Car::Car(Elevator *elevator, int velocity, int floor_height) :
         elevator_(elevator),
         velocity_(velocity),

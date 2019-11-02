@@ -17,16 +17,13 @@ class ElevatorWidget : public QWidget
 Q_OBJECT
 
 public:
-    explicit ElevatorWidget(Elevator *, FloorNumber floor, QWidget *parent = nullptr);
-    void update_car();
-    void update_passenger(const std::list<Passenger *> &passengers);
+    explicit ElevatorWidget(Elevator *, QWidget *parent = nullptr);
 
 public slots:
     void update_from_model();
 
 private:
     Elevator *elevator_;
-    FloorNumber floorNumber_;
     QLabel *widget_;
 
 };

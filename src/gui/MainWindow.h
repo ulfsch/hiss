@@ -8,10 +8,10 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QLabel>
-#include "BuildingWidget.h"
 #include "common.h"
+#include "BuildingWidget.h"
+#include "CarWidget.h"
 
-class Configuration;
 
 class Simulator;
 
@@ -20,20 +20,20 @@ class MainWindow : public QMainWindow
 Q_OBJECT
 
 public:
-    explicit MainWindow(Configuration *, QWidget *parent = nullptr);
+    explicit MainWindow(Simulator *, QWidget *parent = nullptr);
 
 public slots:
     void update_from_model();
-    void start_simulation();
     void tick();
 
 private:
-    Configuration *configuration_;
-    BuildingWidget *buildingWidget_;
     Simulator *simulator_;
+    BuildingWidget *buildingWidget_;
+    QLabel *awtWidget;
+    std::list<CarWidget *> car_widget_list_;
+
     Time simulation_time_;
     QTimer *timer_;
-    QLabel *awtWidget;
 };
 
 #endif //CHISS_MAINWINDOW_H

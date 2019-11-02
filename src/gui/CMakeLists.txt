@@ -9,7 +9,9 @@ set(SOURCE_FILES
         ElevatorWidget.cpp
         ElevatorWidget.h
         FloorWidget.cpp
-        FloorWidget.h)
+        FloorWidget.h
+        CarWidget.cpp
+        CarWidget.h)
 
 add_library(gui ${SOURCE_FILES})
 target_link_libraries(gui Qt4::QtGui)

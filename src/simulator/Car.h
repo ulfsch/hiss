@@ -24,7 +24,6 @@ public:
 
     bool is_idle() const;
     bool is_idle_on_floor(FloorNumber i) const;
-
     Direction direction() const { return direction_; }
 
     // Elevator movement methods
@@ -34,15 +33,12 @@ public:
     // Button methods
     NumberSet destination_buttons() const
     { return destination_buttons_; }
-
     void press_destination_button(FloorNumber);
-
     void clear_destination_button();
 
     // Testing only
     void set_position(FloorNumber number, Direction direction);
     FloorNumber next_floor() const;
-
 
 private:
     Elevator *elevator_;
