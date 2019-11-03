@@ -27,9 +27,16 @@ void BuildingWidget::update_from_model()
     floorWidgets_.clear();
     elevatorWidgets_.clear();
 
+    QPalette palette1;
+    palette1.setColor(QPalette::Background, QColor(200, 255, 255));
+    //setAutoFillBackground(true);
+    //setPalette(palette1);
+
     QGridLayout *layout = new QGridLayout(this);
 
     int column = 0;
+    layout->setColumnStretch(column, 1);
+
     for (auto floor : building_->floors())
     {
         int row = building_->number_of_floors() - floor->number() - 1;
@@ -41,11 +48,25 @@ void BuildingWidget::update_from_model()
     column = 1;
     for (auto elevator : building_->elevators())
     {
+        layout->setColumnStretch(column, 1);
+        layout->setColumnMinimumWidth(column, 150);
         for (auto floor_number : elevator->floorNumbers())
         {
             int row = building_->number_of_floors() - floor_number - 1;
-            QLabel *widget = new QLabel(QString(floor_number), this);
-            layout->addWidget(widget, row, column, Qt::AlignCenter);
+            QWidget *w = new QWidget(this);
+            layout->addWidget(w, row, column, Qt::AlignCenter);
+            QLabel *lbl = new QLabel(QString::number(floor_number), w);
+            QHBoxLayout *l = new QHBoxLayout(w);
+            l->addWidget(lbl);
+
+            lbl->setContentsMargins(0, 0, 0, 0);
+            lbl->setMinimumWidth(150);
+            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+            w->setPalette(palette1);
+            w->setAutoFillBackground(true);
+            //lbl->setAutoFillBackground(true);
+            layout->addWidget(w, row, column, Qt::AlignCenter);
         }
         column += 1;
     }

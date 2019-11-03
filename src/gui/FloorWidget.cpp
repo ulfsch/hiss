@@ -15,7 +15,7 @@ FloorWidget::FloorWidget(Floor *floor, QWidget *parent) :
     palette1.setColor(QPalette::Background, QColor(200, 255, 255));
     setAutoFillBackground(true);
     setPalette(palette1);
-    setFixedWidth(200);
+    setMinimumWidth(150);
 
     update_from_model();
 }
