@@ -43,7 +43,10 @@ public:
     void press_destination_button(FloorNumber);
 
     // Testing only
-    void set_position(FloorNumber number, Direction direction) { car_.set_position(number, direction); }
+    void set_position(FloorNumber number, Direction direction) {
+        car_.set_position(number, direction);
+        car_.set_next_floor(number);
+    }
     FloorNumber next_floor() const { return car_.next_floor(); }
 
 signals:

@@ -15,17 +15,17 @@ struct IsSame
 
     bool operator()(const Stop &b)
     {
-        if (stop_.elevator == b.elevator)
+        if (stop_.elevator_ == b.elevator_)
         {
             return true;
         }
 
-        if (stop_.floor != b.floor)
+        if (stop_.floor_number_ != b.floor_number_)
         {
             return false;
         }
 
-        return (stop_.direction == b.direction);
+        return (stop_.travel_direction_ == b.travel_direction_);
     }
 
     Stop stop_;
