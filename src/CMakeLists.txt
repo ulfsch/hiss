@@ -10,7 +10,7 @@ add_subdirectory(cfg)
 add_subdirectory(gui)
 
 add_executable(hiss main.cpp)
-target_link_libraries(hiss cfg simulator model ncurses)
+target_link_libraries(hiss cfg simulator model)
 
 add_executable(ghiss main_gui.cpp)
 target_link_libraries(ghiss gui cfg simulator model)

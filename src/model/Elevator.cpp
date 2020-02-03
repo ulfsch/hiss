@@ -1,6 +1,7 @@
 //
 // Elevator.cpp
 //
+
 #include "Elevator.h"
 
 
@@ -12,15 +13,14 @@
  * @param velocity  elevator speed in m/s
  * @param floor_height in meter
  */
-Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, QObject *parent, int velocity, int floor_height) :
+Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, QObject *parent) :
         QObject(parent),
         min_floor_(min_floor),
-        max_floor_(max_floor),
-        car_(min_floor, velocity, floor_height)
+        max_floor_(max_floor)
 {
-    for (FloorNumber i = min_floor; i < max_floor; i++)
+    for (FloorNumber floor_number = min_floor; floor_number < max_floor; floor_number++)
     {
-        floors_.insert(i);
+        floors_.insert(floor_number);
     }
 }
 
@@ -29,50 +29,18 @@ Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, QObject *parent
  *
  * @param floor_array array of floor numbers
  * @param len length of array
- * @param velocity  elevator speed in m/s
- * @param floor_height in meter
  */
-Elevator::Elevator(FloorNumber *floor_array, size_t len, QObject *parent, int velocity, int floor_height) :
+Elevator::Elevator(FloorNumber *floor_array, size_t len, QObject *parent) :
         QObject(parent),
         min_floor_(0),
         max_floor_(0),
-        car_(floor_array[0], velocity, floor_height),
         floors_(floor_array, floor_array + len)
 {
     if (len > 0)
     {
         max_floor_ = *std::max_element(floors_.begin(), floors_.end());
+        min_floor_ = *std::min_element(floors_.begin(), floors_.end());
     }
-}
-
-void Elevator::press_destination_button(FloorNumber number)
-{
-    destination_buttons_.insert(number);
-}
-
-void Elevator::clear_destination_button()
-{
-    if (car_.is_idle())
-    {
-        destination_buttons_.erase(car_.current_floor());
-    }
-}
-
-void Elevator::move(Duration dt)
-{
-    car_.move(dt);
-}
-
-bool Elevator::is_idle_on(FloorNumber number) const
-{
-    return car_.is_idle_on_floor(number);
-}
-
-
-std::ostream &operator<<(std::ostream &os, const Elevator &elevator)
-{
-    os << std::string("elevator: ") << elevator.current_floor();
-    return os;
 }
 
 // End of file

@@ -6,7 +6,7 @@ include_directories(../../src/simulator)
 add_executable(
         runSimulatorTests
         passenger_check.cpp
-        up_down_algorithm_check.cpp
+        standard_algorithm_check.cpp
         simulator_check.cpp
 )
 

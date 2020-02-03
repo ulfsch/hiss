@@ -8,7 +8,7 @@
 #include <ostream>
 #include <list>
 
-class Elevator;
+class Car;
 
 
 class Passenger
@@ -19,14 +19,16 @@ public:
     Id id() const;
     FloorNumber begin_floor() const;
     FloorNumber end_floor() const;
-    Elevator *elevator() const;
+
+    Car *car() const;
 
     bool on_start_floor() const;
     bool on_destination() const;
     Duration waiting_time() const;
 
     Duration traveling_time() const;
-    void set_start_traveling(Elevator *elevator, Time time);
+
+    void set_start_traveling(Car *car, Time time);
     void set_on_destination(Time time);
     int print() const;
 
@@ -36,7 +38,7 @@ private:
 
     FloorNumber begin_floor_;
     FloorNumber end_floor_;
-    Elevator* elevator_;
+    Car *car_;
 
     Time begin_time_;
     Time pick_up_time_;
