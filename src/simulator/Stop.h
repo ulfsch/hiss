@@ -13,13 +13,13 @@
 class Stop
 {
 public:
-    Stop(Elevator *e, FloorNumber floorNumber, Direction direction = Direction::NONE);
+    Stop(Elevator *e, FloorNumber n, Direction d = Direction::NONE);
     bool operator<(const Stop &b) const;
 
 public:
-    Elevator *elevator_;
-    FloorNumber floor_number_;
-    Direction travel_direction_;
+    Elevator *elevator;
+    FloorNumber floor;
+    Direction direction;
 
 private:
     bool in_elevator_direction_;

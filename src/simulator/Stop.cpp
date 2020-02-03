@@ -4,21 +4,21 @@
 
 #include "Stop.h"
 
-Stop::Stop(Elevator *e, FloorNumber floorNumber, Direction direction) :
-        elevator_(e),
-        floor_number_(floorNumber),
-        travel_direction_(direction)
+Stop::Stop(Elevator *e, FloorNumber n, Direction d) :
+elevator(e),
+floor(n),
+direction(d)
 {
-    Direction approach_direction = Direction::NONE;
-    int delta = floorNumber - e->next_floor();
+    Direction a = Direction::NONE;
+    int delta = n - e->current_floor();
     if (delta > 0)
-        approach_direction = Direction::UP;
+        a = Direction::UP;
     if (delta < 0)
-        approach_direction = Direction::DOWN;
+        a = Direction::DOWN;
 
-    in_elevator_direction_ = (approach_direction == e->direction());
-    in_travel_direction_ = (travel_direction_ == approach_direction) ;
-    distance_ = std::abs(delta);
+    in_elevator_direction_ = (a == e->direction()) ;
+    in_travel_direction_ = (d == e->direction()) ;
+    distance_ = std::abs(n - e->current_floor());
 }
 
 bool Stop::operator<(const Stop &b) const
