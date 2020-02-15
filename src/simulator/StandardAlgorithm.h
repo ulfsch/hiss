@@ -6,12 +6,13 @@
 #define CHISS_STANDARDALGORITHM_H
 
 #include "Algorithm.h"
+#include "ControlPanel.h"
 
 
 class StandardAlgorithm : public Algorithm
 {
 public:
-    virtual void operator()(Simulator *, std::vector<Stop> &result) override;
+    virtual void operator()(Simulator *, ControlPanel &, std::vector<Stop> &result) override;
 
 };
 

@@ -12,7 +12,7 @@ class TrivialAlgorithm : public Algorithm
 public:
     TrivialAlgorithm();
 
-    void operator()(Simulator *, std::vector<Stop> &result) override;
+    void operator()(Simulator *, ControlPanel&, std::vector<Stop> &result) override;
 
 };
 

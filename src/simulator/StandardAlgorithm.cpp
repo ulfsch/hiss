@@ -20,7 +20,7 @@ struct IsSame
             return true;
         }
 
-        if (stop_.floor != b.floor)
+        if (stop_.floor_number != b.floor_number)
         {
             return false;
         }
@@ -36,27 +36,32 @@ struct IsSame
  *
  * @param simulator
  */
-void StandardAlgorithm::operator()(Simulator *simulator, std::vector<Stop> &result)
+void StandardAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel, std::vector<Stop> &result)
 {
     std::vector<Stop> stops;
 
+    for (std::pair<Car *const, NumberSet> &panel : controlPanel.car_target_buttons)
+    {
+        for (int floor_number : panel.second)
+        {
+            stops.push_back(Stop(panel.first, floor_number, Direction::NONE));
+        }
+
+    }
+
     for (Car *car : simulator->cars())
     {
-        for (FloorNumber floor_number : car->destination_buttons())
+        for (FloorNumber floor_number: controlPanel.floor_call_buttons)
         {
             stops.push_back(Stop(car, floor_number, Direction::NONE));
         }
-
-        for (Floor *floor : simulator->building()->floors())
+        for (FloorNumber floor_number: controlPanel.floor_up_buttons)
         {
-            if (floor->down_button())
-            {
-                stops.push_back(Stop(car, floor->number(), Direction::DOWN));
-            }
-            if (floor->up_button())
-            {
-                stops.push_back(Stop(car, floor->number(), Direction::UP));
-            }
+            stops.push_back(Stop(car, floor_number, Direction::UP));
+        }
+        for (FloorNumber floor_number: controlPanel.floor_down_buttons)
+        {
+            stops.push_back(Stop(car, floor_number, Direction::DOWN));
         }
     }
 

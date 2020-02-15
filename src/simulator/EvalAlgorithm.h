@@ -13,7 +13,7 @@
 class EvalAlgorithm  : public Algorithm
 {
 public:
-    virtual void operator()(Building *) override;
+    void operator()(Simulator *, ControlPanel&, std::vector<Stop> &result) override;
 
     struct Stop
     {

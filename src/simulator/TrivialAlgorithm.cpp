@@ -11,7 +11,7 @@ TrivialAlgorithm::TrivialAlgorithm()
 
 }
 
-void TrivialAlgorithm::operator()(Simulator *simulator, std::vector<Stop> &stops)
+void TrivialAlgorithm::operator()(Simulator *simulator, ControlPanel&, std::vector<Stop> &stops)
 {
     for (Car *car : simulator->cars())
     {

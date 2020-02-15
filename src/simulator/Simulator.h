@@ -9,6 +9,7 @@
 #include "Car.h"
 #include "Passenger.h"
 #include "Traffic.h"
+#include "ControlPanel.h"
 
 
 class Simulator
@@ -20,14 +21,11 @@ public:
     void tick(Time time, Duration dt);
     bool done() const;
 
-    Building *building() const
-    { return building_; }
+    Building *building() const { return building_; }
     const PassengerList &passengers() const { return passengers_; }
 
-    const CarList &cars() const
-    { return cars_; }
+    const CarList &cars() const { return cars_; }
 
-    void inject_passenger(Passenger *passenger);
     void inject_cars();
 
 private:
@@ -41,6 +39,7 @@ private:
 
     PassengerList passengers_;
     CarList cars_;
+    ControlPanel control_panels_;
 
 };
 

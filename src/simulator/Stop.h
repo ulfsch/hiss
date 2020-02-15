@@ -18,7 +18,7 @@ public:
 
 public:
     Car *car;
-    FloorNumber floor;
+    FloorNumber floor_number;
     Direction direction;
 
 private:

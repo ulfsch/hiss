@@ -29,7 +29,7 @@ TEST_F(StandardAlgoTest, basic1) {
     building.floors()[5]->press_buttons(3);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(7, result.front().floor);
+    EXPECT_EQ(7, result.front().floor_number);
 }
 
 TEST_F(StandardAlgoTest, basic2) {
@@ -39,7 +39,7 @@ TEST_F(StandardAlgoTest, basic2) {
     building.floors()[5]->press_buttons(9);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(5, result.front().floor);
+    EXPECT_EQ(5, result.front().floor_number);
 }
 
 TEST_F(StandardAlgoTest, preferElevatorDirection) {
@@ -50,7 +50,7 @@ TEST_F(StandardAlgoTest, preferElevatorDirection) {
     building.floors()[6]->press_buttons(3);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(9, result.front().floor);
+    EXPECT_EQ(9, result.front().floor_number);
 }
 
 TEST_F(StandardAlgoTest, SameDir) {
@@ -61,7 +61,7 @@ TEST_F(StandardAlgoTest, SameDir) {
     building.floors()[9]->press_buttons(3);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(7, result.front().floor);
+    EXPECT_EQ(7, result.front().floor_number);
 }
 
 TEST_F(StandardAlgoTest, OppositeDir) {
@@ -78,7 +78,7 @@ TEST_F(StandardAlgoTest, OppositeDir) {
     building.floors()[9]->press_buttons(3);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(7, result.front().floor);
+    EXPECT_EQ(7, result.front().floor_number);
 }
 
 TEST_F(StandardAlgoTest, OppositeDirIdle) {
@@ -95,7 +95,7 @@ TEST_F(StandardAlgoTest, OppositeDirIdle) {
     building.floors()[9]->press_buttons(3);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(7, result.front().floor);
+    EXPECT_EQ(7, result.front().floor_number);
 }
 
 TEST_F(StandardAlgoTest, OppositeDirDown) {
@@ -112,5 +112,5 @@ TEST_F(StandardAlgoTest, OppositeDirDown) {
     building.floors()[9]->press_buttons(3);
     std::vector<Stop> result;
     algorithm(&building, result);
-    EXPECT_EQ(7, result.front().floor);
+    EXPECT_EQ(7, result.front().floor_number);
 }

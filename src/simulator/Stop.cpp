@@ -6,8 +6,8 @@
 
 Stop::Stop(Car *car, FloorNumber n, Direction d) :
         car(car),
-floor(n),
-direction(d)
+        floor_number(n),
+        direction(d)
 {
     Direction a = Direction::NONE;
     int delta = n - car->current_floor();

@@ -29,21 +29,23 @@ Simulator::~Simulator()
 
 void Simulator::tick(Time time, Duration dt)
 {
-    while (Passenger *p = (*traffic_generator_)(building_, time))
-    {
-        inject_passenger(p);
-    }
-    std::vector<Stop> stops;
-    (*algorithm_)(this, stops);
+     std::vector<Stop> stops;
+    (*algorithm_)(this, control_panels_, stops);
     for (const auto &stop : stops)
     {
-        if (stop.floor != stop.car->current_floor())
+        if (stop.floor_number != stop.car->current_floor())
         {
-            stop.car->set_next_floor(stop.floor);
+            stop.car->set_next_floor(stop.floor_number);
         }
     }
     move_cars(dt);
     move_passengers(time);
+    while (Passenger *passenger = (*traffic_generator_)(building_, time))
+    {
+        passengers_.push_back(passenger);
+        control_panels_.press_floor_buttons(passenger);
+    }
+
 }
 
 bool Simulator::done() const
@@ -63,12 +65,6 @@ bool Simulator::done() const
     }
 
     return true;
-}
-
-void Simulator::inject_passenger(Passenger *passenger)
-{
-    passengers_.push_back(passenger);
-    building_->floor(passenger->begin_floor())->press_buttons(passenger->end_floor());
 }
 
 void Simulator::inject_cars()
@@ -100,7 +96,7 @@ void Simulator::move_passengers(Time time)
             {
                 if (car->is_idle_on_floor(p->begin_floor()))
                 {
-                    car->press_destination_button(p->end_floor());
+                    control_panels_.press_car_buttons(car, p);
                     p->set_start_traveling(car, time);
                     break;
                 }
@@ -114,14 +110,10 @@ void Simulator::move_cars(Duration dt)
     for (Car *car : cars_)
     {
         car->move(dt);
-        car->clear_destination_button();
-        for (Floor *floor : building_->floors())
+        if (car->is_idle())
         {
-            if (car->is_idle_on_floor(floor->number()))
-            {
-                floor->clear_buttons();
-                break;
-            }
+            control_panels_.clear_floor_buttons(car->current_floor());
+            control_panels_.clear_car_buttons(car, car->current_floor());
         }
     }
 }

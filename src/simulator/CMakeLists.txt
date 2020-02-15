@@ -9,6 +9,8 @@ set(SOURCE_FILES
         Passenger.h
         Car.cpp
         Car.h
+        ControlPanel.cpp
+        ControlPanel.h
         Stop.cpp
         Stop.h
         ConstantTraffic.cpp

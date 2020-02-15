@@ -10,7 +10,7 @@ set(SOURCE_FILES
         Elevator.h
         Floor.cpp
         Floor.h
-)
+        )
 
 add_library(model ${SOURCE_FILES})
 target_link_libraries(model Qt4::QtCore)
