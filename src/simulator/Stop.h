@@ -16,6 +16,8 @@ public:
     Stop(Car *car, FloorNumber n, Direction d = Direction::NONE);
     bool operator<(const Stop &b) const;
 
+    void set_car(Car *pCar);
+
 public:
     Car *car;
     FloorNumber floor_number;

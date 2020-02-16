@@ -5,56 +5,77 @@
 #include <Building.h>
 #include <Elevator.h>
 #include "EvalAlgorithm.h"
+#include "Simulator.h"
 
-
-EvalAlgorithm::Stop::Stop(FloorNumber n, Direction d) :
-        floor (n),
-        direction(d),
-        weight(0)
+struct IsSame
 {
+    IsSame(const Stop &stop) : stop_(stop)
+    {}
 
-}
-
-void EvalAlgorithm::operator()(Building *building)
-{
-    for (Elevator *elevator : building->elevators())
+    bool operator()(const Stop &b)
     {
-        std::vector<Stop> stops;
-
-        for (FloorNumber x : elevator->destination_buttons())
+        if (stop_.car == b.car)
         {
-            stops.push_back(Stop(x));
+            return true;
         }
 
-        for (const Floor *floor : building->floors())
+        if (stop_.floor_number != b.floor_number)
         {
-            if (floor->down_button())
-            {
-                stops.push_back(Stop(floor->number(), Direction::DOWN));
-            }
-            if (floor->up_button())
-            {
-                stops.push_back(Stop(floor->number(), Direction::UP));
-            }
+            return false;
         }
 
-        if (!stops.empty())
+        return (stop_.direction == b.direction);
+    }
+
+    Stop stop_;
+};
+
+
+void EvalAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel, std::vector<Stop> &result)
+{
+    std::vector<Stop> stops;
+
+    for (std::pair<Car *const, NumberSet> &panel : controlPanel.car_target_buttons)
+    {
+        for (int floor_number : panel.second)
         {
-            Comp comp(elevator->current_floor(), elevator->direction());
-            std::sort(stops.begin(), stops.end(), comp);
-            for (auto stop : stops)
-            {
-                if (stop.floor != elevator->current_floor())
-                {
-                    elevator->set_next_floor(stop.floor);
-                    break;
-                }
-            }
-        }
-        else
-        {
-            printf("XXX %d\n", stops.size());
+            result.push_back(Stop(panel.first, floor_number, Direction::NONE));
         }
     }
 
+    for (FloorNumber floor_number: controlPanel.floor_up_buttons)
+    {
+        stops.push_back(Stop(nullptr, floor_number, Direction::UP));
+    }
+    for (FloorNumber floor_number: controlPanel.floor_down_buttons)
+    {
+        stops.push_back(Stop(nullptr, floor_number, Direction::DOWN));
+    }
+
+    std::sort(stops.begin(), stops.end());
+
+    uint32_t nbr_cars = simulator->cars().size();
+    uint32_t nbr_stops = stops.size();
+    uint32_t sector_size = nbr_stops / nbr_cars + 0;
+
+    uint32_t i = 0;
+    auto j = simulator->cars().begin();
+    while (j != simulator->cars().end() && i < nbr_stops)
+    {
+        Car *car = *j;
+
+        if (i < nbr_stops)
+        {
+            Stop stop = stops[i++];
+            stop.set_car(car);
+            result.push_back(stop);
+        }
+
+        if (sector_size == 0 || i % sector_size == 0)
+        {
+            ++j;
+        }
+    }
+
+   //std::sort(result.begin(), result.end());
 }

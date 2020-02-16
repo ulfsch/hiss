@@ -2,6 +2,7 @@
 // Configuration.cpp.
 //
 
+#include <EvalAlgorithm.h>
 #include "Configuration.h"
 #include "StandardAlgorithm.h"
 #include "ConstantTraffic.h"
@@ -75,6 +76,10 @@ bool Configuration::parse_xml_stream(QXmlStreamReader &xml)
             else if (type == "Standard")
             {
                 algorithm_ = new StandardAlgorithm();
+            }
+            else if (type == "Eval")
+            {
+                algorithm_ = new EvalAlgorithm();
             }
             else
             {

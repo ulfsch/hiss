@@ -116,17 +116,3 @@ void Car::set_position(FloorNumber number, Direction direction)
     current_floor_ = number;
     direction_ = direction;
 }
-
-void Car::press_destination_button(FloorNumber number)
-{
-    destination_buttons_.insert(number);
-
-}
-
-void Car::clear_destination_button()
-{
-    if (is_idle())
-    {
-        destination_buttons_.erase(current_floor_);
-    }
-}

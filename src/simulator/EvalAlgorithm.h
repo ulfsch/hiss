@@ -15,17 +15,6 @@ class EvalAlgorithm  : public Algorithm
 public:
     void operator()(Simulator *, ControlPanel&, std::vector<Stop> &result) override;
 
-    struct Stop
-    {
-        Stop(FloorNumber n, Direction d = Direction::NONE);
-
-        FloorNumber floor;
-        Direction direction;
-        int weight;
-
-    };
-
-
 };
 
 

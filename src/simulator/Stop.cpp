@@ -9,16 +9,10 @@ Stop::Stop(Car *car, FloorNumber n, Direction d) :
         floor_number(n),
         direction(d)
 {
-    Direction a = Direction::NONE;
-    int delta = n - car->current_floor();
-    if (delta > 0)
-        a = Direction::UP;
-    if (delta < 0)
-        a = Direction::DOWN;
-
-    in_elevator_direction_ = (a == car->direction());
-    in_travel_direction_ = (d == car->direction());
-    distance_ = std::abs(n - car->current_floor());
+    if (car)
+    {
+        set_car(car);
+    }
 }
 
 bool Stop::operator<(const Stop &b) const
@@ -50,6 +44,22 @@ bool Stop::operator<(const Stop &b) const
     }
 
     return this < &b;
+}
+
+void Stop::set_car(Car *pCar)
+{
+    car = pCar;
+
+    Direction a = Direction::NONE;
+    int delta = floor_number - car->current_floor();
+    if (delta > 0)
+        a = Direction::UP;
+    if (delta < 0)
+        a = Direction::DOWN;
+
+    in_elevator_direction_ = (a == car->direction());
+    in_travel_direction_ = (direction == car->direction());
+    distance_ = std::abs(floor_number - car->current_floor());
 }
 
 std::ostream &operator<<(std::ostream &os, Stop &)

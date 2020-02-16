@@ -30,12 +30,6 @@ public:
     void set_next_floor(FloorNumber floor_number);
     void move(Duration dt);
 
-    // Button methods
-    NumberSet destination_buttons() const
-    { return destination_buttons_; }
-    void press_destination_button(FloorNumber);
-    void clear_destination_button();
-
     // Testing only
     void set_position(FloorNumber number, Direction direction);
     FloorNumber next_floor() const;

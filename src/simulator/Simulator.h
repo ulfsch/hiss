@@ -29,8 +29,9 @@ public:
     void inject_cars();
 
 private:
-    void move_passengers(Time time);
+    void control_cars(std::vector<Stop> &stops);
     void move_cars(Duration dt);
+    void move_passengers(Time time);
 
 private:
     Traffic *traffic_generator_;

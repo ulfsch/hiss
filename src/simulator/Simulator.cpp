@@ -5,6 +5,25 @@
 #include "Stop.h"
 #include <algorithm>
 
+
+static bool same_car(const Stop &a, const Stop &b)
+{
+    return a.car == b.car;
+}
+
+struct SameCar
+{
+    SameCar(const Stop &stop) : stop_(stop) {}
+
+    bool operator()(const Stop &b)
+    {
+        return stop_.car == b.car;
+    }
+
+    Stop stop_;
+};
+
+
 Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building) :
         traffic_generator_(traffic),
         algorithm_(algorithm),
@@ -29,15 +48,9 @@ Simulator::~Simulator()
 
 void Simulator::tick(Time time, Duration dt)
 {
-     std::vector<Stop> stops;
+    std::vector<Stop> stops;
     (*algorithm_)(this, control_panels_, stops);
-    for (const auto &stop : stops)
-    {
-        if (stop.floor_number != stop.car->current_floor())
-        {
-            stop.car->set_next_floor(stop.floor_number);
-        }
-    }
+    control_cars(stops);
     move_cars(dt);
     move_passengers(time);
     while (Passenger *passenger = (*traffic_generator_)(building_, time))
@@ -100,6 +113,24 @@ void Simulator::move_passengers(Time time)
                     p->set_start_traveling(car, time);
                     break;
                 }
+            }
+        }
+    }
+}
+
+void Simulator::control_cars(std::vector<Stop> &stops)
+{
+    std::vector<Stop> used;
+
+    for (const auto &stop : stops)
+    {
+        if (std::find_if(used.begin(), used.end(), SameCar(stop)) == used.end())
+        {
+            used.push_back(stop);
+
+            if (stop.floor_number != stop.car->current_floor())
+            {
+                stop.car->set_next_floor(stop.floor_number);
             }
         }
     }

@@ -51,10 +51,10 @@ void StandardAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPa
 
     for (Car *car : simulator->cars())
     {
-        for (FloorNumber floor_number: controlPanel.floor_call_buttons)
-        {
-            stops.push_back(Stop(car, floor_number, Direction::NONE));
-        }
+//        for (FloorNumber floor_number: controlPanel.floor_call_buttons)
+//        {
+//            stops.push_back(Stop(car, floor_number, Direction::NONE));
+//        }
         for (FloorNumber floor_number: controlPanel.floor_up_buttons)
         {
             stops.push_back(Stop(car, floor_number, Direction::UP));
