@@ -12,17 +12,17 @@ struct IsSame
 
     bool operator()(const Stop &b)
     {
-        if (stop_.car == b.car)
+        if (stop_.car_ == b.car_)
         {
             return true;
         }
 
-        if (stop_.floor_number != b.floor_number)
+        if (stop_.floor_number_ != b.floor_number_)
         {
             return false;
         }
 
-        return (stop_.direction == b.direction);
+        return true;
     }
 
     Stop stop_;
@@ -42,7 +42,7 @@ void TrivialAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPan
     {
         for (int floor_number : panel.second)
         {
-            stops.push_back(Stop(panel.first, floor_number, Direction::NONE));
+            stops.push_back(Stop(floor_number, Direction::NONE, panel.first));
         }
     }
 
@@ -56,11 +56,11 @@ void TrivialAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPan
 
         for (FloorNumber floor_number: controlPanel.floor_up_buttons)
         {
-            stops.push_back(Stop(car, floor_number, Direction::UP));
+            stops.push_back(Stop(floor_number, Direction::UP, car));
         }
         for (FloorNumber floor_number: controlPanel.floor_down_buttons)
         {
-            stops.push_back(Stop(car, floor_number, Direction::DOWN));
+            stops.push_back(Stop(floor_number, Direction::DOWN, car));
         }
     }
 

@@ -14,68 +14,56 @@ struct IsSame
 
     bool operator()(const Stop &b)
     {
-        if (stop_.car == b.car)
+        if (stop_.car_ == b.car_)
         {
             return true;
         }
 
-        if (stop_.floor_number != b.floor_number)
+        if (stop_.floor_number_ != b.floor_number_)
         {
             return false;
         }
 
-        return (stop_.direction == b.direction);
+        return true;
     }
 
     Stop stop_;
 };
 
-
 void EvalAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel, std::vector<Stop> &result)
 {
-    std::vector<Stop> stops;
+    std::set<Stop> stops;
 
-    for (std::pair<Car *const, NumberSet> &panel : controlPanel.car_target_buttons)
+    for (Car *car : simulator->cars())
     {
-        for (int floor_number : panel.second)
+        for (FloorNumber floor_number : controlPanel.car_target_buttons[car])
         {
-            result.push_back(Stop(panel.first, floor_number, Direction::NONE));
+            stops.insert(Stop(floor_number, Direction::UP, car));
+            stops.insert(Stop(floor_number, Direction::DOWN, car));
+        }
+        for (FloorNumber floor_number: controlPanel.floor_up_buttons)
+        {
+            stops.insert(Stop(floor_number, Direction::UP, car));
+        }
+        for (FloorNumber floor_number: controlPanel.floor_down_buttons)
+        {
+            stops.insert(Stop(floor_number, Direction::DOWN, car));
         }
     }
 
-    for (FloorNumber floor_number: controlPanel.floor_up_buttons)
+    for (Car *car : simulator->cars())
     {
-        stops.push_back(Stop(nullptr, floor_number, Direction::UP));
-    }
-    for (FloorNumber floor_number: controlPanel.floor_down_buttons)
-    {
-        stops.push_back(Stop(nullptr, floor_number, Direction::DOWN));
-    }
-
-    std::sort(stops.begin(), stops.end());
-
-    uint32_t nbr_cars = simulator->cars().size();
-    uint32_t nbr_stops = stops.size();
-    uint32_t sector_size = nbr_stops / nbr_cars + 0;
-
-    uint32_t i = 0;
-    auto j = simulator->cars().begin();
-    while (j != simulator->cars().end() && i < nbr_stops)
-    {
-        Car *car = *j;
-
-        if (i < nbr_stops)
+        if (car->is_idle())
         {
-            Stop stop = stops[i++];
-            stop.set_car(car);
-            result.push_back(stop);
-        }
-
-        if (sector_size == 0 || i % sector_size == 0)
-        {
-            ++j;
+            for (Stop stop : stops)
+            {
+                if (car == stop.car())
+                {
+                    result.push_back(stop);
+                    break;
+                }
+            }
         }
     }
-
-   //std::sort(result.begin(), result.end());
 }
+

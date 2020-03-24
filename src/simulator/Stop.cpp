@@ -4,62 +4,31 @@
 
 #include "Stop.h"
 
-Stop::Stop(Car *car, FloorNumber n, Direction d) :
-        car(car),
-        floor_number(n),
-        direction(d)
+Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
+        floor_number_(floor_number),
+        car_(car),
+        index_(0)
 {
-    if (car)
+    int mod = car->elevator()->mod();
+
+    if (direction == Direction::UP)
     {
-        set_car(car);
+        index_ = (floor_number_ - car->current_floor()) % mod;
+    }
+    if (direction == Direction::DOWN)
+    {
+        index_ = -(floor_number_ - car->current_floor()) % mod;
     }
 }
 
 bool Stop::operator<(const Stop &b) const
 {
-    // Prefer a stop in the elevator direction.
-    if (in_elevator_direction_ && !b.in_elevator_direction_)
-    {
-        return true;
-    }
-    if (!in_elevator_direction_ && b.in_elevator_direction_)
-    {
-        return false;
-    }
-
-    // Prefer stop in travel direction
-    if (in_travel_direction_ && !b.in_travel_direction_)
-    {
-        return true;
-    }
-    if (!in_travel_direction_ && b.in_travel_direction_)
-    {
-        return false;
-    }
-
-    // Shortest distance
-    if (distance_ < b.distance_)
-    {
-        return true;
-    }
-
-    return this < &b;
+    return index_ < b.index_;
 }
 
-void Stop::set_car(Car *pCar)
+bool Stop::operator==(const Stop &b) const
 {
-    car = pCar;
-
-    Direction a = Direction::NONE;
-    int delta = floor_number - car->current_floor();
-    if (delta > 0)
-        a = Direction::UP;
-    if (delta < 0)
-        a = Direction::DOWN;
-
-    in_elevator_direction_ = (a == car->direction());
-    in_travel_direction_ = (direction == car->direction());
-    distance_ = std::abs(floor_number - car->current_floor());
+    return index_ == b.index_;
 }
 
 std::ostream &operator<<(std::ostream &os, Stop &)

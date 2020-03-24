@@ -83,7 +83,7 @@ void Car::move(Duration duration)
         state_ = State::MOVING;
         direction_ = Direction::UP;
         height_ += velocity_ * duration;
-        current_floor_ = static_cast<FloorNumber>(height_ / floor_height_);
+        //current_floor_ = static_cast<FloorNumber>(height_ / floor_height_);
         if (height_ >= (int) target_floor_ * floor_height_)
         {
             height_ = target_floor_ * floor_height_;
@@ -96,7 +96,7 @@ void Car::move(Duration duration)
         state_ = State::MOVING;
         direction_ = Direction::DOWN;
         height_ -= velocity_ * duration;
-        current_floor_ = static_cast<FloorNumber>((height_ + (floor_height_ - 1)) / floor_height_);
+        //current_floor_ = static_cast<FloorNumber>((height_ + (floor_height_ - 1)) / floor_height_);
         if (height_ <= (int) target_floor_ * floor_height_)
         {
             height_ = target_floor_ * floor_height_;

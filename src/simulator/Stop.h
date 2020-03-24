@@ -13,20 +13,17 @@
 class Stop
 {
 public:
-    Stop(Car *car, FloorNumber n, Direction d = Direction::NONE);
-    bool operator<(const Stop &b) const;
+    Stop(FloorNumber floor_number, Direction direction, Car *car);
 
-    void set_car(Car *pCar);
+    bool operator<(const Stop &b) const;
+    bool operator==(const Stop &b) const;
+
+    Car *car() const { return  car_; }
 
 public:
-    Car *car;
-    FloorNumber floor_number;
-    Direction direction;
-
-private:
-    bool in_elevator_direction_;
-    bool in_travel_direction_;
-    FloorNumber distance_;
+    FloorNumber floor_number_;
+    Car *car_;
+    int index_;
 
 };
 

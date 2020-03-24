@@ -10,10 +10,10 @@
 #include <Algorithm.h>
 #include <Direction.h>
 
-class EvalAlgorithm  : public Algorithm
+class EvalAlgorithm : public Algorithm
 {
 public:
-    void operator()(Simulator *, ControlPanel&, std::vector<Stop> &result) override;
+    void operator()(Simulator *, ControlPanel &, std::vector<Stop> &result) override;
 
 };
 
