@@ -7,8 +7,6 @@ set(SOURCE_FILES
         Simulator.h
         Passenger.cpp
         Passenger.h
-        Car.cpp
-        Car.h
         ControlPanel.cpp
         ControlPanel.h
         Stop.cpp

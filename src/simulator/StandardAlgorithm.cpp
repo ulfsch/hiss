@@ -36,7 +36,7 @@ struct IsSame
  *
  * @param simulator
  */
-void StandardAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel, std::vector<Stop> &result)
+void StandardAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, std::vector<Stop> &result)
 {
     std::vector<Stop> stops;
 
@@ -49,7 +49,7 @@ void StandardAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPa
 
     }
 
-    for (Car *car : simulator->cars())
+    for (Car *car : cars)
     {
 //        for (FloorNumber floor_number: controlPanel.floor_call_buttons)
 //        {

@@ -14,10 +14,12 @@ Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
     if (direction == Direction::UP)
     {
         index_ = (floor_number_ - car->current_floor()) % mod;
+        if (index_ < 0) index_ += mod;
     }
     if (direction == Direction::DOWN)
     {
         index_ = -(floor_number_ - car->current_floor()) % mod;
+        if (index_ < 0) index_ += mod;
     }
 }
 

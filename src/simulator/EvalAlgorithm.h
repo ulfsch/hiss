@@ -13,7 +13,7 @@
 class EvalAlgorithm : public Algorithm
 {
 public:
-    void operator()(Simulator *, ControlPanel &, std::vector<Stop> &result) override;
+    void operator()(CarList &cars, ControlPanel &, std::vector<Stop> &result) override;
 
 };
 

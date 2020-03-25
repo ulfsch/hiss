@@ -30,11 +30,11 @@ struct IsSame
     Stop stop_;
 };
 
-void EvalAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel, std::vector<Stop> &result)
+void EvalAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, std::vector<Stop> &result)
 {
     std::set<Stop> stops;
 
-    for (Car *car : simulator->cars())
+    for (Car *car : cars)
     {
         for (FloorNumber floor_number : controlPanel.car_target_buttons[car])
         {
@@ -51,7 +51,7 @@ void EvalAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel,
         }
     }
 
-    for (Car *car : simulator->cars())
+    for (Car *car : cars)
     {
         if (car->is_idle())
         {

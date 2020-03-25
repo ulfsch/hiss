@@ -2,6 +2,7 @@
 // Car.cpp
 //
 
+#include <assert.h>
 #include "Car.h"
 
 /**
@@ -60,13 +61,14 @@ bool Car::is_idle_on_floor(FloorNumber i) const
  */
 void Car::set_next_floor(FloorNumber floor_number)
 {
+    assert(elevator_->is_valid_floor(floor_number));
     next_floor_ = floor_number;
 }
 
 /**
  * Move the elevator car.
  *
- * If the elevator car is standing still on a floor, a move of
+ * If the elevator car is standing idle on a floor, a move of
  * the elevator is started as defined by next_floor_
  *
  * @param duration in seconds
@@ -83,7 +85,7 @@ void Car::move(Duration duration)
         state_ = State::MOVING;
         direction_ = Direction::UP;
         height_ += velocity_ * duration;
-        //current_floor_ = static_cast<FloorNumber>(height_ / floor_height_);
+        current_floor_ = static_cast<FloorNumber>(height_ / floor_height_);
         if (height_ >= (int) target_floor_ * floor_height_)
         {
             height_ = target_floor_ * floor_height_;
@@ -96,7 +98,7 @@ void Car::move(Duration duration)
         state_ = State::MOVING;
         direction_ = Direction::DOWN;
         height_ -= velocity_ * duration;
-        //current_floor_ = static_cast<FloorNumber>((height_ + (floor_height_ - 1)) / floor_height_);
+        current_floor_ = static_cast<FloorNumber>((height_ + (floor_height_ - 1)) / floor_height_);
         if (height_ <= (int) target_floor_ * floor_height_)
         {
             height_ = target_floor_ * floor_height_;

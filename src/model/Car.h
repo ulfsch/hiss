@@ -9,7 +9,7 @@
 #include "Direction.h"
 #include "Elevator.h"
 
-static const int VELOCITY = 5;
+static const int VELOCITY = 2;
 static const int FLOOR_HEIGHT = 4;
 
 
@@ -44,7 +44,6 @@ private:
     FloorNumber next_floor_;
 
     int height_;
-    NumberSet destination_buttons_;
 
     enum class State
     {

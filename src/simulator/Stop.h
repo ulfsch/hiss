@@ -27,5 +27,6 @@ public:
 
 };
 
+typedef std::vector<Stop> StopVector;
 
 #endif //CHISS_STOP_H

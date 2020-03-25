@@ -7,20 +7,6 @@
 #include <cassert>
 
 
-struct SameCar
-{
-    SameCar(const Stop &stop) : stop_(stop)
-    {}
-
-    bool operator()(const Stop &b)
-    {
-        return stop_.car_ == b.car_;
-    }
-
-    Stop stop_;
-};
-
-
 Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building) :
         traffic_generator_(traffic),
         algorithm_(algorithm),
@@ -46,7 +32,7 @@ Simulator::~Simulator()
 void Simulator::tick(Time time, Duration dt)
 {
     std::vector<Stop> stops;
-    (*algorithm_)(this, control_panels_, stops);
+    (*algorithm_)(cars_, control_panels_, stops);
 
     // Control the cars
     for (const auto &stop : stops)

@@ -10,8 +10,6 @@
  * 
  * @param min_floor lowest floor number. Bottom floor is 0
  * @param max_floor highest floor number + 1
- * @param velocity  elevator speed in m/s
- * @param floor_height in meter
  */
 Elevator::Elevator(FloorNumber min_floor, FloorNumber max_floor, QObject *parent) :
         QObject(parent),
@@ -41,6 +39,11 @@ Elevator::Elevator(FloorNumber *floor_array, size_t len, QObject *parent) :
         max_floor_ = *std::max_element(floors_.begin(), floors_.end());
         min_floor_ = *std::min_element(floors_.begin(), floors_.end());
     }
+}
+
+bool Elevator::is_valid_floor(FloorNumber floor_number) const
+{
+    return floors_.find(floor_number) != floors_.end();
 }
 
 // End of file

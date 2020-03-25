@@ -33,7 +33,7 @@ TrivialAlgorithm::TrivialAlgorithm()
 
 }
 
-void TrivialAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPanel, std::vector<Stop> &result)
+void TrivialAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, std::vector<Stop> &result)
 {
     std::vector<Stop> stops;
 
@@ -47,7 +47,7 @@ void TrivialAlgorithm::operator()(Simulator *simulator, ControlPanel &controlPan
     }
 
     // Check floor call buttons.
-    for (Car *car : simulator->cars())
+    for (Car *car : cars)
     {
 //        for (FloorNumber floor_number: controlPanel.floor_call_buttons)
 //        {
