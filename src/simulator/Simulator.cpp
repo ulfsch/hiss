@@ -2,9 +2,7 @@
 // Simulator.cpp
 //
 #include "Simulator.h"
-#include "Stop.h"
 #include <algorithm>
-#include <cassert>
 
 
 Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building) :

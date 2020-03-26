@@ -3,7 +3,6 @@
 //
 #include "Passenger.h"
 #include <cassert>
-#include <Floor.h>
 
 Id Passenger::last_id_ = 0;
 

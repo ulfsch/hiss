@@ -5,7 +5,6 @@
 #include "gtest/gtest.h"
 #include "Car.h"
 #include "Elevator.h"
-#include "Direction.h"
 
 /*
  * move_up - move car at constant speed (2 m/s)

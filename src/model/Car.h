@@ -6,7 +6,6 @@
 #define CHISS_CAR_H
 
 #include "common.h"
-#include "Direction.h"
 #include "Elevator.h"
 
 static const int VELOCITY = 2;
@@ -16,7 +15,7 @@ static const int FLOOR_HEIGHT = 4;
 class Car
 {
 public:
-    Car(Elevator *elevator, int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
+    explicit Car(Elevator *elevator, int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
 
     // Access methods
     Elevator *elevator() const;

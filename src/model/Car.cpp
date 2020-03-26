@@ -2,7 +2,7 @@
 // Car.cpp
 //
 
-#include <assert.h>
+#include <cassert>
 #include "Car.h"
 
 /**

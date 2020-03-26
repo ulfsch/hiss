@@ -5,9 +5,8 @@
 #ifndef CHISS_STOP_H
 #define CHISS_STOP_H
 
-#include <common.h>
-#include <Car.h>
-#include <Direction.h>
+#include "common.h"
+#include "Car.h"
 
 
 class Stop

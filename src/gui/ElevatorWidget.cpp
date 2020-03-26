@@ -6,8 +6,7 @@
 #include <QLabel>
 #include "ElevatorWidget.h"
 #include "Elevator.h"
-#include "Floor.h"
-#include "Car.h"
+
 
 ElevatorWidget::ElevatorWidget(Elevator *elevator, QWidget *parent) :
         QWidget(parent),

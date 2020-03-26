@@ -2,8 +2,6 @@
 set(SOURCE_FILES
         common.h
         Traffic.h
-        Direction.cpp
-        Direction.h
         Building.cpp
         Building.h
         Elevator.cpp
