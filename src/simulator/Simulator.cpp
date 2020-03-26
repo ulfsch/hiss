@@ -42,7 +42,12 @@ void Simulator::tick(Time time, Duration dt)
         control_panels_.clear_car_buttons(stop.car(), stop.floor_number_);
     }
 
-    move_cars(dt);
+    // Move all cars
+    for (Car *car : cars_)
+    {
+        car->tick(dt);
+    }
+
     move_passengers(time);
     while (Passenger *passenger = (*traffic_generator_)(building_, time))
     {
@@ -104,19 +109,6 @@ void Simulator::move_passengers(Time time)
                     break;
                 }
             }
-        }
-    }
-}
-
-void Simulator::move_cars(Duration dt)
-{
-    for (Car *car : cars_)
-    {
-        car->move(dt);
-        if (car->is_idle())
-        {
-            control_panels_.clear_floor_buttons(car->current_floor());
-            control_panels_.clear_car_buttons(car, car->current_floor());
         }
     }
 }

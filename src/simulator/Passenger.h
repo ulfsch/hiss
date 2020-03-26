@@ -14,7 +14,7 @@ class Car;
 class Passenger
 {
 public:
-    Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time);
+    Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time = 0);
 
     Id id() const;
     FloorNumber begin_floor() const;

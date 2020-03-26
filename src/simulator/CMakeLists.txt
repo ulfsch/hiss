@@ -16,9 +16,7 @@ set(SOURCE_FILES
         TrivialAlgorithm.cpp
         TrivialAlgorithm.h
         StandardAlgorithm.cpp
-        StandardAlgorithm.h
-        EvalAlgorithm.cpp
-        EvalAlgorithm.h)
+        StandardAlgorithm.h)
 
 add_library(simulator ${SOURCE_FILES})
 target_link_libraries(simulator Qt4::QtCore)

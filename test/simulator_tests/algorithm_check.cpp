@@ -3,12 +3,12 @@
 //
 
 #include "gtest/gtest.h"
-#include "EvalAlgorithm.h"
+#include "StandardAlgorithm.h"
 #include "ControlPanel.h"
 #include "Stop.h"
 
 
-TEST(EvalAlgoBasic, mod_tesst)
+TEST(StandardAlgoBasic, mod_tesst)
 {
     CarList cars;
     ControlPanel controlPanel;
@@ -20,9 +20,9 @@ TEST(EvalAlgoBasic, mod_tesst)
     Car car0(&elevator0);
     Car car1(&elevator1);
 
-    Passenger p1(9, 1, 0);
-    Passenger p2(6, 2, 0);
-    Passenger p3(3, 5, 0);
+    Passenger p1(9, 1);
+    Passenger p2(6, 2);
+    Passenger p3(3, 5);
 
     controlPanel.press_floor_buttons(&p1);
     controlPanel.press_floor_buttons(&p2);
@@ -32,7 +32,7 @@ TEST(EvalAlgoBasic, mod_tesst)
     cars.push_back(&car1);
 
     // Evaluate
-    EvalAlgorithm algo;
+    StandardAlgorithm algo;
     (algo)(cars, controlPanel, stops);
 
     // Verify

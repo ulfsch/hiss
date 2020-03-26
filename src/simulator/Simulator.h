@@ -23,14 +23,10 @@ public:
 
     Building *building() const { return building_; }
     const PassengerList &passengers() const { return passengers_; }
-
     const CarList &cars() const { return cars_; }
-
     void inject_cars();
 
 private:
-    void control_cars(std::vector<Stop> &stops);
-    void move_cars(Duration dt);
     void move_passengers(Time time);
 
 private:

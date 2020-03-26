@@ -28,7 +28,7 @@ public:
 
     // Elevator movement methods
     void set_next_floor(FloorNumber floor_number);
-    void move(Duration dt);
+    void tick(Duration duration);
 
     // Testing only
     void set_position(FloorNumber number, Direction direction);

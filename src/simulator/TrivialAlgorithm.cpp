@@ -1,9 +1,8 @@
 //
 // TrivialAlgorithm.cpp
 //
+
 #include "TrivialAlgorithm.h"
-#include "Building.h"
-#include "Simulator.h"
 
 struct IsSame
 {
@@ -42,7 +41,9 @@ void TrivialAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, std
     {
         for (int floor_number : panel.second)
         {
-            stops.push_back(Stop(floor_number, Direction::NONE, panel.first));
+            stops.push_back(Stop(floor_number, Direction::UP, panel.first));
+            stops.push_back(Stop(floor_number, Direction::DOWN
+                    , panel.first));
         }
     }
 
@@ -64,12 +65,18 @@ void TrivialAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, std
         }
     }
 
-    result.clear();
-    for (auto stop : stops)
+    for (Car *car : cars)
     {
-        if (std::find_if(result.begin(), result.end(), IsSame(stop)) == result.end())
+        if (car->is_idle())
         {
-            result.push_back(stop);
+            for (Stop stop : stops)
+            {
+                if (car == stop.car())
+                {
+                    result.push_back(stop);
+                    break;
+                }
+            }
         }
     }
 

@@ -1,78 +1,42 @@
 //
-// StandardAlgorithm.cpp.
+// Created by ulf on 8/20/19.
 //
 
 #include "StandardAlgorithm.h"
-#include "Building.h"
-#include "Simulator.h"
-#include "Stop.h"
-#include <algorithm>
 
-struct IsSame
+void StandardAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, StopVector &result)
 {
-    IsSame(const Stop &stop) : stop_(stop)
-    {}
+    std::set<Stop> stops;
 
-    bool operator()(const Stop &b)
+    for (Car *car : cars)
     {
-        if (stop_.car_ == b.car_)
+        for (FloorNumber floor_number : controlPanel.car_target_buttons[car])
         {
-            return true;
+            stops.insert(Stop(floor_number, Direction::UP, car));
+            stops.insert(Stop(floor_number, Direction::DOWN, car));
         }
-
-        if (stop_.floor_number_ != b.floor_number_)
+        for (FloorNumber floor_number: controlPanel.floor_up_buttons)
         {
-            return false;
+            stops.insert(Stop(floor_number, Direction::UP, car));
         }
-
-        return true;
-    }
-
-    Stop stop_;
-};
-
-/**
- * Algorithm for two call buttons (up/down) on each floor.
- *
- * @param simulator
- */
-void StandardAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, std::vector<Stop> &result)
-{
-    std::vector<Stop> stops;
-
-    for (std::pair<Car *const, NumberSet> &panel : controlPanel.car_target_buttons)
-    {
-        for (int floor_number : panel.second)
+        for (FloorNumber floor_number: controlPanel.floor_down_buttons)
         {
-            stops.push_back(Stop(floor_number, Direction::NONE, panel.first));
+            stops.insert(Stop(floor_number, Direction::DOWN, car));
         }
-
     }
 
     for (Car *car : cars)
     {
-//        for (FloorNumber floor_number: controlPanel.floor_call_buttons)
-//        {
-//            stops.push_back(Stop(car, floor_number, Direction::NONE));
-//        }
-        for (FloorNumber floor_number: controlPanel.floor_up_buttons)
+        if (car->is_idle())
         {
-            stops.push_back(Stop(floor_number, Direction::UP, car));
-        }
-        for (FloorNumber floor_number: controlPanel.floor_down_buttons)
-        {
-            stops.push_back(Stop(floor_number, Direction::DOWN, car));
-        }
-    }
-
-    std::sort(stops.begin(), stops.end());
-
-    result.clear();
-    for (auto stop : stops)
-    {
-        if (std::find_if(result.begin(), result.end(), IsSame(stop)) == result.end())
-        {
-            result.push_back(stop);
+            for (Stop stop : stops)
+            {
+                if (car == stop.car())
+                {
+                    result.push_back(stop);
+                    break;
+                }
+            }
         }
     }
 }

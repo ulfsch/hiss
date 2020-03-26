@@ -16,38 +16,38 @@ TEST(CarBasic, move_up_) {
     EXPECT_TRUE(car.is_idle_on_floor(10));
     car.set_next_floor(15);
 
-    car.move(1);
-    car.move(1);
+    car.tick(1);
+    car.tick(1);
     EXPECT_FALSE(car.is_idle());
     EXPECT_EQ(11, car.current_floor());
     EXPECT_FALSE(car.is_idle_on_floor(17));
 
-    car.move(1);
-    car.move(1);
+    car.tick(1);
+    car.tick(1);
     EXPECT_FALSE(car.is_idle());
     EXPECT_EQ(12, car.current_floor());
     EXPECT_FALSE(car.is_idle_on_floor(15));
 
-    car.move(1);
-    car.move(1);
+    car.tick(1);
+    car.tick(1);
     EXPECT_FALSE(car.is_idle());
     EXPECT_EQ(13, car.current_floor());
     EXPECT_FALSE(car.is_idle_on_floor(15));
 
-    car.move(1);
-    car.move(1);
+    car.tick(1);
+    car.tick(1);
     EXPECT_FALSE(car.is_idle());
     EXPECT_EQ(14, car.current_floor());
     EXPECT_FALSE(car.is_idle_on_floor(15));
 
-    car.move(1);
-    car.move(1);
+    car.tick(1);
+    car.tick(1);
     EXPECT_FALSE(car.is_idle());  // state WAIT
     EXPECT_EQ(15, car.current_floor());
     EXPECT_FALSE(car.is_idle_on_floor(15));
 
-    car.move(1);
-    car.move(1);
+    car.tick(1);
+    car.tick(1);
     EXPECT_TRUE(car.is_idle());  // state IDLE
     EXPECT_EQ(15, car.current_floor());
     EXPECT_TRUE(car.is_idle_on_floor(15));

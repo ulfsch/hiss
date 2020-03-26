@@ -73,7 +73,7 @@ void Car::set_next_floor(FloorNumber floor_number)
  *
  * @param duration in seconds
  */
-void Car::move(Duration duration)
+void Car::tick(Duration duration)
 {
     if (is_idle())
     {
