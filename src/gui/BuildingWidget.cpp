@@ -9,28 +9,15 @@
 #include "ElevatorWidget.h"
 #include "FloorWidget.h"
 
-BuildingWidget::BuildingWidget(Building *building, QWidget *parent) :
+BuildingWidget::BuildingWidget(Simulator *simulator, QWidget *parent) :
         QWidget(parent),
-        building_(building)
+        simulator_(simulator),
+        building_(simulator->building())
 {
     QPalette palette1;
     palette1.setColor(QPalette::Background, QColor(255, 200, 200));
     setAutoFillBackground(true);
     setPalette(palette1);
-
-    update_from_model();
-    connect(building, SIGNAL(changed()), this, SLOT(update_from_model()));
-}
-
-void BuildingWidget::update_from_model()
-{
-    floorWidgets_.clear();
-    elevatorWidgets_.clear();
-
-    QPalette palette1;
-    palette1.setColor(QPalette::Background, QColor(200, 255, 255));
-    //setAutoFillBackground(true);
-    //setPalette(palette1);
 
     QGridLayout *layout = new QGridLayout(this);
 
@@ -40,9 +27,9 @@ void BuildingWidget::update_from_model()
     for (auto floor : building_->floors())
     {
         int row = building_->number_of_floors() - floor->number() - 1;
-        auto widget1 = new FloorWidget(floor, this);
+        auto widget1 = new FloorWidget(floor, simulator_, this);
         layout->addWidget(widget1, row, column, Qt::AlignCenter);
-        floorWidgets_.push_back(widget1);
+        floor_widgets_.push_back(widget1);
     }
 
     column = 1;
@@ -50,25 +37,37 @@ void BuildingWidget::update_from_model()
     {
         layout->setColumnStretch(column, 1);
         layout->setColumnMinimumWidth(column, 150);
+
+        std::vector<ElevatorWidget *> w2;
         for (auto floor_number : elevator->floorNumbers())
         {
             int row = building_->number_of_floors() - floor_number - 1;
-            QWidget *w = new QWidget(this);
+            auto *w = new ElevatorWidget(elevator, floor_number, this);
             layout->addWidget(w, row, column, Qt::AlignCenter);
-            QLabel *lbl = new QLabel(QString::number(floor_number), w);
-            QHBoxLayout *l = new QHBoxLayout(w);
-            l->addWidget(lbl);
-
-            lbl->setContentsMargins(0, 0, 0, 0);
-            lbl->setMinimumWidth(150);
-            w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
-            w->setPalette(palette1);
-            w->setAutoFillBackground(true);
-            //lbl->setAutoFillBackground(true);
-            layout->addWidget(w, row, column, Qt::AlignCenter);
+            w2.push_back(w);
         }
+        elevator_widgets_.push_back(w2);
         column += 1;
+    }
+
+    connect(building_, SIGNAL(changed()), this, SLOT(update_from_model()));
+}
+
+void BuildingWidget::update_from_model()
+{
+
+}
+
+ElevatorWidget *BuildingWidget::elevator_widget(int row, int col) const
+{
+    return elevator_widgets_[col][row];
+}
+
+void BuildingWidget::tick()
+{
+    for (auto floor_widget : floor_widgets_)
+    {
+        floor_widget->update_from_model();
     }
 }
 

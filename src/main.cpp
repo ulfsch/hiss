@@ -82,8 +82,7 @@ int main(int argc, char *argv[])
 static void run_simulation(Configuration &configuration, Result &result, bool verbose)
 {
     Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
-    simulator.inject_cars();
-    
+
     Time time = 0;
     while (!simulator.done())
     {

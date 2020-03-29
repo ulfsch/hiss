@@ -5,8 +5,11 @@
 #ifndef CHISS_CARWIDGET_H
 #define CHISS_CARWIDGET_H
 
+#include <QLabel>
 #include <QWidget>
+#include "BuildingWidget.h"
 #include "Car.h"
+#include "Simulator.h"
 
 
 class CarWidget : public QWidget
@@ -14,14 +17,18 @@ class CarWidget : public QWidget
 Q_OBJECT
 
 public:
-    explicit CarWidget(Car *car, QWidget *parent = nullptr);
+    CarWidget(Car *car, Simulator* simulator, int column, BuildingWidget *parent);
+
+    void tick();
 
 public slots:
 
-    void update_from_simulation();
-
 private:
     Car *car_;
+    Simulator *simulator_;
+    BuildingWidget *building_widget_;
+    int index_;
+    QLabel* label_;
 
 };
 

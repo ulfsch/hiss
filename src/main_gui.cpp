@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
     if (ok)
     {
         Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
-        simulator.inject_cars();
 
         MainWindow window(&simulator);
         window.connect(&configuration, SIGNAL(changed()), &window, SLOT(update_from_model()));

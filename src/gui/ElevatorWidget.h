@@ -17,7 +17,7 @@ class ElevatorWidget : public QWidget
 Q_OBJECT
 
 public:
-    explicit ElevatorWidget(Elevator *, QWidget *parent = nullptr);
+    explicit ElevatorWidget(Elevator *, FloorNumber floor_number, QWidget *parent = nullptr);
 
 public slots:
     void update_from_model();
@@ -25,6 +25,7 @@ public slots:
 private:
     Elevator *elevator_;
     QLabel *widget_;
+    FloorNumber floor_number_;
 
 };
 

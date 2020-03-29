@@ -10,6 +10,10 @@ Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building)
         algorithm_(algorithm),
         building_(building)
 {
+    for (Elevator *elevator : building_->elevators())
+    {
+        cars_.push_back(new Car(elevator));
+    }
 }
 
 Simulator::~Simulator()
@@ -71,15 +75,6 @@ bool Simulator::done() const
     }
 
     return true;
-}
-
-void Simulator::inject_cars()
-{
-    for (Elevator *elevator : building_->elevators())
-    {
-        Car *car = new Car(elevator);
-        cars_.push_back(car);
-    }
 }
 
 void Simulator::move_passengers(Time time)

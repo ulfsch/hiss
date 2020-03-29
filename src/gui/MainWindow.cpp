@@ -21,7 +21,27 @@ MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
         buildingWidget_(nullptr),
         timer_(nullptr)
 {
-    update_from_model();
+    QWidget *central = new QWidget(this);
+    setCentralWidget(central);
+
+    delete buildingWidget_;
+    buildingWidget_ = new BuildingWidget(simulator_, this);
+
+    QVBoxLayout *layout = new QVBoxLayout(central);
+    layout->addWidget(buildingWidget_);
+
+    int column = 0;
+    for (Car *car : simulator_->cars())
+    {
+        CarWidget *car_widget = new CarWidget(car, simulator_, column++, buildingWidget_);
+        car_widget_list_.push_back(car_widget);
+    }
+
+    QStatusBar *status_bar = statusBar();
+    awtWidget = new QLabel("AWT: 55");
+    status_bar->addWidget(awtWidget);
+
+    setWindowTitle(tr("hiss"));
 
     // Start simulation
     timer_ = new QTimer(this);
@@ -31,26 +51,6 @@ MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
 
 void MainWindow::update_from_model()
 {
-    QWidget *central = new QWidget(this);
-    setCentralWidget(central);
-
-    delete buildingWidget_;
-    buildingWidget_ = new BuildingWidget(simulator_->building());
-
-    QVBoxLayout *layout = new QVBoxLayout(central);
-    layout->addWidget(buildingWidget_);
-
-    for (Car *car : simulator_->cars())
-    {
-        CarWidget *car_widget = new CarWidget(car, central);
-        car_widget_list_.push_back(car_widget);
-    }
-
-    QStatusBar *status_bar = statusBar();
-    awtWidget = new QLabel("AWT: 55");
-    status_bar->addWidget(awtWidget);
-
-    setWindowTitle(tr("hiss"));
 }
 
 void MainWindow::tick()
@@ -67,10 +67,10 @@ void MainWindow::tick()
 
         for (CarWidget *car_widget : car_widget_list_)
         {
-            car_widget->update_from_simulation();
+            car_widget->tick();
         }
+        buildingWidget_->tick();
 
-        // buildingWidget_->update_passengers(simulator_->passengers());
         simulation_time_ += SIMULATION_RATE;
 
         Result result;
