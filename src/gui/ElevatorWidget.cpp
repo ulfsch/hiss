@@ -13,10 +13,13 @@ ElevatorWidget::ElevatorWidget(Elevator *elevator, FloorNumber floor_number, QWi
         elevator_(elevator),
         floor_number_(floor_number)
 {
-    QPalette palette1;
-    palette1.setColor(QPalette::Background, QColor(255, 255, 200));
-    setAutoFillBackground(true);
-    setPalette(palette1);
+//    QPalette palette1;
+//    palette1.setColor(QPalette::Background, QColor(255, 255, 200));
+//    setAutoFillBackground(true);
+//    setPalette(palette1);
+
+    setStyleSheet("background-color: blue; margin:8");
+
     setFixedWidth(200);
 
     update_from_model();

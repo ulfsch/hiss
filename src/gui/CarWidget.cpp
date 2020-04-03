@@ -17,10 +17,10 @@ CarWidget::CarWidget(Car *car, Simulator* simulator, int column, BuildingWidget 
         building_widget_(parent),
         index_(column)
 {
-    QPalette palette1;
-    palette1.setColor(QPalette::Background, QColor(255, 255, 255));
-    setAutoFillBackground(true);
-    setPalette(palette1);
+//    QPalette palette1;
+//    palette1.setColor(QPalette::Background, QColor(255, 255, 255));
+//    setAutoFillBackground(true);
+//    setPalette(palette1);
 
     setStyleSheet("margin:0px; padding:0px; border-width: 2px;background-color: white;border-color: black; border-style: solid;");
     auto *layout = new QGridLayout(this);

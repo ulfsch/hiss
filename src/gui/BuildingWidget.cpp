@@ -15,7 +15,7 @@ BuildingWidget::BuildingWidget(Simulator *simulator, QWidget *parent) :
         building_(simulator->building())
 {
     QPalette palette1;
-    palette1.setColor(QPalette::Background, QColor(255, 200, 200));
+    palette1.setColor(QPalette::Background, QColor(255, 200, 20));
     setAutoFillBackground(true);
     setPalette(palette1);
 
