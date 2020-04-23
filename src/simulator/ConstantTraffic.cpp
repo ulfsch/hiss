@@ -30,7 +30,7 @@ ConstantTraffic::ConstantTraffic(size_t number_of_floors,
  * @param time the begin_time for the generated passengers
  * @return list of new passengers generated in one step
  */
-Passenger *ConstantTraffic::operator()(Building *, Time time)
+Passenger *ConstantTraffic::operator()(Building *, MilliSeconds time)
 {
     if (count_ >= 1 && no_of_passengers_ < max_no_of_passengers_)
     {

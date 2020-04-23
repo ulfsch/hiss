@@ -27,8 +27,7 @@ public:
 
     // Elevator movement methods
     void set_next_floor(FloorNumber floor_number);
-    void simulation_step(Duration real_time);
-    //void tick();
+    void tick(MilliSeconds time);
 
     // Testing only
     FloorNumber next_floor() const;
@@ -41,14 +40,14 @@ private:
     double height_;
     double target_height_;
     double start_height_;
+    MilliSeconds start_time_;
 
     FloorNumber current_floor_;
     FloorNumber next_floor_;
-    Duration start_time_;
 
     enum class State
     {
-        IDLE, WAITING, MOVING
+        IDLE, WAITING, MOVING_UP, MOVING_DOWN
     } state_;
 
 };

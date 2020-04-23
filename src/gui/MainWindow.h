@@ -27,15 +27,18 @@ public slots:
     void simulation_step();
 
 private:
+    MilliSeconds get_time() const;
+
+private:
     Simulator *simulator_;
     BuildingWidget *buildingWidget_;
     QLabel *awtWidget;
     std::list<CarWidget *> car_widget_list_;
 
-    Time simulation_time_;
+    MilliSeconds simulation_time_;
     QTimer *timer_;
+    MilliSeconds simulation_start_time_;
 
-    Duration get_time() const;
 };
 
 #endif //CHISS_MAINWINDOW_H

@@ -47,7 +47,9 @@ MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
     // Start simulation
     timer_ = new QTimer(this);
     connect(timer_, SIGNAL(timeout()), this, SLOT(simulation_step()));
-    timer_->start(1000);
+    timer_->start(100);
+
+    simulation_start_time_ = get_time();
 }
 
 void MainWindow::update_from_model()
@@ -64,32 +66,30 @@ void MainWindow::simulation_step()
     }
     else
     {
-        Duration real_time = get_time();
-        simulator_->simulation_step(simulation_time_, real_time);
+        MilliSeconds time = get_time();
+        MilliSeconds simulation_time = time - simulation_start_time_;
 
-        for (CarWidget *car_widget : car_widget_list_)
-        {
-            car_widget->simulation_step();
-        }
-        buildingWidget_->simulation_step();
+        // Simulate
+        simulator_->tick(time);
+        std::for_each(car_widget_list_.begin(), car_widget_list_.end(), std::mem_fun(&CarWidget::tick));
+        buildingWidget_->tick();
 
-        simulation_time_ += SIMULATION_RATE;
-
+        // Show result
         Result result;
-        result.compute_result(simulation_time_, simulator_->passengers());
+        result.compute_result(simulation_time, simulator_->passengers());
         awtWidget->setText(QString("   AWT: %1,  ATT: %2")
-                                   .arg(result.average_waiting_time(), 0, 'g', 2)
-                                   .arg(result.average_traveling_time(), 0, 'g', 2)
+                                   .arg(result.average_waiting_time() / 1000, 0, 'g', 2)
+                                   .arg(result.average_traveling_time() / 1000, 0, 'g', 2)
         );
     }
 
 }
 
-Duration MainWindow::get_time() const
+MilliSeconds MainWindow::get_time() const
 {
-    Duration time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+    MilliSeconds time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
-    return time_ms / 1000.0;
+    return time_ms;
 }
 
 // End of file

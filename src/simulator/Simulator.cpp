@@ -8,7 +8,8 @@
 Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building) :
         traffic_generator_(traffic),
         algorithm_(algorithm),
-        building_(building)
+        building_(building),
+        last_time_(0)
 {
     for (Elevator *elevator : building_->elevators())
     {
@@ -31,31 +32,39 @@ Simulator::~Simulator()
     cars_.clear();
 }
 
-void Simulator::simulation_step(Time simulation_time, Duration real_time)
+void Simulator::tick(MilliSeconds time)
 {
-    std::vector<Stop> stops;
-    (*algorithm_)(cars_, control_panels_, stops);
-
-    // Control the cars
-    for (const auto &stop : stops)
-    {
-        stop.car_->set_next_floor(stop.floor_number_);
-        control_panels_.clear_floor_buttons(stop.floor_number_);
-        control_panels_.clear_car_buttons(stop.car(), stop.floor_number_);
-    }
-
     // Move all cars
     for (Car *car : cars_)
     {
-        car->simulation_step(real_time);
+        car->tick(time);
     }
 
-    move_passengers(simulation_time);
-    while (Passenger *passenger = (*traffic_generator_)(building_, simulation_time))
+    if (time / SIMULATION_RATE != last_time_ / SIMULATION_RATE)
     {
-        passengers_.push_back(passenger);
-        control_panels_.press_floor_buttons(passenger);
+        last_time_ = time;
+
+        // Move passengers
+        move_passengers(time);
+        while (Passenger *passenger = (*traffic_generator_)(building_, time))
+        {
+            passengers_.push_back(passenger);
+            control_panels_.press_floor_buttons(passenger);
+        }
+
+        // Evaluate
+        std::vector<Stop> stops;
+        (*algorithm_)(cars_, control_panels_, stops);
+
+        // Control the cars
+        for (const auto &stop : stops)
+        {
+            stop.car_->set_next_floor(stop.floor_number_);
+            control_panels_.clear_floor_buttons(stop.floor_number_);
+            control_panels_.clear_car_buttons(stop.car(), stop.floor_number_);
+        }
     }
+
 }
 
 bool Simulator::done() const
@@ -77,7 +86,7 @@ bool Simulator::done() const
     return true;
 }
 
-void Simulator::move_passengers(Time time)
+void Simulator::move_passengers(MilliSeconds time)
 {
     // Disembark
     for (Passenger *p : passengers_)

@@ -18,7 +18,7 @@ Q_OBJECT
 
 public:
     CarWidget(Car *car, Simulator* simulator, int column, BuildingWidget *parent);
-    void simulation_step();
+    void tick();
 
 public slots:
     void update();

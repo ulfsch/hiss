@@ -12,15 +12,9 @@
 #include <iostream>
 
 static void run_simulation(Configuration &, Result &, bool verbose);
-
 static void print_simulator(const Simulator *simulator);
 static void print_usage(const char *arg);
 
-
-/**
- * Constants.
- */
-const Duration SIMULATION_RATE = 1;      // Seconds/simulation_step
 
 /**
  * Main program.
@@ -69,7 +63,7 @@ int main(int argc, char *argv[])
         std::cout << result << std::endl;
     }
 
-    return ok ? 0  : 1;
+    return ok ? 0 : 1;
 }
 
 /**
@@ -83,10 +77,10 @@ static void run_simulation(Configuration &configuration, Result &result, bool ve
 {
     Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
 
-    Time simulation_time = 0;
+    MilliSeconds simulation_time = 0;
     while (!simulator.done())
     {
-        simulator.simulation_step(simulation_time, simulation_time);
+        simulator.tick(simulation_time);
         simulation_time += SIMULATION_RATE;
         if (verbose)
         {
@@ -112,7 +106,7 @@ static void print_simulator(const Simulator *simulator)
 
     for (Car *e: simulator->cars())
     {
-        (void)e;
+        (void) e;
         printf("%-30s", "Elevator");
     }
     printf("\n");

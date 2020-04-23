@@ -14,7 +14,7 @@ class Car;
 class Passenger
 {
 public:
-    Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time = 0);
+    Passenger(FloorNumber begin_floor, FloorNumber end_floor, MilliSeconds time = 0);
 
     Id id() const;
     FloorNumber begin_floor() const;
@@ -24,12 +24,12 @@ public:
 
     bool on_start_floor() const;
     bool on_destination() const;
-    Duration waiting_time() const;
+    MilliSeconds waiting_time() const;
 
-    Duration traveling_time() const;
+    MilliSeconds traveling_time() const;
 
-    void set_start_traveling(Car *car, Time time);
-    void set_on_destination(Time time);
+    void set_start_traveling(Car *car, MilliSeconds time);
+    void set_on_destination(MilliSeconds time);
     int print() const;
 
 private:
@@ -40,9 +40,9 @@ private:
     FloorNumber end_floor_;
     Car *car_;
 
-    Time begin_time_;
-    Time pick_up_time_;
-    Time end_time_;
+    MilliSeconds begin_time_;
+    MilliSeconds pick_up_time_;
+    MilliSeconds end_time_;
 
 };
 

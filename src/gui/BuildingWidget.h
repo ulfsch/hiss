@@ -24,7 +24,7 @@ public:
     explicit BuildingWidget(Simulator* simulator, QWidget *parent = nullptr);
 
     ElevatorWidget* elevator_widget(int row, int col) const;
-    void simulation_step();
+    void tick();
 
 public slots:
     void update_from_model();

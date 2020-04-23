@@ -6,7 +6,7 @@
 
 Result::Result() = default;
 
-void Result::compute_result(Time time, const PassengerList &passengers)
+void Result::compute_result(MilliSeconds time, const PassengerList &passengers)
 {
     simulation_time_ = time;
     number_of_passengers_ = passengers.size();
@@ -36,7 +36,7 @@ void Result::compute_result(Time time, const PassengerList &passengers)
     }
 }
 
-Time Result::simulation_time() const
+MilliSeconds Result::simulation_time() const
 {
     return simulation_time_;
 }
@@ -66,9 +66,9 @@ std::ostream &operator<<(std::ostream &os, const Result &result)
     os <<
        "Number of passengers:     " << result.number_of_passengers() << std::endl <<
        "Passengers at destination:" << result.passengers_at_destination() << std::endl <<
-       "Total simulation time:    " << result.simulation_time() << std::endl <<
-       "Average waiting time:     " << result.average_waiting_time() << std::endl <<
-       "Average traveling time:   " << result.average_traveling_time() << std::endl;
+       "Total simulation time:    " << result.simulation_time() / 1000  << std::endl <<
+       "Average waiting time:     " << result.average_waiting_time() / 1000 << std::endl <<
+       "Average traveling time:   " << result.average_traveling_time() / 1000  << std::endl;
 
     return os;
 }

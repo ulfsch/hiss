@@ -24,7 +24,7 @@ TEST(PassengerBasic, access_methods) {
 }
 
 TEST(PassengerBasic, waiting_time) {
-    Time time = 50;
+    MilliSeconds time = 50;
     Passenger *p = new Passenger(7, 14, time);
     p->set_start_traveling(&car, time + 8);
     EXPECT_EQ(8UL, p->waiting_time());
@@ -39,7 +39,7 @@ TEST(PassengerBasic, waiting_time) {
 }
 
 TEST(PassengerBasic, traveling_time) {
-    Time time = 50;
+    MilliSeconds time = 50;
     Passenger *p = new Passenger(7, 14, time);
     p->set_start_traveling(&car, time + 8);
     p->set_on_destination(time + 18);

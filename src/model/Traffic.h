@@ -15,7 +15,7 @@ class Traffic
 public:
     virtual ~Traffic() = default;
 
-    virtual Passenger *operator()(Building *building, Time) = 0;
+    virtual Passenger *operator()(Building *building, MilliSeconds) = 0;
 
     virtual bool done() const = 0;
 

@@ -12,7 +12,7 @@ Id Passenger::last_id_ = 0;
  * @param end_floor
  * @param time
  */
-Passenger::Passenger(FloorNumber begin_floor, FloorNumber end_floor, Time time) :
+Passenger::Passenger(FloorNumber begin_floor, FloorNumber end_floor, MilliSeconds time) :
         id_(++last_id_),
         begin_floor_(begin_floor),
         end_floor_(end_floor),
@@ -58,7 +58,7 @@ bool Passenger::on_start_floor() const
     return pick_up_time_ == 0;
 }
 
-void Passenger::set_start_traveling(Car *car, Time time)
+void Passenger::set_start_traveling(Car *car, MilliSeconds time)
 {
     assert(pick_up_time_ == 0);
     assert(end_time_ == 0);
@@ -66,7 +66,7 @@ void Passenger::set_start_traveling(Car *car, Time time)
     car_ = car;
 }
 
-void Passenger::set_on_destination(Time time)
+void Passenger::set_on_destination(MilliSeconds time)
 {
     assert(pick_up_time_ != 0);
     assert(end_time_ == 0);
@@ -74,12 +74,12 @@ void Passenger::set_on_destination(Time time)
     car_ = nullptr;
 }
 
-Duration Passenger::waiting_time() const
+MilliSeconds Passenger::waiting_time() const
 {
     return (pick_up_time_ > 0) ? pick_up_time_ - begin_time_ : 0;
 }
 
-Duration Passenger::traveling_time() const
+MilliSeconds Passenger::traveling_time() const
 {
     return (end_time_ > 0) ? end_time_ - pick_up_time_ : 0;
 }

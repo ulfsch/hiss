@@ -63,7 +63,7 @@ ElevatorWidget *BuildingWidget::elevator_widget(int row, int col) const
     return elevator_widgets_[col][row];
 }
 
-void BuildingWidget::simulation_step()
+void BuildingWidget::tick()
 {
     for (auto floor_widget : floor_widgets_)
     {

@@ -18,7 +18,7 @@ public:
     explicit Simulator(Traffic *traffic, Algorithm *algorithm, Building *building);
     virtual ~Simulator();
 
-    void simulation_step(Time simulation_time, Duration real_time);
+    void tick(MilliSeconds time);
     bool done() const;
 
     Building *building() const { return building_; }
@@ -26,7 +26,7 @@ public:
     const CarList &cars() const { return cars_; }
 
 private:
-    void move_passengers(Time time);
+    void move_passengers(MilliSeconds time);
 
 private:
     Traffic *traffic_generator_;
@@ -37,6 +37,7 @@ private:
     CarList cars_;
     ControlPanel control_panels_;
 
+    MilliSeconds last_time_;
 };
 
 #endif //CHISS_SIMULATOR_H

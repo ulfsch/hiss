@@ -8,12 +8,13 @@
 #include <set>
 
 typedef unsigned int Id;
+typedef unsigned int MilliSeconds;
 typedef int FloorNumber;
-typedef double Duration;
-typedef unsigned int Time;
 
 typedef std::set<FloorNumber> NumberSet;
 
 enum class Direction { DOWN, UP };
+
+const MilliSeconds SIMULATION_RATE = 1000;      // MilliSeconds/tick
 
 #endif //CHISS_COMMON_H

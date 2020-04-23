@@ -20,9 +20,9 @@ Car::Car(Elevator *elevator, int velocity, int floor_height) :
         height_(elevator->min_floor() * floor_height),
         target_height_(height_),
         start_height_(height_),
+        start_time_(0),
         current_floor_(elevator->min_floor()),
         next_floor_(elevator->min_floor()),
-        start_time_(0),
         state_(State::IDLE)
 {
 }
@@ -66,44 +66,17 @@ void Car::set_next_floor(FloorNumber floor_number)
     next_floor_ = floor_number;
 }
 
-#if 0
-void Car::tick() {
-    Duration duration = get_time() - start_time_;
-
-    if (height_ < target_height_)
-    {
-        height_ = start_height_ + velocity_ * duration;
-        if (height_ >= target_height_)
-        {
-            height_ = target_height_;
-            current_floor_ = target_height_ / floor_height_;
-            state_ = State::WAITING;
-        }
-    }
-    else if (height_ > target_height_)
-    {
-        height_ = start_height_ - velocity_ * duration;
-        if (height_ <= target_height_)
-        {
-            height_ = target_height_;
-            current_floor_ = target_height_ / floor_height_;
-            state_ = State::WAITING;
-        }
-    }
-}
-#endif
-
 /**
  * Move the elevator car.
  *
  * If the elevator car is standing idle on a floor, a move of
  * the elevator is started as defined by next_floor_
  *
- * @param real_time in seconds
+ * @param time in seconds
  */
-void Car::simulation_step(Duration real_time)
+void Car::tick(MilliSeconds time)
 {
-    Duration duration = real_time - start_time_;
+    MilliSeconds duration = time - start_time_;
 
     switch (state_)
     {
@@ -112,40 +85,37 @@ void Car::simulation_step(Duration real_time)
             {
                 target_height_ = next_floor_ * floor_height_;
                 start_height_ = current_floor_ * floor_height_;
-                start_time_ = real_time;
-                state_ = State::MOVING;
+                start_time_ = time;
+                state_ = (height_ < target_height_) ? State::MOVING_UP : State::MOVING_DOWN;
             }
             break;
 
-        case State::MOVING:
-            if (height_ < target_height_)
+        case State::MOVING_UP:
+            height_ = start_height_ + velocity_ * duration / 1000;
+            if (height_ >= target_height_)
             {
-                height_ = start_height_ + velocity_ * duration;
-                if (height_ >= target_height_)
-                {
-                    height_ = target_height_;
-                    current_floor_ = target_height_ / floor_height_;
-                    start_time_ = real_time;
-                    state_ = State::WAITING;
-                }
+                height_ = target_height_;
+                current_floor_ = target_height_ / floor_height_;
+                start_time_ = time;
+                state_ = State::WAITING;
             }
-            else if (height_ > target_height_)
+            break;
+
+        case State::MOVING_DOWN:
+            height_ = start_height_ - velocity_ * duration / 1000;
+            if (height_ <= target_height_)
             {
-                height_ = start_height_ - velocity_ * duration;
-                if (height_ <= target_height_)
-                {
-                    height_ = target_height_;
-                    current_floor_ = target_height_ / floor_height_;
-                    start_time_ = real_time;
-                    state_ = State::WAITING;
-                }
+                height_ = target_height_;
+                current_floor_ = target_height_ / floor_height_;
+                start_time_ = time;
+                state_ = State::WAITING;
             }
             break;
 
         case (State::WAITING):
-            if ( duration >= 1.0)
+            if (duration >= 1000)
             {
-                start_time_ = real_time;
+                start_time_ = time;
                 state_ = State::IDLE;
             }
             break;

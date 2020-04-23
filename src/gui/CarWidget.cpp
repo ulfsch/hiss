@@ -39,8 +39,6 @@ CarWidget::CarWidget(Car *car, Simulator* simulator, int column, BuildingWidget 
 
 void CarWidget::update()
 {
-    QWidget::update();
-
     ElevatorWidget* widget = building_widget_->elevator_widget(0, index_);
     QSize size = widget->size();
     QPoint pos = widget->pos();
@@ -51,7 +49,7 @@ void CarWidget::update()
     setFixedSize(size);
 }
 
-void CarWidget::simulation_step()
+void CarWidget::tick()
 {
     QString str;
     for (const auto &item : simulator_->passengers())
