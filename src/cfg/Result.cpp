@@ -31,8 +31,8 @@ void Result::compute_result(MilliSeconds time, const PassengerList &passengers)
     }
     else
     {
-        average_traveling_time_ = -1;
-        average_waiting_time_   = -1;
+        average_traveling_time_ = 0;
+        average_waiting_time_ = 0;
     }
 }
 
@@ -66,9 +66,9 @@ std::ostream &operator<<(std::ostream &os, const Result &result)
     os <<
        "Number of passengers:     " << result.number_of_passengers() << std::endl <<
        "Passengers at destination:" << result.passengers_at_destination() << std::endl <<
-       "Total simulation time:    " << result.simulation_time() / 1000  << std::endl <<
+       "Total simulation time:    " << result.simulation_time() / 1000 << std::endl <<
        "Average waiting time:     " << result.average_waiting_time() / 1000 << std::endl <<
-       "Average traveling time:   " << result.average_traveling_time() / 1000  << std::endl;
+       "Average traveling time:   " << result.average_traveling_time() / 1000 << std::endl;
 
     return os;
 }

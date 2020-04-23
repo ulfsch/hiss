@@ -24,7 +24,7 @@ public:
 
 public slots:
     void update_from_model();
-    void simulation_step();
+    void tick();
 
 private:
     MilliSeconds get_time() const;

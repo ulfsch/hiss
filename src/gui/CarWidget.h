@@ -21,7 +21,7 @@ public:
     void tick();
 
 public slots:
-    void update();
+    void update_car_position();
 
 private:
     Car *car_;

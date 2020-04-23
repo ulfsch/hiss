@@ -52,7 +52,7 @@ void Simulator::tick(MilliSeconds time)
             control_panels_.press_floor_buttons(passenger);
         }
 
-        // Evaluate
+        // Execute algorithm
         std::vector<Stop> stops;
         (*algorithm_)(cars_, control_panels_, stops);
 

@@ -7,23 +7,25 @@
 
 #include "common.h"
 #include "Elevator.h"
+#include <QtCore>
 
 static const int VELOCITY = 2;
 static const int FLOOR_HEIGHT = 4;
 
 
-class Car
+class Car : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit Car(Elevator *elevator, int velocity = VELOCITY, int floor_height = FLOOR_HEIGHT);
 
     // Access methods
     Elevator *elevator() const;
     FloorNumber current_floor() const;
-
-    double normalized_height() const;
     bool is_idle() const;
     bool is_idle_on_floor(FloorNumber i) const;
+    double normalized_height() const;
 
     // Elevator movement methods
     void set_next_floor(FloorNumber floor_number);
@@ -31,6 +33,9 @@ public:
 
     // Testing only
     FloorNumber next_floor() const;
+
+signals:
+    void car_moved();
 
 private:
     Elevator *elevator_;

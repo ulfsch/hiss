@@ -3,7 +3,6 @@
 //
 
 #include <cassert>
-#include <chrono>
 #include "Car.h"
 
 /**
@@ -88,6 +87,7 @@ void Car::tick(MilliSeconds time)
                 start_time_ = time;
                 state_ = (height_ < target_height_) ? State::MOVING_UP : State::MOVING_DOWN;
             }
+            emit car_moved();
             break;
 
         case State::MOVING_UP:
@@ -95,10 +95,11 @@ void Car::tick(MilliSeconds time)
             if (height_ >= target_height_)
             {
                 height_ = target_height_;
-                current_floor_ = target_height_ / floor_height_;
+                current_floor_ = std::round(target_height_ / floor_height_);
                 start_time_ = time;
                 state_ = State::WAITING;
             }
+            emit car_moved();
             break;
 
         case State::MOVING_DOWN:
@@ -106,10 +107,11 @@ void Car::tick(MilliSeconds time)
             if (height_ <= target_height_)
             {
                 height_ = target_height_;
-                current_floor_ = target_height_ / floor_height_;
+                current_floor_ = std::round(target_height_ / floor_height_);
                 start_time_ = time;
                 state_ = State::WAITING;
             }
+            emit car_moved();
             break;
 
         case (State::WAITING):
@@ -124,5 +126,5 @@ void Car::tick(MilliSeconds time)
 
 double Car::normalized_height() const
 {
-    return (double) height_ / (double) floor_height_;
+    return height_ / floor_height_;
 }

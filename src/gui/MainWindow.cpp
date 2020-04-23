@@ -13,8 +13,7 @@
 #include "Simulator.h"
 #include "CarWidget.h"
 
-#define SIMULATION_RATE 1   // Seconds/simulation_step
-
+const int GUI_UPDATE_RATE = 50;  // 50 ms = 20Hz
 
 MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
         QMainWindow(parent),
@@ -46,8 +45,8 @@ MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
 
     // Start simulation
     timer_ = new QTimer(this);
-    connect(timer_, SIGNAL(timeout()), this, SLOT(simulation_step()));
-    timer_->start(100);
+    connect(timer_, SIGNAL(timeout()), this, SLOT(tick()));
+    timer_->start(GUI_UPDATE_RATE);
 
     simulation_start_time_ = get_time();
 }
@@ -56,7 +55,10 @@ void MainWindow::update_from_model()
 {
 }
 
-void MainWindow::simulation_step()
+/*
+ * Execute one simulation step.
+ */
+void MainWindow::tick()
 {
     if (simulator_->done())
     {
@@ -67,16 +69,18 @@ void MainWindow::simulation_step()
     else
     {
         MilliSeconds time = get_time();
-        MilliSeconds simulation_time = time - simulation_start_time_;
+        MilliSeconds total_time = time - simulation_start_time_;
 
-        // Simulate
+        // Execute one simulation step
         simulator_->tick(time);
+
+        // Update car and building widgets
         std::for_each(car_widget_list_.begin(), car_widget_list_.end(), std::mem_fun(&CarWidget::tick));
         buildingWidget_->tick();
 
-        // Show result
+        // Update simulation result
         Result result;
-        result.compute_result(simulation_time, simulator_->passengers());
+        result.compute_result(total_time, simulator_->passengers());
         awtWidget->setText(QString("   AWT: %1,  ATT: %2")
                                    .arg(result.average_waiting_time() / 1000, 0, 'g', 2)
                                    .arg(result.average_traveling_time() / 1000, 0, 'g', 2)
@@ -87,9 +91,9 @@ void MainWindow::simulation_step()
 
 MilliSeconds MainWindow::get_time() const
 {
-    MilliSeconds time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+    MilliSeconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
-    return time_ms;
+    return ms;
 }
 
 // End of file
