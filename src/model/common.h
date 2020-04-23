@@ -9,7 +9,7 @@
 
 typedef unsigned int Id;
 typedef int FloorNumber;
-typedef unsigned long Duration;
+typedef double Duration;
 typedef unsigned int Time;
 
 typedef std::set<FloorNumber> NumberSet;

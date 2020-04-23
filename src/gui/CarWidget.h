@@ -12,16 +12,16 @@
 #include "Simulator.h"
 
 
-class CarWidget : public QWidget
+class CarWidget : public QFrame
 {
 Q_OBJECT
 
 public:
     CarWidget(Car *car, Simulator* simulator, int column, BuildingWidget *parent);
-
-    void tick();
+    void simulation_step();
 
 public slots:
+    void update();
 
 private:
     Car *car_;

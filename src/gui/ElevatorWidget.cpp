@@ -13,23 +13,21 @@ ElevatorWidget::ElevatorWidget(Elevator *elevator, FloorNumber floor_number, QWi
         elevator_(elevator),
         floor_number_(floor_number)
 {
-//    QPalette palette1;
-//    palette1.setColor(QPalette::Background, QColor(255, 255, 200));
-//    setAutoFillBackground(true);
-//    setPalette(palette1);
+    QPalette palette1;
+    palette1.setColor(QPalette::Background, QColor(255, 255, 100));
+    setPalette(palette1);
+    setAutoFillBackground(true);
 
-    setStyleSheet("background-color: blue; margin:8");
+    //setContentsMargins(0, 0, 0, 0);
+    setMinimumWidth(150);
 
-    setFixedWidth(200);
-
-    update_from_model();
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    widget_ = new QLabel(QString::number(floor_number_), this);
+    layout->addWidget(widget_, 0, Qt::AlignCenter);
 }
 
 void ElevatorWidget::update_from_model()
 {
-    QGridLayout *layout = new QGridLayout(this);
-    widget_ = new QLabel(QString::number(floor_number_), this);
-    layout->addWidget(widget_, 0, 0, Qt::AlignCenter);
 }
 
 // End of file

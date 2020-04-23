@@ -21,34 +21,35 @@ public:
     Elevator *elevator() const;
     FloorNumber current_floor() const;
 
+    double normalized_height() const;
     bool is_idle() const;
     bool is_idle_on_floor(FloorNumber i) const;
-    Direction direction() const { return direction_; }
 
     // Elevator movement methods
     void set_next_floor(FloorNumber floor_number);
-    void tick(Duration duration);
+    void simulation_step(Duration real_time);
+    //void tick();
 
     // Testing only
-    void set_position(FloorNumber number, Direction direction);
     FloorNumber next_floor() const;
 
 private:
     Elevator *elevator_;
-    const int velocity_;
-    const int floor_height_;
+    const double velocity_;
+    const double floor_height_;
+
+    double height_;
+    double target_height_;
+    double start_height_;
 
     FloorNumber current_floor_;
-    FloorNumber target_floor_;
     FloorNumber next_floor_;
-
-    int height_;
+    Duration start_time_;
 
     enum class State
     {
         IDLE, WAITING, MOVING
     } state_;
-    Direction direction_;
 
 };
 

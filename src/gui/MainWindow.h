@@ -24,7 +24,7 @@ public:
 
 public slots:
     void update_from_model();
-    void tick();
+    void simulation_step();
 
 private:
     Simulator *simulator_;
@@ -34,6 +34,8 @@ private:
 
     Time simulation_time_;
     QTimer *timer_;
+
+    Duration get_time() const;
 };
 
 #endif //CHISS_MAINWINDOW_H

@@ -20,7 +20,7 @@ static void print_usage(const char *arg);
 /**
  * Constants.
  */
-const Duration SIMULATION_RATE = 1;      // Seconds/tick
+const Duration SIMULATION_RATE = 1;      // Seconds/simulation_step
 
 /**
  * Main program.
@@ -83,18 +83,18 @@ static void run_simulation(Configuration &configuration, Result &result, bool ve
 {
     Simulator simulator(configuration.traffic(), configuration.algorithm(), configuration.building());
 
-    Time time = 0;
+    Time simulation_time = 0;
     while (!simulator.done())
     {
-        simulator.tick(time, SIMULATION_RATE);
-        time += SIMULATION_RATE;
+        simulator.simulation_step(simulation_time, simulation_time);
+        simulation_time += SIMULATION_RATE;
         if (verbose)
         {
             print_simulator(&simulator);
         }
     }
 
-    result.compute_result(time, simulator.passengers());
+    result.compute_result(simulation_time, simulator.passengers());
 }
 
 /**

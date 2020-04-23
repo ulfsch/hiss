@@ -18,7 +18,7 @@ public:
     explicit Simulator(Traffic *traffic, Algorithm *algorithm, Building *building);
     virtual ~Simulator();
 
-    void tick(Time time, Duration dt);
+    void simulation_step(Time simulation_time, Duration real_time);
     bool done() const;
 
     Building *building() const { return building_; }

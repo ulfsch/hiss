@@ -4,6 +4,7 @@
 
 #include <QLabel>
 #include <QHBoxLayout>
+#include <chrono>
 #include "Simulator.h"
 #include "Car.h"
 #include "CarWidget.h"
@@ -11,32 +12,47 @@
 
 
 CarWidget::CarWidget(Car *car, Simulator* simulator, int column, BuildingWidget *parent) :
-        QWidget(parent),
+        QFrame(parent),
         car_(car),
         simulator_(simulator),
         building_widget_(parent),
         index_(column)
 {
-//    QPalette palette1;
-//    palette1.setColor(QPalette::Background, QColor(255, 255, 255));
-//    setAutoFillBackground(true);
-//    setPalette(palette1);
+    QPalette palette1;
+    palette1.setColor(QPalette::Background, QColor(255, 255, 255));
+    setFrameShape(Shape::Box);
+    setLineWidth(2);
+    setAutoFillBackground(true);
+    setPalette(palette1);
 
-    setStyleSheet("margin:0px; padding:0px; border-width: 2px;background-color: white;border-color: black; border-style: solid;");
     auto *layout = new QGridLayout(this);
     label_ = new QLabel(QString::number(7), this);
     layout->addWidget(label_);
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    timer->start(100);
+
 }
 
-void CarWidget::tick()
+void CarWidget::update()
 {
-    FloorNumber floorNumber = car_->current_floor();
-    ElevatorWidget* widget = building_widget_->elevator_widget(floorNumber, index_);
-    move(widget->pos());
-    resize(widget->width(), widget->height());
+    QWidget::update();
 
+    ElevatorWidget* widget = building_widget_->elevator_widget(0, index_);
+    QSize size = widget->size();
+    QPoint pos = widget->pos();
+
+    int y = car_->normalized_height() * (size.height() + 7);
+    pos += QPoint(0, -y);
+    move(pos);
+    setFixedSize(size);
+}
+
+void CarWidget::simulation_step()
+{
     QString str;
     for (const auto &item : simulator_->passengers())
     {
@@ -46,12 +62,9 @@ void CarWidget::tick()
                 str.append(QString(" %1").arg(item->end_floor()));
             else
                 str.append(QString(", %1").arg(item->end_floor()));
-
-//            if (car_->is_idle())
-//                setStyleSheet("background:white");
-//            else
-//                setStyleSheet("background:lightblue");
         }
     }
     label_->setText(str);
 }
+
+// End of file

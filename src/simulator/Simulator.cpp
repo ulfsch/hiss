@@ -31,7 +31,7 @@ Simulator::~Simulator()
     cars_.clear();
 }
 
-void Simulator::tick(Time time, Duration dt)
+void Simulator::simulation_step(Time simulation_time, Duration real_time)
 {
     std::vector<Stop> stops;
     (*algorithm_)(cars_, control_panels_, stops);
@@ -47,11 +47,11 @@ void Simulator::tick(Time time, Duration dt)
     // Move all cars
     for (Car *car : cars_)
     {
-        car->tick(dt);
+        car->simulation_step(real_time);
     }
 
-    move_passengers(time);
-    while (Passenger *passenger = (*traffic_generator_)(building_, time))
+    move_passengers(simulation_time);
+    while (Passenger *passenger = (*traffic_generator_)(building_, simulation_time))
     {
         passengers_.push_back(passenger);
         control_panels_.press_floor_buttons(passenger);

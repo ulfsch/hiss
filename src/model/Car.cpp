@@ -3,6 +3,7 @@
 //
 
 #include <cassert>
+#include <chrono>
 #include "Car.h"
 
 /**
@@ -16,13 +17,13 @@ Car::Car(Elevator *elevator, int velocity, int floor_height) :
         velocity_(velocity),
         floor_height_(floor_height),
 
-        current_floor_(elevator->min_floor()),
-        target_floor_(elevator->min_floor()),
-        next_floor_(elevator->min_floor()),
-
         height_(elevator->min_floor() * floor_height),
-        state_(State::IDLE),
-        direction_(Direction::UP)
+        target_height_(height_),
+        start_height_(height_),
+        current_floor_(elevator->min_floor()),
+        next_floor_(elevator->min_floor()),
+        start_time_(0),
+        state_(State::IDLE)
 {
 }
 
@@ -65,56 +66,93 @@ void Car::set_next_floor(FloorNumber floor_number)
     next_floor_ = floor_number;
 }
 
+#if 0
+void Car::tick() {
+    Duration duration = get_time() - start_time_;
+
+    if (height_ < target_height_)
+    {
+        height_ = start_height_ + velocity_ * duration;
+        if (height_ >= target_height_)
+        {
+            height_ = target_height_;
+            current_floor_ = target_height_ / floor_height_;
+            state_ = State::WAITING;
+        }
+    }
+    else if (height_ > target_height_)
+    {
+        height_ = start_height_ - velocity_ * duration;
+        if (height_ <= target_height_)
+        {
+            height_ = target_height_;
+            current_floor_ = target_height_ / floor_height_;
+            state_ = State::WAITING;
+        }
+    }
+}
+#endif
+
 /**
  * Move the elevator car.
  *
  * If the elevator car is standing idle on a floor, a move of
  * the elevator is started as defined by next_floor_
  *
- * @param duration in seconds
+ * @param real_time in seconds
  */
-void Car::tick(Duration duration)
+void Car::simulation_step(Duration real_time)
 {
-    if (is_idle())
-    {
-        target_floor_ = next_floor_;
-    }
+    Duration duration = real_time - start_time_;
 
-    if (target_floor_ > current_floor_)
+    switch (state_)
     {
-        state_ = State::MOVING;
-        direction_ = Direction::UP;
-        height_ += velocity_ * duration;
-        current_floor_ = static_cast<FloorNumber>(height_ / floor_height_);
-        if (height_ >= (int) target_floor_ * floor_height_)
-        {
-            height_ = target_floor_ * floor_height_;
-            current_floor_ = target_floor_;
-            state_ = State::WAITING;
-        }
-    }
-    else if (target_floor_ < current_floor_)
-    {
-        state_ = State::MOVING;
-        direction_ = Direction::DOWN;
-        height_ -= velocity_ * duration;
-        current_floor_ = static_cast<FloorNumber>((height_ + (floor_height_ - 1)) / floor_height_);
-        if (height_ <= (int) target_floor_ * floor_height_)
-        {
-            height_ = target_floor_ * floor_height_;
-            current_floor_ = target_floor_;
-            state_ = State::WAITING;
-        }
-    }
-    else
-    {
-        // direction_ = Direction::NONE;
-        state_ = State::IDLE;
+        case State::IDLE:
+            if (next_floor_ != current_floor_)
+            {
+                target_height_ = next_floor_ * floor_height_;
+                start_height_ = current_floor_ * floor_height_;
+                start_time_ = real_time;
+                state_ = State::MOVING;
+            }
+            break;
+
+        case State::MOVING:
+            if (height_ < target_height_)
+            {
+                height_ = start_height_ + velocity_ * duration;
+                if (height_ >= target_height_)
+                {
+                    height_ = target_height_;
+                    current_floor_ = target_height_ / floor_height_;
+                    start_time_ = real_time;
+                    state_ = State::WAITING;
+                }
+            }
+            else if (height_ > target_height_)
+            {
+                height_ = start_height_ - velocity_ * duration;
+                if (height_ <= target_height_)
+                {
+                    height_ = target_height_;
+                    current_floor_ = target_height_ / floor_height_;
+                    start_time_ = real_time;
+                    state_ = State::WAITING;
+                }
+            }
+            break;
+
+        case (State::WAITING):
+            if ( duration >= 1.0)
+            {
+                start_time_ = real_time;
+                state_ = State::IDLE;
+            }
+            break;
     }
 }
 
-void Car::set_position(FloorNumber number, Direction direction)
+double Car::normalized_height() const
 {
-    current_floor_ = number;
-    direction_ = direction;
+    return (double) height_ / (double) floor_height_;
 }

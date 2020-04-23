@@ -6,13 +6,14 @@
 #include <QLabel>
 #include <QStatusBar>
 #include <Result.h>
+#include <chrono>
 #include "MainWindow.h"
 #include "Configuration.h"
 #include "BuildingWidget.h"
 #include "Simulator.h"
 #include "CarWidget.h"
 
-#define SIMULATION_RATE 1   // Seconds/tick
+#define SIMULATION_RATE 1   // Seconds/simulation_step
 
 
 MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
@@ -45,7 +46,7 @@ MainWindow::MainWindow(Simulator *simulator, QWidget *parent) :
 
     // Start simulation
     timer_ = new QTimer(this);
-    connect(timer_, SIGNAL(timeout()), this, SLOT(tick()));
+    connect(timer_, SIGNAL(timeout()), this, SLOT(simulation_step()));
     timer_->start(1000);
 }
 
@@ -53,7 +54,7 @@ void MainWindow::update_from_model()
 {
 }
 
-void MainWindow::tick()
+void MainWindow::simulation_step()
 {
     if (simulator_->done())
     {
@@ -63,13 +64,14 @@ void MainWindow::tick()
     }
     else
     {
-        simulator_->tick(simulation_time_, SIMULATION_RATE);
+        Duration real_time = get_time();
+        simulator_->simulation_step(simulation_time_, real_time);
 
         for (CarWidget *car_widget : car_widget_list_)
         {
-            car_widget->tick();
+            car_widget->simulation_step();
         }
-        buildingWidget_->tick();
+        buildingWidget_->simulation_step();
 
         simulation_time_ += SIMULATION_RATE;
 
@@ -81,6 +83,13 @@ void MainWindow::tick()
         );
     }
 
+}
+
+Duration MainWindow::get_time() const
+{
+    Duration time_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+    return time_ms / 1000.0;
 }
 
 // End of file
