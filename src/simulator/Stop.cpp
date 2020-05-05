@@ -25,17 +25,19 @@ Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
         index_(0)
 {
     int mod = car->elevator()->mod();
+    int a = (direction  == Direction::UP) ? floor_number_ : -floor_number_;
+    index_ = modulo((a - car_->get_index()), mod);
 
-    if (direction == Direction::UP)
-    {
-        index_ = (floor_number_ - car->current_floor()) % mod;
-        if (index_ < 0) index_ += mod;
-    }
-    if (direction == Direction::DOWN)
-    {
-        index_ = -(floor_number_ - car->current_floor()) % mod;
-        if (index_ < 0) index_ += mod;
-    }
+//    if (direction == Direction::UP)
+//    {
+//        index_ = (floor_number_ - car->current_floor()) % mod;
+//        if (index_ < 0) index_ += mod;
+//    }
+//    if (direction == Direction::DOWN)
+//    {
+//        index_ = -(floor_number_ - car->current_floor()) % mod;
+//        if (index_ < 0) index_ += mod;
+//    }
 }
 
 bool Stop::operator<(const Stop &b) const

@@ -26,6 +26,7 @@ public:
     bool is_idle() const;
     bool is_idle_on_floor(FloorNumber i) const;
     double normalized_height() const;
+    Direction current_direction() const;
 
     // Elevator movement methods
     void set_next_floor(FloorNumber floor_number);
@@ -33,6 +34,8 @@ public:
 
     // Testing only
     FloorNumber next_floor() const;
+    void set_current_floor(FloorNumber floor_number, Direction direction);
+    int get_index() const;
 
 signals:
     void car_moved();
@@ -55,6 +58,7 @@ private:
         IDLE, WAITING, MOVING_UP, MOVING_DOWN
     } state_;
 
+    Direction current_direction_;
 };
 
 typedef std::list<Car *> CarList;

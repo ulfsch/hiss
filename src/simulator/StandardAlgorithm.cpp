@@ -8,6 +8,7 @@ void StandardAlgorithm::operator()(CarList &cars, ControlPanel &controlPanel, St
 {
     std::set<Stop> stops;
 
+    // Create a stop list for all cars
     for (Car *car : cars)
     {
         for (FloorNumber floor_number : controlPanel.car_target_buttons[car])

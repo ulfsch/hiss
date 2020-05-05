@@ -22,7 +22,8 @@ Car::Car(Elevator *elevator, int velocity, int floor_height) :
         start_time_(0),
         current_floor_(elevator->min_floor()),
         next_floor_(elevator->min_floor()),
-        state_(State::IDLE)
+        state_(State::IDLE),
+        current_direction_(Direction::UP)
 {
 }
 
@@ -34,6 +35,11 @@ Elevator *Car::elevator() const
 FloorNumber Car::current_floor() const
 {
     return current_floor_;
+}
+
+Direction Car::current_direction() const
+{
+    return current_direction_;
 }
 
 FloorNumber Car::next_floor() const
@@ -91,6 +97,7 @@ void Car::tick(MilliSeconds time)
             break;
 
         case State::MOVING_UP:
+            current_direction_ = Direction::UP;
             height_ = start_height_ + velocity_ * duration / 1000;
             if (height_ >= target_height_)
             {
@@ -103,6 +110,7 @@ void Car::tick(MilliSeconds time)
             break;
 
         case State::MOVING_DOWN:
+            current_direction_ = Direction::DOWN;
             height_ = start_height_ - velocity_ * duration / 1000;
             if (height_ <= target_height_)
             {
@@ -127,4 +135,15 @@ void Car::tick(MilliSeconds time)
 double Car::normalized_height() const
 {
     return height_ / floor_height_;
+}
+
+void Car::set_current_floor(FloorNumber floor_number, Direction direction)
+{
+    current_floor_ = floor_number;
+    current_direction_ = direction;
+}
+
+int Car::get_index() const
+{
+    return (current_direction_ == Direction::DOWN) ? -current_floor_ : current_floor_;
 }

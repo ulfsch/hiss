@@ -55,7 +55,7 @@ TEST(CarBasic, move_up_) {
 }
 
 /**
- * Test out of range
+ * Test out of range. Valid: 10..13
  */
 TEST(CarBasic, move_error_cases) {
     Elevator e(10, 14);

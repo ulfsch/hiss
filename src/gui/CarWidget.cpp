@@ -48,7 +48,7 @@ void CarWidget::update_car_position()
     QSize size = widget->size();
     QPoint pos = widget->pos();
 
-    int y = (int)std::round(car_->normalized_height() * (size.height() + 7));
+    int y = (int)std::round(car_->normalized_height() * (size.height() + 6));
     pos += QPoint(0, -y);
     move(pos);
     setFixedSize(size);

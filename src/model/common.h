@@ -17,4 +17,14 @@ enum class Direction { DOWN, UP };
 
 const MilliSeconds SIMULATION_RATE = 1000;      // MilliSeconds/tick
 
+inline int modulo(int x, int mod)
+{
+    int result = x % mod;
+    if (result < 0)
+    {
+        result += mod;
+    }
+    return result;
+}
+
 #endif //CHISS_COMMON_H
