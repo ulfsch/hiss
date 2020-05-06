@@ -22,7 +22,7 @@ public:
 public:
     FloorNumber floor_number_;
     Car *car_;
-    int index_;
+    int distance_;
 
 };
 

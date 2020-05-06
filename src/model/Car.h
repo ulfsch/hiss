@@ -35,7 +35,7 @@ public:
     // Testing only
     FloorNumber next_floor() const;
     void set_current_floor(FloorNumber floor_number, Direction direction);
-    int get_index() const;
+    int position() const;
 
 signals:
     void car_moved();
@@ -58,7 +58,7 @@ private:
         IDLE, WAITING, MOVING_UP, MOVING_DOWN
     } state_;
 
-    Direction current_direction_;
+    Direction direction_;
 };
 
 typedef std::list<Car *> CarList;

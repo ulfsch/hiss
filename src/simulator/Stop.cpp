@@ -10,7 +10,7 @@
  * A car traveling path can be seen as a circle there south
  * is minimum elevator floor and north is the maximum floor.
  *
- * index_ holds the position in that circle. Values between
+ * distance_ holds the position in that circle. Values between
  * minimum and maximum represent floors when the car is
  * going up and values between max and 2*max is then the
  * car is going down.
@@ -22,32 +22,21 @@
 Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
         floor_number_(floor_number),
         car_(car),
-        index_(0)
+        distance_(0)
 {
-    int mod = car->elevator()->mod();
-    int a = (direction  == Direction::UP) ? floor_number_ : -floor_number_;
-    index_ = modulo((a - car_->get_index()), mod);
-
-//    if (direction == Direction::UP)
-//    {
-//        index_ = (floor_number_ - car->current_floor()) % mod;
-//        if (index_ < 0) index_ += mod;
-//    }
-//    if (direction == Direction::DOWN)
-//    {
-//        index_ = -(floor_number_ - car->current_floor()) % mod;
-//        if (index_ < 0) index_ += mod;
-//    }
+    int nbrPositions = car->elevator()->nbr_positions();
+    int position = (direction == Direction::UP) ? floor_number_ : -floor_number_;
+    distance_ = modulo((position - car_->position()), nbrPositions);
 }
 
 bool Stop::operator<(const Stop &b) const
 {
-    return index_ < b.index_;
+    return distance_ < b.distance_;
 }
 
 bool Stop::operator==(const Stop &b) const
 {
-    return index_ == b.index_;
+    return distance_ == b.distance_;
 }
 
 std::ostream &operator<<(std::ostream &os, Stop &)

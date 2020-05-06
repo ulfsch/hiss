@@ -20,7 +20,7 @@ public:
     // Get methods
     FloorNumber max_floor() const { return max_floor_; }
     FloorNumber min_floor() const { return min_floor_; }
-    FloorNumber mod() const { return 2 * (max_floor_ - 1 - min_floor_); }
+    FloorNumber nbr_positions() const { return 2 * (max_floor_ - 1 - min_floor_); }
     const NumberSet &floorNumbers() const { return floors_; }
 
     bool is_valid_floor(FloorNumber floor_number) const;
