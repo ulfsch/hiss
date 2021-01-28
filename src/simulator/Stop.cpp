@@ -24,9 +24,24 @@ Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
         car_(car),
         distance_(0)
 {
-    int nbrPositions = car->elevator()->nbr_positions();
-    int position = (direction == Direction::UP) ? floor_number_ : -floor_number_;
-    distance_ = modulo((position - car_->position()), nbrPositions);
+    FloorNumber from_floor = car_->current_floor();
+    FloorNumber floors = floor_number - from_floor;
+    int max_weight = car->elevator()->nbr_positions();
+
+    if (direction == Direction::ANY)
+    {
+        int d1 = modulo(floors, max_weight);
+        int d2 = modulo(-floors, max_weight);
+        distance_ = std::min(d1, d2);
+    }
+    else if (direction == car_->current_direction())
+    {
+        distance_ = modulo(floors, max_weight);
+    }
+    else
+    {
+        distance_ = modulo(-floors, max_weight);
+    }
 }
 
 bool Stop::operator<(const Stop &b) const
@@ -46,7 +61,7 @@ std::ostream &operator<<(std::ostream &os, Stop &)
         os << std::string(" ") << s.floor << "u";
     if (s.travel_direction_ == Direction::DOWN)
         os << std::string(" ") << s.floor << "d";
-    if (s.travel_direction_ == Direction::NONE)
+    if (s.travel_direction_ == Direction::ANY)
         os << std::string(" ") << s.floor << "-";
 #endif
     return os;
