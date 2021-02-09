@@ -12,6 +12,6 @@
 
     <algorithm type="Standard"></algorithm>
 
-    <traffic type="Random" rate="0,2"></traffic>
+    <traffic type="Random" rate="0.2"></traffic>
 </configuration>
 
