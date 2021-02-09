@@ -12,7 +12,7 @@ class TrivialAlgorithm : public Algorithm
 public:
     TrivialAlgorithm();
 
-    void operator()(CarList &cars, ControlPanel&, std::vector<Stop> &result) override;
+    void operator()(CarList &cars, ControlPanel, std::vector<Stop> &result) override;
 
 };
 

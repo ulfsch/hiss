@@ -12,7 +12,7 @@
 class StandardAlgorithm : public Algorithm
 {
 public:
-    void operator()(CarList &cars, ControlPanel &, std::vector<Stop> &result) override;
+    void operator()(CarList &cars, ControlPanel , std::vector<Stop> &result) override;
 
 };
 

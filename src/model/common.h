@@ -13,14 +13,14 @@ typedef int FloorNumber;
 
 typedef std::set<FloorNumber> NumberSet;
 
-enum class Direction { DOWN, UP };
+enum class Direction { ANY, DOWN, UP };
 
 const MilliSeconds SIMULATION_RATE = 1000;      // MilliSeconds/tick
 
 inline int modulo(int x, int mod)
 {
     int result = x % mod;
-    if (result < 0)
+    while (result < 0)
     {
         result += mod;
     }
