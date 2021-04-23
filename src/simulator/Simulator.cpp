@@ -13,7 +13,9 @@ Simulator::Simulator(Traffic *traffic, Algorithm *algorithm, Building *building)
 {
     for (Elevator *elevator : building_->elevators())
     {
-        cars_.push_back(new Car(elevator));
+        Car* car = new Car(elevator);
+        cars_.push_back(car);
+        // control_panels_.car_target_buttons.insert(std::pair<Car*, NumberSet>(car, NumberSet()));
     }
 }
 

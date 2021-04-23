@@ -24,6 +24,7 @@ public:
     Building *building() const { return building_; }
     const PassengerList &passengers() const { return passengers_; }
     const CarList &cars() const { return cars_; }
+    const ControlPanel& control_panel() const { return control_panels_; }
 
 private:
     void move_passengers(MilliSeconds time);

@@ -4,7 +4,7 @@
 
 #include "StandardAlgorithm.h"
 
-void StandardAlgorithm::operator()(CarList &cars, ControlPanel control_panel, StopVector &result)
+void StandardAlgorithm::operator()(CarList &cars, ControlPanel& control_panel, StopVector &result)
 {
     std::set<Stop> stops;
 

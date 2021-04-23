@@ -32,7 +32,7 @@ TrivialAlgorithm::TrivialAlgorithm()
 
 }
 
-void TrivialAlgorithm::operator()(CarList &cars, ControlPanel controlPanel, std::vector<Stop> &result)
+void TrivialAlgorithm::operator()(CarList &cars, ControlPanel& controlPanel, std::vector<Stop> &result)
 {
     std::vector<Stop> stops;
 
