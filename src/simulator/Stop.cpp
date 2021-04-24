@@ -24,7 +24,13 @@ Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
         car_(car),
         distance_(0)
 {
+    if (direction == Direction::DOWN)
+        floor_number = -floor_number;
+
     FloorNumber from_floor = car_->current_floor();
+    if (car->current_direction() == Direction::DOWN)
+        from_floor = -from_floor;
+
     FloorNumber floors = floor_number - from_floor;
     int max_weight = car->elevator()->nbr_positions();
 
@@ -34,13 +40,9 @@ Stop::Stop(FloorNumber floor_number, Direction direction, Car *car) :
         int d2 = modulo(-floors, max_weight);
         distance_ = std::min(d1, d2);
     }
-    else if (direction == car_->current_direction())
-    {
-        distance_ = modulo(floors, max_weight);
-    }
     else
     {
-        distance_ = modulo(-floors, max_weight);
+        distance_ = modulo(floors, max_weight);
     }
 }
 
