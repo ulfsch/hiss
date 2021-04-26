@@ -51,16 +51,17 @@ TEST(StandardAlgoBasic, mod_tesst)
     EXPECT_EQ(stops[0].floor_number_, 5);
 }
 
-TEST(StandardAlgoBasic, algo_test_1)
+TEST(StandardAlgoOneElevator, algo_test_1)
 {
+    Elevator elevator0(0, 10);
     CarList cars;
     ControlPanel controlPanel;
     StopVector stops;
 
-    Elevator elevator0(0, 10);
-
+    // Set up
     Car car0(&elevator0);
-    car0.set_current_floor(4, Direction::UP);
+    cars.push_back(&car0);
+    car0.set_current_floor(4, Direction::DOWN);
 
     Passenger p1(0, 7);
     Passenger p2(5, 1);
@@ -68,7 +69,57 @@ TEST(StandardAlgoBasic, algo_test_1)
     controlPanel.press_floor_buttons(&p1);
     controlPanel.press_floor_buttons(&p2);
 
+    // Evaluate
+    StandardAlgorithm algo;
+    (algo)(cars, controlPanel, stops);
+
+    // Verify
+    EXPECT_EQ(stops[0].floor_number_, 0);
+}
+
+TEST(StandardAlgoOneElevator, algo_test_3)
+{
+    Elevator elevator0(0, 10);
+    CarList cars;
+    ControlPanel controlPanel;
+    StopVector stops;
+
+    // Set up
+    Car car0(&elevator0);
     cars.push_back(&car0);
+    car0.set_current_floor(4, Direction::UP);
+
+    Passenger p1(6, 7);
+    Passenger p2(5, 1);
+
+    controlPanel.press_floor_buttons(&p1);
+    controlPanel.press_floor_buttons(&p2);
+
+    // Evaluate
+    StandardAlgorithm algo;
+    (algo)(cars, controlPanel, stops);
+
+    // Verify
+    EXPECT_EQ(stops[0].floor_number_, 6);
+}
+
+TEST(StandardAlgoOneElevator, algo_test_4)
+{
+    Elevator elevator0(0, 10);
+    CarList cars;
+    ControlPanel controlPanel;
+    StopVector stops;
+
+    // Set up
+    Car car0(&elevator0);
+    cars.push_back(&car0);
+    car0.set_current_floor(4, Direction::UP);
+
+    Passenger p1(0, 7);
+    Passenger p2(5, 1);
+
+    controlPanel.press_floor_buttons(&p1);
+    controlPanel.press_floor_buttons(&p2);
 
     // Evaluate
     StandardAlgorithm algo;
