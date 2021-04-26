@@ -138,7 +138,7 @@ static void print_simulator(const Simulator *simulator)
 
             if (car->current_floor() == row_number)
             {
-                column += printf("e[to %d ", car->next_floor());
+                column += printf("[next:%d ", car->next_floor());
                 for (const auto passenger : passengers)
                 {
                     if (passenger->car() == car)

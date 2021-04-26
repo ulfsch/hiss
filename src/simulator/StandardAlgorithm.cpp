@@ -18,12 +18,10 @@ void StandardAlgorithm::operator()(CarList &cars, ControlPanel& control_panel, S
         for (FloorNumber floor_number: control_panel.floor_up_buttons)
         {
             stops.insert(Stop(floor_number, Direction::UP, car));
-            //control_panel.clear_floor_buttons(floor_number);
         }
         for (FloorNumber floor_number: control_panel.floor_down_buttons)
         {
             stops.insert(Stop(floor_number, Direction::DOWN, car));
-            // control_panel.clear_floor_buttons(floor_number);
         }
     }
 
@@ -38,9 +36,6 @@ void StandardAlgorithm::operator()(CarList &cars, ControlPanel& control_panel, S
             if (std::find(assigned.begin(), assigned.end(), car) == assigned.end())
             {
                 result.push_back(stop);
-                //control_panel.clear_floor_buttons(stop.floor_number_);
-                //control_panel.clear_car_buttons(stop.car(), stop.floor_number_);
-
                 assigned.push_back(car);
             }
         }

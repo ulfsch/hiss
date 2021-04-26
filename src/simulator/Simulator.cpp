@@ -48,6 +48,8 @@ void Simulator::tick(MilliSeconds time)
 
         // Move passengers
         move_passengers(time);
+
+        // Inject new passengers
         while (Passenger *passenger = (*traffic_generator_)(building_, time))
         {
             passengers_.push_back(passenger);

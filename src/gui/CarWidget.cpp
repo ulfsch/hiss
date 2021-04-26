@@ -59,7 +59,7 @@ void CarWidget::update_car_position()
  */
 void CarWidget::tick()
 {
-    QString str;
+    QString str = QString("->%1: ").arg(car_->next_floor());
     for (const auto &passenger : simulator_->passengers())
     {
         if (passenger->car() == car_)
